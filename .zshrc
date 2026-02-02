@@ -30,7 +30,9 @@ alias k="kubectl"
 alias mux='tmuxinator'
 export JAVA_HOME=$HOME/OpenJDK/jdk-23.0.1.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
-export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
@@ -48,6 +50,7 @@ function y() {
 	rm -f -- "$tmp"
 }
 export EDITOR="nvim"
+export GEMINI_API_KEY="AIzaSyDM0QCNZhi07i988cCcsDcWpxb7oyU8r5M"
 
 # Automatically start or attach to a tmux session
 # if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
@@ -59,3 +62,15 @@ if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH=/Users/joseiciano/.local/bin:$PATH
+
+# bun completions
+[ -s "/Users/joseiciano/.bun/_bun" ] && source "/Users/joseiciano/.bun/_bun"
+
+# LLama server
+alias llama-15="llama-server --fim-qwen-1.5b-default"
+alias llama-3="llama-server --fim-qwen-3b-default"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
