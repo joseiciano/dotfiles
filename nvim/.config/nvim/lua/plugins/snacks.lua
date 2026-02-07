@@ -5,7 +5,8 @@ return {
       bufdelete = {},
       picker = {
         hidden = true,
-        ignored = true,
+        ignored = false,
+        exclude = { "node_modules", "dist" },
       },
       lazygit = {},
       terminal = {},
@@ -40,19 +41,6 @@ return {
         desc = "Lazygit",
       },
       {
-        "<leader>ty",
-        function()
-          Snacks.terminal.open("yazi", {
-            win = {
-              style = "float", -- Ensures it's a floating window
-              width = 0.8, -- 80% of screen width
-              height = 0.8, -- 80% of screen height
-            },
-          })
-        end,
-        desc = "Yazi (Terminal)",
-      },
-      {
         "<leader>tf",
         function()
           local file = vim.api.nvim_buf_get_name(0)
@@ -79,7 +67,7 @@ return {
         desc = "Yazi (CWD)",
       },
       {
-        "<leader>tt",
+        "<leader>tY",
         function()
           Snacks.terminal.toggle("yazi", {
             win = { style = "float" },
@@ -88,6 +76,33 @@ return {
           })
         end,
         desc = "Toggle Latest Yazi Session",
+      },
+      {
+        "<leader>ts",
+        function()
+          Snacks.terminal.toggle(nil, {
+            id = "persistent_term", -- Ensures this specific terminal is remembered
+            win = {
+              style = "float",
+              width = 0.8,
+              height = 0.8,
+            },
+          })
+        end,
+        desc = "Toggle Persistent Terminal",
+      },
+      {
+        "<leader>tS",
+        function()
+          Snacks.terminal.open(nil, {
+            win = {
+              style = "float",
+              width = 0.8,
+              height = 0.8,
+            },
+          })
+        end,
+        desc = "Open New Terminal (Non-persistent)",
       },
     },
   },

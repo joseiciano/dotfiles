@@ -71,6 +71,11 @@ export PATH=/Users/joseiciano/.local/bin:$PATH
 alias llama-15="llama-server --fim-qwen-1.5b-default"
 alias llama-3="llama-server --fim-qwen-3b-default"
 
+export obsidianpath="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Pepega"
+
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/joseiciano/.antigravity/antigravity/bin:$PATH"
