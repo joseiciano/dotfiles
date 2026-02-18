@@ -23,6 +23,22 @@ export LS_COLORS=$LS_COLORS:"ow=0;34:tw=0;34:"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# --- FZF & RIPGREP CONFIGURATION ---
+if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
+if [ -f /usr/share/doc/fzf/examples/completion.zsh ]; then
+  source /usr/share/doc/fzf/examples/completion.zsh
+fi
+
+if command -v rg > /dev/null; then
+  export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --preview '[[ \$(file --mime-type -b {}) == text/* ]] && batcat --color=always {} || file -b {}'"
+# -----------------------------------
+
 # Docker Dev Environment Function
 ddev() {
   if [ ! "$(docker ps -q -f name=dev_container)" ]; then
