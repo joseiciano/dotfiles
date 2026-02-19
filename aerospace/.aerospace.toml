@@ -12,7 +12,10 @@ start-at-login = true
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 # Inside ~/.aerospace.toml
-exec-on-workspace-change = ['/bin/bash', '-c', 'tmux set-option -g status-left-length 101']
+exec-on-workspace-change = [
+    '/bin/bash', '-c',
+    'f=$(aerospace list-workspaces --focused); aerospace list-workspaces --monitor all --visible | tail -r | awk -v focused="$f" "{ val = (\$1 == focused) ? \"*\"\$1 : \$1; printf (NR==1 ? \"(\"val : \" | \"val) } END { printf \")\" }" > ~/dotfiles/.state/aerospace_status.txt && tmux set-option -g status-left-length 101'
+]
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
