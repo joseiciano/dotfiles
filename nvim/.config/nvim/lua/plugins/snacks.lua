@@ -41,6 +41,19 @@ return {
         desc = "Lazygit",
       },
       {
+        "<leader>ld",
+        function()
+          Snacks.terminal("lazydocker", {
+            win = {
+              style = "float", -- Opens in a floating window
+              width = 0.9,
+              height = 0.9,
+            },
+          })
+        end,
+        desc = "Lazydocker (Snacks)",
+      },
+      {
         "<leader>tf",
         function()
           local file = vim.api.nvim_buf_get_name(0)
@@ -57,7 +70,7 @@ return {
         desc = "Yazi (Current File)",
       },
       {
-        "<leader>tc",
+        "<leader>ty",
         function()
           Snacks.terminal.open("yazi", {
             cwd = vim.fn.getcwd(),
@@ -78,7 +91,7 @@ return {
         desc = "Toggle Latest Yazi Session",
       },
       {
-        "<leader>ts",
+        "<leader>tt",
         function()
           Snacks.terminal.toggle(nil, {
             id = "persistent_term", -- Ensures this specific terminal is remembered

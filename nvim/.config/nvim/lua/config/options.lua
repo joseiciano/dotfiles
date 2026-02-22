@@ -3,3 +3,4 @@
 -- Add any additional options here
 vim.opt.wrap = true
 vim.o.updatetime = 300
+vim.opt.showtabline = 2
