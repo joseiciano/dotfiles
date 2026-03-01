@@ -4,6 +4,25 @@
 --
 vim.api.nvim_set_keymap("t", "<C-t><C-t>", "<C-\\><C-n>", { noremap = true, silent = true })
 
+-- Fancy Save
+vim.keymap.set("n", "<leader>qQ", function()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    -- Check if buffer is valid and loaded
+    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_get_option_value("buflisted", { buf = buf }) then
+      local buftype = vim.api.nvim_get_option_value("buftype", { buf = buf })
+      local modified = vim.api.nvim_get_option_value("modified", { buf = buf })
+
+      -- Only save if it's not a terminal and has changes
+      if buftype ~= "terminal" and modified then
+        vim.api.nvim_buf_call(buf, function()
+          vim.cmd("silent! update")
+        end)
+      end
+    end
+  end
+  vim.cmd("quitall")
+end, { desc = "Save non-terminal buffers and quit" })
+
 local function replace_current_word()
   if not vim.bo.modifiable then
     return
