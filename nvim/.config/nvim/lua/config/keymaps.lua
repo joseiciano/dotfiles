@@ -23,45 +23,6 @@ vim.keymap.set("n", "<leader>qQ", function()
   vim.cmd("quitall")
 end, { desc = "Save non-terminal buffers and quit" })
 
-local function replace_current_word()
-  if not vim.bo.modifiable then
-    return
-  end
-
-  local current_word = vim.fn.expand("<cword>")
-
-  -- 1. Check for word
-  if current_word == "" then
-    print("Cursor is not on a word. Operation aborted.")
-    return
-  end
-
-  -- 2. Prompt for replacement
-  local prompt = string.format("Replace %s by?", current_word)
-  local replacement_word = vim.fn.input(prompt .. " ")
-
-  if replacement_word == nil or replacement_word == "" then
-    print("Replacement cancelled.")
-    return
-  end
-
-  -- 3. Perform file-wide substitution
-  local escaped_current = vim.fn.escape(current_word, "~/\\")
-  local escaped_replacement = vim.fn.escape(replacement_word, "~/\\")
-
-  -- This substitution command is solid: %s for file-wide, \V for literal match, I for case-insensitive
-  local command = string.format("%%s/\\V%s/%s/geI", escaped_current, escaped_replacement)
-  vim.cmd(command)
-  print(string.format("Replaced all occurrences of '%s' with '%s'.", current_word, replacement_word))
-end
-
--- Set the keymap to call the now-global function
-vim.keymap.set("n", "<leader>cc", replace_current_word, {
-  noremap = true,
-  silent = true,
-  desc = "Replace word under cursor and all occurrences in file",
-})
-
 -- Change delete to black hole by default
 vim.keymap.set({ "n", "v" }, "d", '"_d', { noremap = true, desc = "Delete (Black Hole)" })
 vim.keymap.set("n", "dd", '"_dd', { noremap = true, desc = "Delete Line (Black Hole)" })

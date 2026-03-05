@@ -7,11 +7,32 @@ return {
         hidden = true,
         ignored = false,
         exclude = { "node_modules", "dist" },
+        sources = {
+          explorer = {
+            layout = {
+              layout = {
+                width = 35,
+              },
+            },
+          },
+        },
       },
       lazygit = {},
       terminal = {},
     },
     keys = {
+      {
+        "<leader>es",
+        function()
+          Snacks.picker.lsp_symbols({
+            layout = {
+              preset = "vscode",
+              preview = "main",
+            },
+          })
+        end,
+        desc = "LSP Symbols (VSCode Layout)",
+      },
       {
         "<leader>yy",
         function()
@@ -91,7 +112,7 @@ return {
         desc = "Toggle Latest Yazi Session",
       },
       {
-        "<leader>tt",
+        "<leader>ts",
         function()
           Snacks.terminal.toggle(nil, {
             id = "persistent_term", -- Ensures this specific terminal is remembered
