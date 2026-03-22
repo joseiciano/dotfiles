@@ -66,11 +66,15 @@ outer.right = 0
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
-run = 'move-node-to-workspace 6'
+run = 'move-node-to-workspace 7'
 
 [[on-window-detected]]
 if.app-id = 'com.googlecode.iterm2'
 run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.docker.docker'
+run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-id = 'com.wizards.mtga'
@@ -92,10 +96,6 @@ run = 'move-node-to-workspace 5'
 if.app-id = 'com.apple.finder'
 run = 'move-node-to-workspace 5'
 
-# 'main' binding mode declaration
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# 'main' binding mode must be always presented
-# Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
 # All possible keys:
@@ -112,18 +112,6 @@ run = 'move-node-to-workspace 5'
 # - Arrows.         left, down, up, right
 
 # All possible modifiers: cmd, alt, ctrl, shift
-
-# All possible commands: https://nikitabobko.github.io/AeroSpace/commands
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-# You can uncomment the following lines to open up terminal with alt + enter shortcut
-# (like in i3)
-# alt-enter = '''exec-and-forget osascript -e '
-# tell application "Terminal"
-#     do script
-#     activate
-# end tell'
-# '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
@@ -171,6 +159,7 @@ alt-shift-3 = 'move-node-to-workspace 3'
 alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
 alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -184,18 +173,14 @@ alt-w = 'fullscreen'
 
 
 # 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
+alt-r = ['flatten-workspace-tree', 'mode main'] # reset layout
 f = [
   'layout floating tiling',
   'mode main',
 ] # Toggle between floating and tiling layout
-backspace = ['close-all-windows-but-current', 'mode main']
-
-# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main']
+# backspace = ['close-all-windows-but-current', 'mode main']
 
 left = ['join-with left', 'mode main']
 right = ['join-with left', 'mode main']
@@ -207,16 +192,13 @@ j = ['join-with down', 'mode main']
 k = ['join-with up', 'mode main']
 l = ['join-with right', 'mode main']
 
-shift-down = 'volume down'
-shift-up = 'volume up'
-alt-down = ['volume set 0', 'mode main']
-
 1 = ['move-node-to-workspace 1', 'mode main']
 2 = ['move-node-to-workspace 2', 'mode main']
 3 = ['move-node-to-workspace 3', 'mode main']
 4 = ['move-node-to-workspace 8', 'mode main']
 5 = ['move-node-to-workspace 5', 'mode main']
 6 = ['move-node-to-workspace 6', 'mode main']
+7 = ['move-node-to-workspace 7', 'mode main']
 
 [workspace-to-monitor-force-assignment]
 1 = 'main'
@@ -225,3 +207,4 @@ alt-down = ['volume set 0', 'mode main']
 4 = 'secondary'
 5 = 'secondary'
 6 = 'secondary'
+7 = 'secondary'

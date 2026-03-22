@@ -68,6 +68,9 @@ alias llama-15="curl http://llama-15:8080/v1/completions"
 alias llama-3="curl http://llama-3:8080/v1/completions"
 alias python=python3
 alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+alias init-ts='$HOME/dotfiles/scripts/init-ts.sh'
+alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
+alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
 
 # Editor
 if [[ -n $SSH_CONNECTION ]]; then
@@ -122,3 +125,9 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+
+# Tmuxifier
+export PATH="$HOME/.tmux/plugins/tmuxifier/bin:$PATH"
+eval "$(tmuxifier init -)"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

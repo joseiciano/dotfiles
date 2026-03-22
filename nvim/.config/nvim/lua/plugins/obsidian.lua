@@ -16,6 +16,7 @@ return {
     "nvim-lua/plenary.nvim",
 
     -- see below for full list of optional dependencies 👇
+    --
   },
   opts = {
     workspaces = {

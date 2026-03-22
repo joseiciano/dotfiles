@@ -22,6 +22,25 @@ return {
     },
     keys = {
       {
+        "<leader>fs",
+        function()
+          local sessions = vim.fn.systemlist("tmux list-sessions -F '#S'")
+          local items = {}
+          for _, s in ipairs(sessions) do
+            table.insert(items, { text = s, value = s })
+          end
+          Snacks.picker.pick({
+            source = "tmux",
+            items = items,
+            confirm = function(picker, item)
+              picker:close()
+              vim.fn.system("tmux switch-client -t " .. item.value)
+            end,
+          })
+        end,
+        desc = "Tmux Sessions",
+      },
+      {
         "<leader>es",
         function()
           Snacks.picker.lsp_symbols({
