@@ -71,6 +71,7 @@ alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 alias init-ts='$HOME/dotfiles/scripts/init-ts.sh'
 alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
 alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
+alias mako-delete-wt="$HOME/dotfiles/scripts/delete-worktree-branch.sh mako"
 
 # Editor
 if [[ -n $SSH_CONNECTION ]]; then

@@ -1,0 +1,175 @@
+{
+  "plugin": [
+    "opencode-alibaba-qwen3-auth",
+    "file:///Users/joseiciano/.config/opencode/plugins/opencode-fallback/index.ts"
+  ],
+  "model": "openai/gpt-5.3-codex",
+  "agent": {
+    "general": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    },
+    "explore": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    },
+    "orchestration": {
+      "model": "openai/gpt-5.3-codex",
+      "fallback_models": [
+        "openai/gpt-5.3-codex",
+        "qwencode/qwen3-coder-plus"
+      ],
+      "skills": [
+        "*"
+      ],
+    },
+    "designer": {
+      "model": "zai-coding-plan/glm-4.7",
+      "fallback_models": [
+        "openai/gpt-5.1-mini",
+        "opencode/minimax-m2.5-free",
+        "opencode/nemotron-3-super-free",
+      ],
+      "skills": [],
+    },
+    "explorer": {
+      "model": "opencode/minimax-m2.5-free",
+      "fallback_models": [
+        "openai/gpt-5.1-mini",
+        "opencode/nemotron-3-super-free"
+      ],
+      "variant": "low",
+      "skills": [],
+    },
+    "fixer": {
+      "model": "qwencode/qwen3-coder-plus",
+      "fallback_models": [
+        "openai/gpt-5.1-mini",
+        "opencode/minimax-m2.5-free",
+        "opencode/nemotron-3-super-free"
+      ],
+      "variant": "low",
+      "skills": [],
+      "mcps": []
+    },
+    "librarian": {
+      "model": "qwencode/qwen3-coder-plus",
+      "fallback_models": [
+        "openai/gpt-5.3-codex",
+        "opencode/minimax-m2.5-free"
+      ],
+      "variant": "low",
+      "skills": [],
+      "mcps": []
+    },
+    "oracle": {
+      "model": "openai/gpt-5.3-codex",
+      "fallback_models": [
+        "openai/gpt-5.3-codex",
+        "qwencode/qwen3-coder-plus"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    }
+  },
+  "provider": {
+    "qwencode": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Qwen 3 Coder",
+      "options": {
+        "baseURL": "https://portal.qwen.ai/v1"
+      },
+      "models": {
+        "qwen3-coder-plus": {
+          "name": "Qwen-3.5 Plus"
+        }
+      }
+    },
+    "openai": {
+      "options": {
+        "baseURL": "http://127.0.0.1:2455/v1",
+      },
+      "models": {
+        "gpt-5.4": {
+          "name": "GPT-5.4",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 1050000,
+            "output": 128000
+          }
+        },
+        "gpt-5.3-codex": {
+          "name": "GPT-5.3 Codex",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 272000,
+            "output": 65536
+          }
+        },
+        "gpt-5.1-codex-mini": {
+          "name": "GPT-5.1 Codex Mini",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 272000,
+            "output": 65536
+          }
+        },
+        "gpt-5.3-codex-spark": {
+          "name": "GPT-5.3 Codex Spark",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "xhigh",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        }
+      },
+      "whitelist": [
+        "gpt-5.4",
+        "gpt-5.3-codex",
+        "gpt-5.1-codex-mini",
+        "gpt-5.3-codex-spark"
+      ]
+    },
+    "opencode": {
+      "whitelist": [
+        "big-pickle",
+        "mimo-v2-flash-free",
+        "minimax-m2.5-free",
+        "nemotron-3-super-free"
+      ]
+    },
+    "openrouter": {
+      "whitelist": []
+    },
+    "zai-coding-plan": {
+      "whitelist": [
+        "glm-4.7",
+        "glm-4.7-flash",
+        "glm-5"
+      ]
+    },
+    "alibaba": {
+      "whitelist": []
+    }
+  },
+  "$schema": "https://opencode.ai/config.json"
+}

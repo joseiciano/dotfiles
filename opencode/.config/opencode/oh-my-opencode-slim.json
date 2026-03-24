@@ -1,0 +1,104 @@
+{
+  "preset": "openai-qwen",
+  "presets": {
+    "openai-qwen": {
+      "orchestrator": {
+        "model": "openai/gpt-5.3-codex",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.3-codex"
+          },
+          {
+            "model": "qwencode/qwen3-coder-plus"
+          }
+        ],
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "websearch"
+        ]
+      },
+      "oracle": {
+        "model": "openai/gpt-5.3-codex",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.1-mini"
+          },
+          {
+            "model": "qwencode/qwen3-coder-plus"
+          }
+        ],
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "qwencode/qwen3-coder-plus",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.3-codex"
+          },
+          {
+            "model": "opencode/minimax-m2.5-free"
+          }
+        ],
+        "variant": "low",
+        "skills": [],
+        "mcps": [
+          "websearch",
+          "context7",
+          "grep_app"
+        ]
+      },
+      "explorer": {
+        "model": "opencode/minimax-m2.5-free",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.1-mini"
+          },
+          {
+            "model": "opencode/nemotron-3-super-free"
+          }
+        ],
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      },
+      "designer": {
+        "model": "zai-coding-plan/glm-4.7",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.1-mini"
+          },
+          {
+            "model": "opencode/minimax-m2.5-free"
+          },
+          {
+            "model": "opencode/nemotron-3-super-free"
+          }
+        ],
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "fixer": {
+        "model": "qwencode/qwen3-coder-plus",
+        "fallback": [
+          {
+            "model": "openai/gpt-5.1-mini"
+          },
+          {
+            "model": "opencode/minimax-m2.5-free"
+          },
+          {
+            "model": "opencode/nemotron-3-super-free"
+          }
+        ],
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      }
+    }
+  }
+}
