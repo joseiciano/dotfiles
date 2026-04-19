@@ -4,13 +4,25 @@ return {
     -- Note: LazyVim will automatically load this when you open a .http or .rest file
     ft = { "http", "rest" },
     keys = {
+      { "<leader>r", "", desc = "+Rest" },
+      { "<leader>rb", "<cmd>lua require('kulala').scratchpad()<cr>", desc = "Open scratchpad" },
+      { "<leader>rC", "<cmd>lua require('kulala').copy()<cr>", desc = "Copy as cURL", ft = "http" },
+      { "<leader>rc", "<cmd>lua require('kulala').from_curl()<cr>", desc = "Paste from curl", ft = "http" },
+      { "<leader>re", "<cmd>lua require('kulala').set_selected_env()<cr>", desc = "Set environment", ft = "http" },
       {
-        "<leader>rs",
-        function()
-          require("kulala").run()
-        end,
-        desc = "Send request",
+        "<leader>rg",
+        "<cmd>lua require('kulala').download_graphql_schema()<cr>",
+        desc = "Download GraphQL schema",
+        ft = "http",
       },
+      { "<leader>ri", "<cmd>lua require('kulala').inspect()<cr>", desc = "Inspect current request", ft = "http" },
+      { "<leader>rn", "<cmd>lua require('kulala').jump_next()<cr>", desc = "Jump to next request", ft = "http" },
+      { "<leader>rp", "<cmd>lua require('kulala').jump_prev()<cr>", desc = "Jump to previous request", ft = "http" },
+      { "<leader>rq", "<cmd>lua require('kulala').close()<cr>", desc = "Close window", ft = "http" },
+      { "<leader>rr", "<cmd>lua require('kulala').replay()<cr>", desc = "Replay the last request" },
+      { "<leader>rs", "<cmd>lua require('kulala').run()<cr>", desc = "Send the request", ft = "http" },
+      { "<leader>rS", "<cmd>lua require('kulala').show_stats()<cr>", desc = "Show stats", ft = "http" },
+      { "<leader>rt", "<cmd>lua require('kulala').toggle_view()<cr>", desc = "Toggle headers/body", ft = "http" },
       {
         "<leader>ra",
         function()
@@ -18,34 +30,7 @@ return {
         end,
         desc = "Send all requests",
       },
-      {
-        "<leader>rb",
-        function()
-          require("kulala").scratchpad()
-        end,
-        desc = "Open scratchpad",
-      },
-      {
-        "<leader>rt",
-        function()
-          require("kulala").toggle_view()
-        end,
-        desc = "Toggle headers/body",
-      },
-      {
-        "<leader>rc",
-        function()
-          require("kulala").from_curl()
-        end,
-        desc = "Import from curl",
-      },
     },
-    opts = {
-      global_keymaps = false,
-      -- These prefixes are used if you use the default keymaps;
-      -- since we defined custom keys above, these are mostly fallback settings.
-      global_keymaps_prefix = "<leader>r",
-      kulala_keymaps_prefix = "",
-    },
+    opts = {},
   },
 }

@@ -131,4 +131,9 @@ function y() {
 export PATH="$HOME/.tmux/plugins/tmuxifier/bin:$PATH"
 eval "$(tmuxifier init -)"
 
+# Worktrunk
+wt-delete-all-branch() {
+	wt list --format=json | jq -r '.[].branch | select(. != "main")' | xargs -I {} wt remove {} --force
+}
+
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

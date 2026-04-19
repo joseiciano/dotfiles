@@ -47,3 +47,21 @@ No changes required
 - Tests passed: [not run - reason]
 - LSP diagnostics: [not run - reason]
 </verification>
+
+## Coding Information
+
+The following are **needed** when referring to code changes. **Always** refer to them for coding changes. 
+
+### Backend-specific information
+
+The following section is relevant **only** when working on backend changes.
+
+**Always** read these files and refer to them when working on backend changes. **Only** use this for backend changes.
+
+- [Controller-Service-Repository Patterns](`../references/controller-service-repository.md`)
+### Frontend-specific information
+The following section is relevant **only** when working on frontend changes. 
+
+**Always** read these files and refer to them when working on frontend changes. **Only** use this for frontend changes. 
+
+- [Smart-Dumb Component Patterns](../references/smart-dumb.md)

@@ -20,3 +20,14 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
   end,
   desc = "Show diagnostic float on hover",
 })
+
+local max_buffers = 100
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+    if #buffers > max_buffers then
+      vim.cmd("bd " .. buffers[1].bufnr)
+    end
+  end,
+})

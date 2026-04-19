@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@opencode-ai/plugin": "1.2.20",
+    "@opencode-ai/plugin": "1.3.10",
     "opencode-alibaba-qwen3-auth": "^1.0.0"
   }
 }

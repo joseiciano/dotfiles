@@ -3,7 +3,8 @@ return {
     "akinsho/bufferline.nvim",
     opts = {
       options = {
-        always_show_bufferline = true,
+        mode = "tabs",
+        always_show_bufferline = false,
       },
     },
   },

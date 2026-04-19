@@ -1,9 +1,11 @@
 return {
   "dhruvasagar/vim-table-mode",
-  event = { "BufReadPost", "BufNewFile" }, -- Load when you open/create a file
-  cmd = { "TableModeToggle", "TableModeEnable" }, -- Load when you run these commands
+  event = { "BufReadPost", "BufNewFile" },
+  cmd = { "TableModeToggle", "TableModeEnable" },
   init = function()
-    -- Optional: Change the table leader trigger if you want
-    -- The default is <leader>tm
+    vim.g.table_mode_map_prefix = "<leader>t"
+  end,
+  config = function()
+    vim.keymap.set("n", "<leader>tt", "<cmd>Tableize<cr>", { desc = "Tabelize" })
   end,
 }

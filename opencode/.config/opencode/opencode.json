@@ -4,6 +4,7 @@
     "file:///Users/joseiciano/.config/opencode/plugins/opencode-fallback/index.ts"
   ],
   "model": "openai/gpt-5.3-codex",
+  "default_agent": "orchestration",
   "agent": {
     "general": {
       "disable": true,
@@ -15,12 +16,22 @@
       "options": {},
       "permission": {}
     },
+    "pull-requester": {
+      "model": "openai/gpt-5.4-mini",
+      "fallback_models": [
+        "openai/gpt-5.4-nano",
+        "opencode/minimax-m2.5-free"
+      ],
+      "variant": "low",
+      "skills": []
+    },
     "orchestration": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
         "openai/gpt-5.3-codex",
         "qwencode/qwen3-coder-plus"
       ],
+      "variant": "high",
       "skills": [
         "*"
       ],
@@ -35,8 +46,9 @@
       "skills": [],
     },
     "explorer": {
-      "model": "opencode/minimax-m2.5-free",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
+        "opencode/minimax-m2.5-free",
         "openai/gpt-5.1-mini",
         "opencode/nemotron-3-super-free"
       ],
@@ -44,8 +56,9 @@
       "skills": [],
     },
     "fixer": {
-      "model": "qwencode/qwen3-coder-plus",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
+        "openai/gpt-5.3-codex",
         "openai/gpt-5.1-mini",
         "opencode/minimax-m2.5-free",
         "opencode/nemotron-3-super-free"
@@ -55,17 +68,16 @@
       "mcps": []
     },
     "librarian": {
-      "model": "qwencode/qwen3-coder-plus",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
         "openai/gpt-5.3-codex",
         "opencode/minimax-m2.5-free"
       ],
-      "variant": "low",
       "skills": [],
       "mcps": []
     },
     "oracle": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
         "openai/gpt-5.3-codex",
         "qwencode/qwen3-coder-plus"
@@ -102,6 +114,15 @@
           },
           "limit": {
             "context": 1050000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4-mini",
+          "reasoning": true,
+          "options": {},
+          "limit": {
+            "context": 400000,
             "output": 128000
           }
         },
@@ -146,7 +167,8 @@
         "gpt-5.4",
         "gpt-5.3-codex",
         "gpt-5.1-codex-mini",
-        "gpt-5.3-codex-spark"
+        "gpt-5.3-codex-spark",
+        "gpt-5.4-mini"
       ]
     },
     "opencode": {
@@ -171,5 +193,22 @@
       "whitelist": []
     }
   },
-  "$schema": "https://opencode.ai/config.json"
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "excalidraw": {
+      "type": "local",
+      "command": [
+        "docker",
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "EXPRESS_SERVER_URL=http://host.docker.internal:3001",
+        "-e",
+        "ENABLE_CANVAS_SYNC=true",
+        "ghcr.io/yctimlin/mcp_excalidraw:latest"
+      ],
+      "enabled": true
+    }
+  }
 }

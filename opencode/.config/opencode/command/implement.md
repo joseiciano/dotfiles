@@ -1,6 +1,6 @@
 ---
 description: Plan and implement a new task end to end, creating tests if needed. 
-agent: orchestrator
+agent: orchestration
 ---
 
 Implement $1 end to end. 

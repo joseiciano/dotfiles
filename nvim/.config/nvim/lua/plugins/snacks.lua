@@ -11,7 +11,7 @@ return {
           explorer = {
             layout = {
               layout = {
-                width = 35,
+                width = 30,
               },
             },
           },
@@ -19,73 +19,43 @@ return {
       },
       lazygit = {},
       terminal = {},
+      statuscolumn = {
+        left = { "sign", "mark" },
+      },
     },
     keys = {
       {
-        "<leader>fs",
+        "<leader>be",
         function()
-          local sessions = vim.fn.systemlist("tmux list-sessions -F '#S'")
-          local items = {}
-          for _, s in ipairs(sessions) do
-            table.insert(items, { text = s, value = s })
-          end
-          Snacks.picker.pick({
-            source = "tmux",
-            items = items,
-            confirm = function(picker, item)
-              picker:close()
-              vim.fn.system("tmux switch-client -t " .. item.value)
-            end,
-          })
+          Snacks.picker.buffers()
         end,
-        desc = "Tmux Sessions",
+        desc = "Buffers",
       },
       {
-        "<leader>es",
+        "<leader>ge",
+        function()
+          Snacks.picker.git_status()
+        end,
+        desc = "Git Status (Changes)",
+      },
+      {
+        "<leader>se",
         function()
           Snacks.picker.lsp_symbols({
             layout = {
-              preset = "vscode",
-              preview = "main",
+              preset = "sidebar",
+              position = "left",
             },
           })
         end,
-        desc = "LSP Symbols (VSCode Layout)",
-      },
-      {
-        "<leader>yy",
-        function()
-          Snacks.bufdelete()
-        end,
-        desc = "Delete Current Buffer",
-      },
-      {
-        "<leader>ya",
-        function()
-          Snacks.bufdelete.all()
-        end,
-        desc = "Delete All Buffers",
-      },
-      {
-        "<leader>yo",
-        function()
-          Snacks.bufdelete.other()
-        end,
-        desc = "Delete Other Buffers",
-      },
-      {
-        "<leader>tl",
-        function()
-          Snacks.lazygit.open()
-        end,
-        desc = "Lazygit",
+        desc = "LSP Symbols",
       },
       {
         "<leader>ld",
         function()
           Snacks.terminal("lazydocker", {
             win = {
-              style = "float", -- Opens in a floating window
+              style = "float",
               width = 0.9,
               height = 0.9,
             },
@@ -94,51 +64,13 @@ return {
         desc = "Lazydocker (Snacks)",
       },
       {
-        "<leader>tf",
-        function()
-          local file = vim.api.nvim_buf_get_name(0)
-          local cmd = (file ~= "" and vim.bo.buftype == "") and ('yazi "' .. file .. '"') or "yazi"
-
-          Snacks.terminal.open(cmd, {
-            win = {
-              style = "float",
-              width = 0.9,
-              height = 0.9,
-            },
-          })
-        end,
-        desc = "Yazi (Current File)",
-      },
-      {
-        "<leader>ty",
-        function()
-          Snacks.terminal.open("yazi", {
-            cwd = vim.fn.getcwd(),
-            win = { style = "float" },
-          })
-        end,
-        desc = "Yazi (CWD)",
-      },
-      {
-        "<leader>tY",
-        function()
-          Snacks.terminal.toggle("yazi", {
-            win = { style = "float" },
-            -- This ID ensures toggle finds the "yazi" session specifically
-            id = "yazi_terminal",
-          })
-        end,
-        desc = "Toggle Latest Yazi Session",
-      },
-      {
         "<leader>ts",
         function()
           Snacks.terminal.toggle(nil, {
-            id = "persistent_term", -- Ensures this specific terminal is remembered
+            id = "persistent_term",
             win = {
-              style = "float",
-              width = 0.8,
-              height = 0.8,
+              style = "bottom",
+              height = 0.4,
             },
           })
         end,
@@ -149,14 +81,34 @@ return {
         function()
           Snacks.terminal.open(nil, {
             win = {
-              style = "float",
-              width = 0.8,
-              height = 0.8,
+              style = "bottom",
+              height = 0.4,
             },
           })
         end,
-        desc = "Open New Terminal (Non-persistent)",
+        desc = "New Terminal (Bottom)",
       },
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.getcwd() })
+        end,
+        desc = "Find Files (CWD)",
+      },
+      {
+        "<leader>fF",
+        function()
+          Snacks.picker.files()
+        end,
+        desc = "Find Files (Root)",
+      },
+      -- {
+      --   "<leader>me",
+      --   function()
+      --     Snacks.picker.marks()
+      --   end,
+      --   desc = "Marks",
+      -- },
     },
   },
 }
