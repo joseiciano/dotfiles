@@ -5,7 +5,7 @@ return {
       bufdelete = {},
       picker = {
         hidden = true,
-        ignored = false,
+        ignored = true,
         exclude = { "node_modules", "dist" },
         sources = {
           explorer = {
