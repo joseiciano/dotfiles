@@ -64,7 +64,7 @@ return {
         desc = "Lazydocker (Snacks)",
       },
       {
-        "<leader>ts",
+        "<leader>tt",
         function()
           Snacks.terminal.toggle(nil, {
             id = "persistent_term",
@@ -77,7 +77,7 @@ return {
         desc = "Toggle Persistent Terminal",
       },
       {
-        "<leader>tS",
+        "<leader>tT",
         function()
           Snacks.terminal.open(nil, {
             win = {

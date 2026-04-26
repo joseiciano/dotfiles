@@ -6,6 +6,6 @@ return {
     vim.g.table_mode_map_prefix = "<leader>t"
   end,
   config = function()
-    vim.keymap.set("n", "<leader>tt", "<cmd>Tableize<cr>", { desc = "Tabelize" })
+    vim.keymap.set("n", "<leader>ts", "<cmd>Tableize<cr>", { desc = "Tabelize" })
   end,
 }
