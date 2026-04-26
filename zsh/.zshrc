@@ -1,14 +1,13 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
+# Plugins
+source $HOME/dotfiles/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 2>/dev/null
+source $HOME/dotfiles/zsh/plugins/zsh-you-should-use/zsh-you-should-use.plugin.zsh 2>/dev/null
 
 # macOS (BSD ls)
 # The 'ow' equivalent is 'G' and 'tw' is 'H'
@@ -19,25 +18,6 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 # 'ow' = other-writable, 'tw' = sticky bit
 # '0;34' = Blue text, no background
 export LS_COLORS=$LS_COLORS:"ow=0;34:tw=0;34:"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# --- FZF & RIPGREP CONFIGURATION ---
-if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
-  source /usr/share/doc/fzf/examples/key-bindings.zsh
-fi
-if [ -f /usr/share/doc/fzf/examples/completion.zsh ]; then
-  source /usr/share/doc/fzf/examples/completion.zsh
-fi
-
-if command -v rg > /dev/null; then
-  export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-fi
-
-export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border --preview '[[ \$(file --mime-type -b {}) == text/* ]] && batcat --color=always {} || file -b {}'"
-# -----------------------------------
 
 # Docker Dev Environment Function
 ddev() {
@@ -63,9 +43,10 @@ ddev() {
 }
 
 # Aliases
+alias k="kubectl"
 alias mux='tmuxinator'
-alias llama-15="curl http://llama-15:8080/v1/completions"
-alias llama-3="curl http://llama-3:8080/v1/completions"
+alias llama-15="llama-server --fim-qwen-1.5b-default"
+alias llama-3="llama-server --fim-qwen-3b-default"
 alias python=python3
 alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 alias init-ts='$HOME/dotfiles/scripts/init-ts.sh'
@@ -73,12 +54,9 @@ alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
 alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
 alias mako-delete-wt="$HOME/dotfiles/scripts/delete-worktree-branch.sh mako"
 
+
 # Editor
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+export EDITOR="nvim"
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -86,18 +64,21 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 
 # Java
-export JAVA_HOME="$HOME/OpenJDK/jdk-23.0.1.jdk/Contents/Home"
-export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=$HOME/OpenJDK/jdk-23.0.1.jdk/Contents/Home
+export PATH=$JAVA_HOME/bin:$PATH
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+export NVM_DIR=$HOME/.nvm
+
+[ -s "$NVM_DIR/nvm.sh" ] && nvm_load() {
+  . "$NVM_DIR/nvm.sh" # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
 
 # Android
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$PATH:$ANDROID_HOME/emulator"
-export PATH="$PATH:$ANDROID_HOME/platform-tools"
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 # Obsidian
 export obsidianpath="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Pepega"
@@ -105,17 +86,20 @@ export obsidianpath="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents
 # Bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+[ -s "/Users/joseiciano/.bun/_bun" ] && source "/Users/joseiciano/.bun/_bun"
 
 # Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+export PATH="/Users/joseiciano/.antigravity/antigravity/bin:$PATH"
 
 # Local bin
-export PATH="$HOME/.local/bin:$PATH"
+export PATH=/Users/joseiciano/.local/bin:$PATH
 
 # Google Cloud SDK
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
+if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/joseiciano/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# fzf integration
+source <(fzf --zsh)
 
 # Yazi function
 function y() {
@@ -127,13 +111,8 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-# Tmuxifier
-export PATH="$HOME/.tmux/plugins/tmuxifier/bin:$PATH"
-eval "$(tmuxifier init -)"
+source ~/powerlevel10k/powerlevel10k.zsh-theme
 
-# Worktrunk
-wt-delete-all-branch() {
-	wt list --format=json | jq -r '.[].branch | select(. != "main")' | xargs -I {} wt remove {} --force
-}
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
