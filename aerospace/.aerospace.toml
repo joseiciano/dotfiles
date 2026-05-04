@@ -66,12 +66,12 @@ outer.right = 0
 
 # Main screen 
 [[on-window-detected]]
-if.app-id = 'com.googlecode.iterm2'
-run = 'move-node-to-workspace terminal'
+if.app-id = 'com.docker.docker'
+run = ['move-node-to-workspace terminal', 'layout accordion']
 
 [[on-window-detected]]
-if.app-id = 'com.docker.docker'
-run = 'move-node-to-workspace gui'
+if.app-id = 'com.mitchellh.ghostty'
+run = ['move-node-to-workspace terminal', 'layout accordion']
 
 # Secondary
 [[on-window-detected]]
@@ -80,21 +80,23 @@ run = 'move-node-to-workspace browser'
 
 [[on-window-detected]]
 if.app-id = 'com.wizards.mtga'
-run = 'move-node-to-workspace games'
+run = ['move-node-to-workspace terminal', 'layout accordion']
+
+[[on-window-detected]]
+if.app-id = 'com.valvesoftware.steam'
+run = ['move-node-to-workspace terminal', 'layout accordion']
 
 [[on-window-detected]]
 if.app-id = 'com.pdfeditor.pdfeditormac'
 run = 'move-node-to-workspace pdf'
 
 [[on-window-detected]]
-if.app-id = 'com.valvesoftware.steam'
-run = 'move-node-to-workspace games'
+if.app-id = 'com.blackmagic-design.DaVinciResolve'
+run = ['move-node-to-workspace terminal', 'layout accordion']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = 'move-node-to-workspace finder'
-
-[mode.main.binding]
+if.app-id = 'com.autocut'
+run = ['move-node-to-workspace terminal', 'layout accordion']
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -108,91 +110,57 @@ run = 'move-node-to-workspace finder'
 # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
 #                   keypadMinus, keypadMultiply, keypadPlus
 # - Arrows.         left, down, up, right
+#
+# # All possible modifiers: cmd, alt, ctrl, shift
 
-# All possible modifiers: cmd, alt, ctrl, shift
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#focus
+# Top level layer, used for most important commands + going to keytables
+[mode.main.binding]
+# Go to specific key tables
+alt-shift-ctrl-t = 'mode table'
 alt-h = 'focus left'
 alt-j = 'focus down'
 alt-k = 'focus up'
 alt-l = 'focus right'
 
-alt-left = 'focus left'
-alt-down = 'focus down'
-alt-up = 'focus up'
-alt-right = 'focus right'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-t = 'workspace terminal'
-alt-m = 'workspace misc'
-alt-c = 'workspace gui'
-alt-b = 'workspace browser'
-alt-f = 'workspace finder'
-alt-p = 'workspace pdf'
-alt-g = 'workspace games'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
-alt-semicolon = 'mode service'
-
 alt-w = 'fullscreen'
 
-# 'service' binding mode declaration.
-[mode.service.binding]
-esc = ['reload-config', 'mode main']
-alt-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = [
-  'layout floating tiling',
-  'mode main',
-] # Toggle between floating and tiling layout
-# backspace = ['close-all-windows-but-current', 'mode main']
+[mode.table.binding]
+w = 'mode go_to_window'
+m = 'mode move_window'
+r = 'mode resize_window'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move
-alt-h = 'move left'
-alt-j = 'move down'
-alt-k = 'move up'
-alt-l = 'move right'
+[mode.go_to_window.binding]
+t = ['move-node-to-workspace terminal', 'mode main']
+m = ['move-node-to-workspace misc', 'mode main']
+b = ['move-node-to-workspace browser', 'mode main']
+p = ['move-node-to-workspace pdf', 'mode main']
+g = ['move-node-to-workspace games', 'mode main']
+v = ['move-node-to-workspace video-editing', 'mode main']
 
-alt-left = 'move left'
-alt-down = 'move down'
-alt-up = 'move up'
-alt-right = 'move right'
+[mode.move_window.binding]
+h = ['move left', 'mode main']
+j = ['move down', 'mode main']
+k = ['move up', 'mode main']
+l = ['move right', 'mode main']
 
-alt-shift-left = ['join-with left', 'mode main']
-alt-shift-right = ['join-with left', 'mode main']
-alt-shift-down = ['join-with down', 'mode main']
-alt-shift-up = ['join-with up', 'mode main']
+shift-h = ['join-with left', 'mode main']
+shift-j = ['join-with down', 'mode main']
+shift-k = ['join-with up', 'mode main']
+shift-l = ['join-with right', 'mode main']
 
-alt-shift-h = ['join-with left', 'mode main']
-alt-shift-j = ['join-with down', 'mode main']
-alt-shift-k = ['join-with up', 'mode main']
-alt-shift-l = ['join-with right', 'mode main']
+[mode.resize_window.binding]
+m = ['resize smart -50', 'mode main']
+p = ['resize smart +50', 'mode main']
 
-alt-t = ['move-node-to-workspace terminal', 'mode main']
-alt-m = ['move-node-to-workspace misc', 'mode main']
-alt-c = ['move-node-to-workspace gui', 'mode main']
-alt-b = ['move-node-to-workspace browser', 'mode main']
-alt-f = ['move-node-to-workspace finder', 'mode main']
-alt-p = ['move-node-to-workspace pdf', 'mode main']
-alt-g = ['move-node-to-workspace games', 'mode main']
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#resize
-minus = ['resize smart -50', 'mode main']
-equal = ['resize smart +50', 'mode main']
+f = ['layout floating tiling', 'mode main']
+t = ['layout tiles horizontal vertical', 'mode main']
+a = ['layout accordion horizontal vertical', 'mode main']
 
 [workspace-to-monitor-force-assignment]
 terminal = 'main'
 misc = 'main'
-gui = 'main'
 browser = 'secondary'
-finder = 'secondary'
 pdf = 'secondary'
 games = 'secondary'
+video-editing = 'main'

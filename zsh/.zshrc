@@ -58,7 +58,6 @@ alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
 alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
 alias mako-delete-wt="$HOME/dotfiles/scripts/delete-worktree-branch.sh mako"
 
-
 # Editor
 export EDITOR="nvim"
 

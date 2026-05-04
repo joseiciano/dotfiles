@@ -16,3 +16,14 @@ vim.keymap.set("n", "<leader>qQ", function()
 
   vim.cmd("quitall")
 end, { desc = "Save non-terminal buffers and quit" })
+
+-- Tmux session
+local function send_line_ref()
+  local file = vim.fn.expand("%:p")
+  local line = vim.fn.line(".")
+  -- Format: file_path:line_number
+  local cmd = string.format("tmux send-keys -t right '%s:%s' Enter", file, line)
+  os.execute(cmd)
+end
+
+vim.keymap.set("n", "<leader>tr", send_line_ref)
