@@ -116,7 +116,7 @@ run = ['move-node-to-workspace terminal', 'layout accordion']
 # Top level layer, used for most important commands + going to keytables
 [mode.main.binding]
 # Go to specific key tables
-alt-shift-ctrl-t = 'mode table'
+alt-ctrl-a = 'mode table'
 alt-h = 'focus left'
 alt-j = 'focus down'
 alt-k = 'focus up'

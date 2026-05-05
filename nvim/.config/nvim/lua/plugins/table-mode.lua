@@ -3,9 +3,9 @@ return {
   event = { "BufReadPost", "BufNewFile" },
   cmd = { "TableModeToggle", "TableModeEnable" },
   init = function()
-    vim.g.table_mode_map_prefix = "<leader>t"
+    vim.g.table_mode_map_prefix = "<leader>j"
   end,
   config = function()
-    vim.keymap.set("n", "<leader>ts", "<cmd>Tableize<cr>", { desc = "Tabelize" })
+    vim.keymap.set("n", "<leader>t", "<cmd>Tableize<cr>", { desc = "Tabelize" })
   end,
 }
