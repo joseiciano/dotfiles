@@ -42,7 +42,7 @@ link_file() {
 
 # --- Root Dotfiles ---
 # Common files at the root of the repo
-link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+# link_file "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 link_file "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 link_file "$DOTFILES_DIR/.tmux" "$HOME/.tmux"
@@ -67,5 +67,8 @@ done
 
 # --- Aerospace (Special case at root-level subdir) ---
 link_file "$DOTFILES_DIR/aerospace/.aerospace.toml" "$HOME/.aerospace.toml"
+
+# --- Ghostty ---
+link_file "$DOTFILES_DIR/ghostty/config" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 echo "✨ Symlinking complete! You might need to restart your terminal or source your .zshrc."

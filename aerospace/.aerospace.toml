@@ -130,6 +130,7 @@ alt-tab = 'workspace-back-and-forth'
 alt-w = 'fullscreen'
 
 [mode.table.binding]
+esc = 'mode main'
 w = 'mode go_to_window'
 m = 'mode move_window'
 r = 'mode resize_window'
