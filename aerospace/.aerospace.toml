@@ -79,6 +79,10 @@ if.app-id = 'com.microsoft.edgemac'
 run = 'move-node-to-workspace browser'
 
 [[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace browser'
+
+[[on-window-detected]]
 if.app-id = 'com.wizards.mtga'
 run = ['move-node-to-workspace games', 'layout accordion']
 
