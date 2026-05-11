@@ -8,7 +8,17 @@ return {
         ignored = true,
         exclude = { "node_modules", "dist" },
         sources = {
+          files = {
+            hidden = true,
+            ignored = true,
+          },
+          grep = {
+            hidden = true,
+            ignored = true,
+          },
           explorer = {
+            hidden = true,
+            ignored = true,
             layout = {
               layout = {
                 width = 30,
@@ -91,14 +101,14 @@ return {
       {
         "<leader>ff",
         function()
-          Snacks.picker.files({ cwd = vim.fn.getcwd() })
+          Snacks.picker.files({ cwd = vim.fn.getcwd(), hidden = true, ignored = true })
         end,
         desc = "Find Files (CWD)",
       },
       {
         "<leader>fF",
         function()
-          Snacks.picker.files()
+          Snacks.picker.files({ hidden = true, ignored = true })
         end,
         desc = "Find Files (Root)",
       },
