@@ -124,47 +124,76 @@ run = ['move-node-to-workspace video-editing', 'layout accordion']
 # Top level layer, used for most important commands + going to keytables
 [mode.main.binding]
 # Go to specific key tables
-alt-ctrl-a = 'mode table'
-alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
-alt-l = 'focus right'
+alt-a = ['mode table']
+alt-h = ['focus left']
+alt-j = ['focus down']
+alt-k = ['focus up']
+alt-l = ['focus right']
 
-alt-tab = 'workspace-back-and-forth'
-alt-w = 'fullscreen'
+alt-tab = ['workspace-back-and-forth']
+alt-w = ['fullscreen']
 
 [mode.table.binding]
-esc = 'mode main'
-w = 'mode go_to_window'
-m = 'mode move_window'
-r = 'mode resize_window'
+esc = ['mode main']
+alt-a = ['mode table']
+
+w = ['mode go_to_window']
+m = ['mode move_window']
+r = ['mode resize_window']
+
+h = ['focus left']
+j = ['focus down']
+k = ['focus up']
+l = ['focus right']
 
 [mode.go_to_window.binding]
-t = ['move-node-to-workspace terminal', 'mode main']
-m = ['move-node-to-workspace misc', 'mode main']
-b = ['move-node-to-workspace browser', 'mode main']
-p = ['move-node-to-workspace pdf', 'mode main']
-g = ['move-node-to-workspace games', 'mode main']
-v = ['move-node-to-workspace video-editing', 'mode main']
+esc = ['mode main']
+alt-a = ['mode table']
+
+t = ['workspace terminal', 'mode main']
+m = ['workspace misc', 'mode main']
+b = ['workspace browser', 'mode main']
+p = ['workspace pdf', 'mode main']
+g = ['workspace games', 'mode main']
+v = ['workspace video-editing', 'mode main']
 
 [mode.move_window.binding]
-h = ['move left', 'mode main']
-j = ['move down', 'mode main']
-k = ['move up', 'mode main']
-l = ['move right', 'mode main']
+esc = ['mode main']
+alt-a = ['mode table']
 
-shift-h = ['join-with left', 'mode main']
-shift-j = ['join-with down', 'mode main']
-shift-k = ['join-with up', 'mode main']
-shift-l = ['join-with right', 'mode main']
+t = ['move-node-to-workspace terminal', 'workspace terminal', 'mode main']
+m = ['move-node-to-workspace misc', 'workspace misc', 'mode main']
+b = ['move-node-to-workspace browser', 'workspace browser', 'mode main']
+p = ['move-node-to-workspace pdf', 'workspace pdf', 'mode main']
+g = ['move-node-to-workspace games', 'workspace games', 'mode main']
+v = [
+  'move-node-to-workspace video-editing',
+  'workspace video-editing',
+  'mode main',
+]
+
+h = ['move left']
+j = ['move down']
+k = ['move up']
+l = ['move right']
+
+shift-h = ['join-with left']
+shift-j = ['join-with down']
+shift-k = ['join-with up']
+shift-l = ['join-with right']
 
 [mode.resize_window.binding]
-m = ['resize smart -50', 'mode main']
-p = ['resize smart +50', 'mode main']
+esc = ['mode main']
+alt-a = ['mode table']
 
-f = ['layout floating tiling', 'mode main']
-t = ['layout tiles horizontal vertical', 'mode main']
-a = ['layout accordion horizontal vertical', 'mode main']
+h = ['resize smart -50']
+j = ['resize smart -50']
+k = ['resize smart +50']
+l = ['resize smart +50']
+
+f = ['layout floating tiling']
+t = ['layout tiles horizontal vertical']
+a = ['layout accordion horizontal vertical']
 
 [workspace-to-monitor-force-assignment]
 terminal = 'main'
