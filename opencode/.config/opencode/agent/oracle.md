@@ -8,7 +8,8 @@ permission:
   bash: allow
   external_directory:
     "*": ask
-    "~/dotfiles/opencode/.config/opencode/references/**": allow
+    "~/.config/opencode/references/**": allow
+    "~/.config/opencode/command/**": allow
 ---
 
 You are Oracle - a strategic technical advisor.

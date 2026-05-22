@@ -8,7 +8,8 @@ permission:
   bash: deny
   external_directory:
     "*": ask
-    "~/dotfiles/opencode/.config/opencode/references/**": allow
+    "~/.config/opencode/references/**": allow
+    "~/.config/opencode/command/**": allow
 ---
 
 <Role>

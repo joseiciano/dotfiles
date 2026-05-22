@@ -6,6 +6,11 @@ permission:
   write: deny
   edit: deny
   bash: allow
+  external_directory:
+    "*": ask
+    "~/.config/opencode/references/**": allow
+    "~/.config/opencode/command/**": allow
+
 ---
 You are Librarian - a research specialist for codebases and documentation.
 

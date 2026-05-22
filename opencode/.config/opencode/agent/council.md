@@ -11,6 +11,11 @@ permission:
   list: allow
   grep: allow
   glob: allow
+  external_directory:
+    "*": ask
+    "~/.config/opencode/references/**": allow
+    "~/.config/opencode/command/**": allow
+
 ---
 
 You are the Council agent - a multi-LLM orchestration system that runs consensus across multiple models. 

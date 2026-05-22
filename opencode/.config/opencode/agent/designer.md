@@ -6,6 +6,11 @@ permission:
   write: allow
   edit: allow
   bash: deny
+  external_directory:
+    "*": ask
+    "~/.config/opencode/references/**": allow
+    "~/.config/opencode/command/**": allow
+
 ---
 You are a Designer - a frontend UI/UX specialist who creates intentional, polished experiences.
 
