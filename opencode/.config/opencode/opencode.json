@@ -217,6 +217,13 @@
         "ghcr.io/yctimlin/mcp_excalidraw:latest"
       ],
       "enabled": true
+    "Neon": {
+      "type": "remote",
+      "url": "https://mcp.neon.tech/mcp",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:NEON_TOKEN}"
+      }
     }
   }
 }
