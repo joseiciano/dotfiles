@@ -1,6 +1,7 @@
 {
   "plugin": [
-    "file:///Users/joseiciano/.config/opencode/plugins/opencode-fallback/index.ts"
+    "file:///Users/joseiciano/.config/opencode/plugins/opencode-fallback/index.ts",
+    "@angdrew/opencode-hashline-plugin"
   ],
   "model": "openai/gpt-5.3-codex",
   "default_agent": "orchestration",
@@ -26,8 +27,9 @@
       ]
     },
     "pull-requester": {
-      "model": "openai/gpt-5.4-mini",
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-4.7-flash",
       "fallback_models": [
+        "openai/gpt-5.4-mini",
         "openai/gpt-5.4-nano",
         "opencode/minimax-m2.5-free"
       ],
@@ -35,37 +37,40 @@
       "skills": []
     },
     "orchestration": {
-      "model": "openai/gpt-5.5",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
         "openai/gpt-5.3-codex",
       ],
-      "variant": "high",
+      "variant": "medium",
       "skills": [
         "*"
       ],
     },
     "designer": {
-      "model": "zai-coding-plan/glm-4.7",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
         "openai/gpt-5.1-mini",
         "opencode/minimax-m2.5-free",
         "opencode/nemotron-3-super-free",
       ],
+      "variant": "medium",
       "skills": [],
     },
     "explorer": {
-      "model": "openai/gpt-5.4",
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "fallback_models": [
+        "openai/gpt-5.4",
         "opencode/minimax-m2.5-free",
         "openai/gpt-5.1-mini",
         "opencode/nemotron-3-super-free"
       ],
-      "variant": "low",
+      "variant": "medium",
       "skills": [],
     },
     "fixer": {
-      "model": "openai/gpt-5.4",
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "fallback_models": [
+        "openai/gpt-5.4",
         "openai/gpt-5.3-codex",
         "openai/gpt-5.1-mini",
         "opencode/minimax-m2.5-free",
@@ -76,8 +81,9 @@
       "mcps": []
     },
     "librarian": {
-      "model": "openai/gpt-5.4-mini",
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "fallback_models": [
+        "openai/gpt-5.4-mini",
         "openai/gpt-5.3-codex",
         "opencode/minimax-m2.5-free"
       ],
@@ -89,6 +95,69 @@
       "fallback_models": [
         "openai/gpt-5.3-codex",
       ],
+      "variant": "medium",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-agents-md": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-code-quality": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-code": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-documentation": {
+      "model": "deepseek/deepseek-v4-flash",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-orchestrator": {
+      "model": "openai/gpt-5.4",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "medium",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-security": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
+      "variant": "high",
+      "skills": [],
+      "mcps": [],
+    },
+    "reviewer-performance": {
+      "model": "deepseek/deepseek-v4-pro",
+      "fallback_models": [
+        "openai/gpt-5.3-codex"
+      ],
       "variant": "high",
       "skills": [],
       "mcps": [],
@@ -98,6 +167,7 @@
     "openai": {
       "options": {
         "baseURL": "http://127.0.0.1:2455/v1",
+        "apiKey": "sk-clb-OBoJ3NWrIqr4c7kgCwtJ6iStNHOvSKMrb5RmGaSPG2A"
       },
       "models": {
         "gpt-5.5": {
@@ -216,14 +286,20 @@
         "ENABLE_CANVAS_SYNC=true",
         "ghcr.io/yctimlin/mcp_excalidraw:latest"
       ],
+      "enabled": false
+    },
+    "cloudflare-observability": {
+      "type": "remote",
+      "url": "https://observability.mcp.cloudflare.com/mcp",
       "enabled": true
+    },
     "Neon": {
       "type": "remote",
       "url": "https://mcp.neon.tech/mcp",
       "enabled": true,
       "headers": {
-        "Authorization": "Bearer {env:NEON_TOKEN}"
+        "Authorization": "Bearer {file:~/dotfiles/opencode/.config/opencode/envs/neon}"
       }
-    }
+    },
   }
 }

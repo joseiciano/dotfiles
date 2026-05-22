@@ -57,7 +57,7 @@ Rotate "o" "rotatew ; show-wk-menu #{@wk_menu_windows}" \
 "Rotate reverse" "O" "rotatew -D ; show-wk-menu #{@wk_menu_windows}" \
 "" \
 Rename "R" "command-prompt -I \"#W\" \"renamew -- \\"%%\\"\"" \
-Kill "x" "confirm -p \"Kill window #W? (y/n)\" killw"'
+Kill "x" killw'
 
 set -g @wk_menu_resize \
 'Left "h" "resizep -L ; show-wk-menu #{@wk_menu_resize}" \
@@ -90,7 +90,7 @@ Mark "m" "selectp -m" \
 Unmark "M" "selectp -M" \
 Capture "C" capture-pane \
 "Respawn pane" "R" restart-pane \
-Kill "x" "confirm -p \"Kill pane #P? (y/n)\" killp"'
+Kill "x" killp'
 
 set -g @wk_menu_terminals \
 '"Attached Opencode" "a" "run-shell \"~/dotfiles/scripts/tmux/toggle-opencode-attached.sh\"" \

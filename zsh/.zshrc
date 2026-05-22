@@ -105,5 +105,10 @@ source $HOME/dotfiles/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Go into Tmux right away
+if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ] && [ -n "$PS1" ]; then
+  exec tmux new-session -A -s main
+fi
+
 # Uncomment to time zshrc load time
 # zprof

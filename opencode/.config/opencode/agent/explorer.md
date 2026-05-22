@@ -45,3 +45,11 @@ Concise answer to the question
 - READ-ONLY: Search and report, don't modify
 - Be exhaustive but concise
 - Include line numbers when relevant
+
+## Coding Information
+
+The following are **needed** when referring to code changes. **Always** refer to them for coding changes. 
+
+Reference the skills that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/skills-guide.md`
+
+Reference the MCPs that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/mcp-guide.md`

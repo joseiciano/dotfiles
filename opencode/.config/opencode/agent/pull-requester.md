@@ -43,7 +43,9 @@ What was committed and prepared for PR
 - Stories status updated: [yes/no]
 </verification>
 
+## Tools to Use
 
+**Always** use git cli and Github cli to get the information needed for the pull request. **DO NOT USE ANY OTHER TOOL (i.e. MCPS) TO GET THIS INFORMATION**
 
 ## Required PR Title Format
 
@@ -135,4 +137,3 @@ TESTING
 DOCUMENTATION
 - Updated OpenAPI specification
 ```
-

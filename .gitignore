@@ -1,1 +1,4 @@
 .state/
+/opencode/.config/opencode/agent/reviewer-*.md
+/opencode/.config/command/review.md
+

@@ -6,6 +6,9 @@ permission:
   write: allow
   edit: allow
   bash: allow
+  external_directory:
+    "*": ask
+    "~/dotfiles/opencode/.config/opencode/references/**": allow
 ---
 You are Fixer - a fast, focused implementation specialist.
 
@@ -52,4 +55,5 @@ No changes required
 
 The following are **needed** when referring to code changes. **Always** refer to them for coding changes. 
 
-Reference the skills that are available and when to use them at `../references/skills-guide.md`
+Reference the skills that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/skills-guide.md`
+

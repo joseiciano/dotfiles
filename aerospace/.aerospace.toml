@@ -57,8 +57,8 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 0
-inner.vertical = 0
+inner.horizontal = 8
+inner.vertical = 8
 outer.left = 0
 outer.bottom = 0
 outer.top = 0
@@ -84,27 +84,35 @@ run = 'move-node-to-workspace browser'
 
 [[on-window-detected]]
 if.app-id = 'com.wizards.mtga'
-run = ['move-node-to-workspace games', 'layout accordion']
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
-run = ['move-node-to-workspace games', 'layout accordion']
+run = ['move-node-to-workspace games', 'layout floating']
 
 [[on-window-detected]]
-if.app-id = 'gg.untapped.companion'
-run = ['move-node-to-workspace games', 'layout accordion']
+if.app-id = 'com.epicgames.EpicGamesLauncher'
+run = ['move-node-to-workspace games', 'layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Stickies'
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.pdfeditor.pdfeditormac'
 run = 'move-node-to-workspace pdf'
-
+#
 [[on-window-detected]]
 if.app-id = 'com.blackmagic-design.DaVinciResolve'
-run = ['move-node-to-workspace video-editing', 'layout accordion']
+run = ['move-node-to-workspace video-editing']
 
 [[on-window-detected]]
 if.app-id = 'com.autocut'
-run = ['move-node-to-workspace video-editing', 'layout accordion']
+run = ['move-node-to-workspace video-editing', 'layout floating']
 
 # All possible keys:
 # - Letters.        a, b, c, ..., z
@@ -130,6 +138,11 @@ alt-j = ['focus down']
 alt-k = ['focus up']
 alt-l = ['focus right']
 
+alt-left = ['focus left']
+alt-down = ['focus down']
+alt-up = ['focus up']
+alt-right = ['focus right']
+
 alt-tab = ['workspace-back-and-forth']
 alt-w = ['fullscreen']
 
@@ -145,6 +158,13 @@ h = ['focus left']
 j = ['focus down']
 k = ['focus up']
 l = ['focus right']
+
+left = ['focus left']
+down = ['focus down']
+up = ['focus up']
+right = ['focus right']
+
+tab = ['workspace-back-and-forth']
 
 [mode.go_to_window.binding]
 esc = ['mode main']
@@ -177,10 +197,20 @@ j = ['move down']
 k = ['move up']
 l = ['move right']
 
+left = ['move left']
+down = ['move down']
+up = ['move up']
+right = ['move right']
+
 shift-h = ['join-with left']
 shift-j = ['join-with down']
 shift-k = ['join-with up']
 shift-l = ['join-with right']
+
+shift-left = ['join-with left']
+shift-down = ['join-with down']
+shift-up = ['join-with up']
+shift-right = ['join-with right']
 
 [mode.resize_window.binding]
 esc = ['mode main']
@@ -190,6 +220,11 @@ h = ['resize smart -50']
 j = ['resize smart -50']
 k = ['resize smart +50']
 l = ['resize smart +50']
+
+left = ['resize smart -50']
+down = ['resize smart -50']
+up = ['resize smart +50']
+right = ['resize smart +50']
 
 f = ['layout floating tiling']
 t = ['layout tiles horizontal vertical']
