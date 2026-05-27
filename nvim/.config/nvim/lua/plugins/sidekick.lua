@@ -19,7 +19,8 @@ return {
     {
       "<leader>aa",
       function()
-        local sessions = require("sidekick.cli.state").get({ attached = true, name = "opencode", terminal = true, cwd = true })
+        local sessions =
+          require("sidekick.cli.state").get({ attached = true, name = "opencode", terminal = true, cwd = true })
         if #sessions > 0 then
           local terminal = sessions[1].terminal
           terminal:toggle()

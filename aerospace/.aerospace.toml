@@ -57,12 +57,12 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 8
-inner.vertical = 8
-outer.left = 0
-outer.bottom = 0
-outer.top = 0
-outer.right = 0
+inner.horizontal = 16
+inner.vertical = 16
+outer.left = 16
+outer.bottom = 16
+outer.top = 16
+outer.right = 16
 
 # Main screen 
 [[on-window-detected]]
@@ -143,8 +143,15 @@ alt-down = ['focus down']
 alt-up = ['focus up']
 alt-right = ['focus right']
 
-alt-tab = ['workspace-back-and-forth']
+alt-tab = ['workspace-back-and-forth', 'mode main']
 alt-w = ['fullscreen']
+
+alt-t = ['workspace terminal', 'mode main']
+alt-m = ['workspace misc', 'mode main']
+alt-b = ['workspace browser', 'mode main']
+alt-p = ['workspace pdf', 'mode main']
+alt-g = ['workspace games', 'mode main']
+alt-v = ['workspace video-editing', 'mode main']
 
 [mode.table.binding]
 esc = ['mode main']
@@ -177,6 +184,22 @@ p = ['workspace pdf', 'mode main']
 g = ['workspace games', 'mode main']
 v = ['workspace video-editing', 'mode main']
 
+[mode.join_window.binding]
+esc = ['mode main']
+alt-a = ['mode table']
+
+h = ['join-with left', 'mode main']
+j = ['join-with down', 'mode main']
+k = ['join-with up', 'mode main']
+l = ['join-with right', 'mode main']
+
+left = ['join-with left', 'mode main']
+down = ['join-with down', 'mode main']
+up = ['join-with up', 'mode main']
+right = ['join-with right', 'mode main']
+
+f = ['flatten-workspace-tree', 'mode main']
+
 [mode.move_window.binding]
 esc = ['mode main']
 alt-a = ['mode table']
@@ -201,16 +224,6 @@ left = ['move left']
 down = ['move down']
 up = ['move up']
 right = ['move right']
-
-shift-h = ['join-with left']
-shift-j = ['join-with down']
-shift-k = ['join-with up']
-shift-l = ['join-with right']
-
-shift-left = ['join-with left']
-shift-down = ['join-with down']
-shift-up = ['join-with up']
-shift-right = ['join-with right']
 
 [mode.resize_window.binding]
 esc = ['mode main']

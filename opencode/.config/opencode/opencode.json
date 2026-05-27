@@ -1,9 +1,7 @@
 {
   "plugin": [
-    "file:///Users/joseiciano/.config/opencode/plugins/opencode-fallback/index.ts",
     "@angdrew/opencode-hashline-plugin"
   ],
-  "model": "openai/gpt-5.3-codex",
   "default_agent": "orchestration",
   "agent": {
     "general": {
@@ -17,102 +15,107 @@
       "permission": {}
     },
     "council": {
-      "model": "openai/gpt-5.5",
-      "fallback_models": [
-        "openai/gpt-5.3-codex"
-      ],
-      "variant": "high",
+      "model": "openai/gpt-5.4",
+      "variant": "medium",
       "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "councillor": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+      "variant": "medium",
+      "skills": [
+        "*"
+      ],
+      "mcps": [
         "*"
       ]
     },
     "pull-requester": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-4.7-flash",
-      "fallback_models": [
-        "openai/gpt-5.4-mini",
-        "openai/gpt-5.4-nano",
-        "opencode/minimax-m2.5-free"
-      ],
       "variant": "low",
-      "skills": []
+      "skills": [],
+      "mcps": []
     },
     "orchestration": {
       "model": "openai/gpt-5.4",
-      "fallback_models": [
-        "openai/gpt-5.3-codex",
-      ],
       "variant": "medium",
       "skills": [
         "*"
       ],
+      "mcps": [
+        "*"
+      ]
     },
     "designer": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": [
-        "openai/gpt-5.1-mini",
-        "opencode/minimax-m2.5-free",
-        "opencode/nemotron-3-super-free",
-      ],
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "variant": "medium",
       "skills": [],
     },
     "explorer": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "fallback_models": [
-        "openai/gpt-5.4",
-        "opencode/minimax-m2.5-free",
-        "openai/gpt-5.1-mini",
-        "opencode/nemotron-3-super-free"
-      ],
       "variant": "medium",
       "skills": [],
+      "mcps": [
+        "*"
+      ]
     },
     "fixer": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "fallback_models": [
-        "openai/gpt-5.4",
-        "openai/gpt-5.3-codex",
-        "openai/gpt-5.1-mini",
-        "opencode/minimax-m2.5-free",
-        "opencode/nemotron-3-super-free"
+      "variant": "medium",
+      "skills": [
+        "*"
       ],
-      "variant": "low",
-      "skills": [],
-      "mcps": []
+      "mcps": [
+        "*"
+      ]
     },
     "librarian": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "fallback_models": [
-        "openai/gpt-5.4-mini",
-        "openai/gpt-5.3-codex",
-        "opencode/minimax-m2.5-free"
+      "skills": [
+        "*"
       ],
-      "skills": [],
-      "mcps": []
+      "mcps": [
+        "*"
+      ]
     },
     "oracle": {
       "model": "openai/gpt-5.4",
-      "fallback_models": [
-        "openai/gpt-5.3-codex",
-      ],
       "variant": "medium",
-      "skills": [],
-      "mcps": [],
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ],
+    },
+    "product-manager": {
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high",
+      "skills": [
+        "persona"
+      ],
+      "mcps": []
+    },
+    "product-manager-mini": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+      "variant": "high",
+      "skills": [
+        "persona"
+      ],
+      "mcps": []
     },
     "reviewer-agents-md": {
       "model": "deepseek/deepseek-v4-flash",
-      "fallback_models": [
-        "openai/gpt-5.3-codex"
-      ],
       "variant": "high",
       "skills": [],
       "mcps": [],
     },
     "reviewer-code-quality": {
       "model": "deepseek/deepseek-v4-pro",
-      "fallback_models": [
-        "openai/gpt-5.3-codex"
-      ],
       "variant": "high",
       "skills": [],
       "mcps": [],
@@ -215,38 +218,24 @@
             "output": 65536
           }
         },
-        "gpt-5.1-codex-mini": {
-          "name": "GPT-5.1 Codex Mini",
-          "reasoning": true,
-          "options": {
-            "reasoningEffort": "high",
-            "reasoningSummary": "detailed"
-          },
-          "limit": {
-            "context": 272000,
-            "output": 65536
-          }
-        },
-        "gpt-5.3-codex-spark": {
-          "name": "GPT-5.3 Codex Spark",
-          "reasoning": true,
-          "options": {
-            "reasoningEffort": "xhigh",
-            "reasoningSummary": "detailed"
-          },
-          "limit": {
-            "context": 128000,
-            "output": 65536
-          }
-        }
       },
       "whitelist": [
         "gpt-5.5",
         "gpt-5.4",
         "gpt-5.3-codex",
-        "gpt-5.1-codex-mini",
-        "gpt-5.3-codex-spark",
         "gpt-5.4-mini"
+      ]
+    },
+    "cloudflare": {
+      "whitelist": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-4.7-flash"
+      ]
+    },
+    "deepseek": {
+      "whitelist": [
+        "deepseek-v4-pro",
+        "deepseek-v4-flash"
       ]
     },
     "opencode": {
