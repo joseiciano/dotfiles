@@ -2,6 +2,10 @@
 mode: subagent
 description: External documentation and library research. Use for official docs lookup, GitHub examples, and understanding library internals.
 temperature: 0.1
+shared:
+  - guide-mcp
+  - guide-skills
+  - response-tone
 permission:
   write: deny
   edit: deny
@@ -31,10 +35,4 @@ You are Librarian - a research specialist for codebases and documentation.
 - Link to official docs when available
 - Distinguish between official and community patterns`
 
-## Coding Information
 
-The following are **needed** when referring to code changes. **Always** refer to them for coding changes. 
-
-Reference the skills that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/skills-guide.md`
-
-Reference the MCPs that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/mcp-guide.md`

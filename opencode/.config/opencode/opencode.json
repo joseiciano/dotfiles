@@ -1,6 +1,7 @@
 {
   "plugin": [
-    "@angdrew/opencode-hashline-plugin"
+    "@angdrew/opencode-hashline-plugin",
+    "./plugins/agent-composer/index.ts"
   ],
   "default_agent": "orchestration",
   "agent": {

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@angdrew/opencode-hashline-plugin": "1.0.0",
-    "@opencode-ai/plugin": "1.14.50"
+    "@opencode-ai/plugin": "1.14.50",
+    "yaml": "2.9.0"
   }
 }

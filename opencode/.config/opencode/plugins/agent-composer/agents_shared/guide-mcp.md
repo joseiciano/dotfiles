@@ -1,5 +1,7 @@
 # MCP Guide
 
+The following skills are **needed** when referring to code changes. **Always** refer to them for coding changes. 
+
 This document lists the available Model Context Protocol (MCP) servers and when to use them.
 
 ## MCPs

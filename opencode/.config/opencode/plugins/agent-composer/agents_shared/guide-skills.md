@@ -1,5 +1,7 @@
 # Skills Guide
 
+The following skills are **needed** when referring to code changes. **Always** refer to them for coding changes. 
+
 This document is to give information on the skills available, and guidance on when to use them. 
 
 ## Skills

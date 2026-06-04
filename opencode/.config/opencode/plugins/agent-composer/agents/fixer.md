@@ -2,6 +2,10 @@
 mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 temperature: 0.2
+shared:
+  - guide-mcp
+  - guide-skills
+  - response-tone
 permission:
   write: allow
   edit: allow
@@ -51,10 +55,4 @@ No changes required
 - Tests passed: [not run - reason]
 - LSP diagnostics: [not run - reason]
 </verification>
-
-## Coding Information
-
-The following are **needed** when referring to code changes. **Always** refer to them for coding changes. 
-
-Reference the skills that are available and when to use them at `~/dotfiles/opencode/.config/opencode/references/skills-guide.md`
 
