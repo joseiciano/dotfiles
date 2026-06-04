@@ -9,7 +9,6 @@ permissions:
   read: allow
   '*': deny,
   question: deny,
-  read: allow,
   glob: allow,
   grep: allow,
   lsp: allow,
