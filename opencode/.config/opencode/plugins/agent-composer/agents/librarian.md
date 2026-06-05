@@ -3,9 +3,7 @@ mode: subagent
 description: External documentation and library research. Use for official docs lookup, GitHub examples, and understanding library internals.
 temperature: 0.1
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission:
   write: deny
   edit: deny

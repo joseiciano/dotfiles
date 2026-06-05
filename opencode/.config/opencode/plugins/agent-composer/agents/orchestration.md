@@ -3,9 +3,7 @@ mode: primary
 description: AI coding orchestrator that delegates tasks to specialist agents for optimal quality, speed, and cost
 temperature: 0.1
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission: 
   write: deny 
   edit: deny 

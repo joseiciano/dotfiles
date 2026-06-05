@@ -2,9 +2,7 @@
 description: Multi-LLM council agent that synthesizes responses from multiple models for higher-quality outputs on critical decisions.
 mode: subagent
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 temperature: 0.1
 permission: 
   write: deny

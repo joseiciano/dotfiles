@@ -3,9 +3,7 @@ mode: subagent
 description: UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish.
 temperature: 0.7
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission:
   write: allow
   edit: allow

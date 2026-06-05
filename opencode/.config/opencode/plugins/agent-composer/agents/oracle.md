@@ -3,9 +3,7 @@ mode: subagent
 fallback_models: []
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission:
   write: deny
   edit: deny

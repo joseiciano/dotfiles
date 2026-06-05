@@ -3,9 +3,7 @@ mode: subagent
 description: Fast codebase search and pattern matching. Use for finding files, locating code patterns, and answering 'where is X?' questions.
 temperature: 0.1
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission:
   write: deny
   edit: deny

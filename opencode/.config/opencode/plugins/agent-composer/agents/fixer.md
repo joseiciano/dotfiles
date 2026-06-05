@@ -3,9 +3,7 @@ mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 temperature: 0.2
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permission:
   write: allow
   edit: allow

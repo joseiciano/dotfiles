@@ -2,9 +2,7 @@
 description: read-only advisor in the multi-llm council
 temperature: 0.2
 shared:
-  - guide-mcp
-  - guide-skills
-  - response-tone
+  - coding-shared
 permissions:
   read: allow
   '*': deny,
