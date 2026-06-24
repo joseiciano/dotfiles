@@ -1,4 +1,5 @@
 .state/
-/opencode/.config/opencode/agent/reviewer-*.md
+/opencode/.config/opencode/plugins/agent-composer/agents/reviewer-*.md
+/opencode/.config/opencode/plugins/agent-composer/agents_shared/reviewer-*.md
 /opencode/.config/command/review.md
 
