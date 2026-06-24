@@ -1,5 +1,6 @@
 return {}
---
+
+-- local first_toggle = true
 -- return {
 --   "sudo-tee/opencode.nvim",
 --   dependencies = {
@@ -20,9 +21,20 @@ return {}
 --
 --     keymap = {
 --       editor = {
---         ["<leader>aa"] = { "toggle" },
---         ["<leader>ai"] = { "open_input" },
---         ["<leader>aI"] = { "open_input_new_session" },
+--         ["<leader>aa"] = {
+--           function()
+--             local api = require("opencode.api")
+--             if first_toggle then
+--               first_toggle = false
+--               api.toggle(true)
+--             else
+--               api.toggle()
+--             end
+--           end,
+--           desc = "Toggle opencode",
+--         },
+--         ["<leader>aI"] = { "open_input" },
+--         ["<leader>ai"] = { "open_input_new_session" },
 --         ["<leader>ao"] = { "open_output" },
 --         ["<leader>af"] = { "toggle_focus" },
 --         ["<leader>aF"] = { "timeline" },

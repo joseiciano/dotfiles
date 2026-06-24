@@ -23,13 +23,16 @@ Complete the following checklist:
 - [ ] Based on the plan created above, implement using @fixer subagents. 
   - [ ]  For the implementation, make sure there are tests validating successful implementation. 
   - [ ] Make sure there are documentation changes included, if needed
-- [ ] Cycle through revisions. Run a code review with the same considerations as the [`review`](~/dotfiles/opencode/.config/opencode/command/review.md) command. **DO NOT** address comments modifying future tickets, only handle ones modifying the ticket we are working on right now. 
-  - [ ] Spawn a @reviewer-orchestrator subagent to review the code, oversee with an @oracle subagent if there are any changes that need to be made. If there are, implement using @fixer
-  - [ ] Spawn a new @reviewer-orchestrator subagent after the previous set of iterations, and repeat until we get an LGTM.
+- [ ] Cycle through revisions. **DO NOT** address comments modifying future tickets, only handle ones modifying the ticket we are working on right now. 
+For each cycle, do the following:
+  - [ ] Spawn a new @reviewer-orchestrator and do a code review using the  [`review`](~/dotfiles/opencode/.config/opencode/skills/review/SKILL.md) skill.   
+  - [ ] Analyze if review status was "Approved" or "Approved with Comments". If so, stop here. 
+  - [ ] If status was not "Approved" or "Approved with Comments", review changes needed and implement using @fixer
+  - [ ] Spawn a new @reviewer-orchestrator subagent after the previous set of iterations, and repeat.
 - [ ] Separate implementation into concise commits 
 - [ ] Prompt the user if we would like to make a pull request. 
 
-**Note**: For the review cycles you **must** always use the same prompt that is provided in the `/review` command. 
+**Note**: For the review cycles you **must** always use the `review` skill.
 
 ## Implementation Diagram
 
@@ -77,11 +80,11 @@ flowchart TD
     FixerBlock1 --> Imp[Fixers implement code changes, enters review cycle]
     FixerBlock2 --> Imp[Fixers implement code changes, enters review cycle]
     FixerBlock3 --> Imp[Fixers implement code changes, enters review cycle]
-    Imp --> Reviewer-Orchestrator[Orchestration calls /review command, spawns @reviewer-orchestrator agent for review]
-    Reviewer-Orchestrator --> LGTMCheck["LGTM | Good, with minor nits | Needs work"]
-    LGTMCheck -- "LGTM" --> Commits[Split into concise commits]
-    LGTMCheck -- "Good, with minor nits" --> ReviewOracle[Calls @oracle to review the changes suggested. implement with @fixer if needed. Call a new @reviewer-orchestrator agent to re-review]
-    LGTMCheck -- "Needs Work" --> ReviewOracle[Calls @oracle to review the changes. implement with @fixer. Call a new @reviewer-orchestrator agent to re-review]
+    Imp --> Reviewer-Orchestrator[Orchestration spawns @reviewer-orchestrator agent for review, runs review skill]
+    Reviewer-Orchestrator --> LGTMCheck["Approved | Approved with Comments | Minor Issues | Significant Concerns"]
+    LGTMCheck -- "Approved | Approved with Comments" --> Commits[Split into concise commits]
+    LGTMCheck -- "Minor Issues" --> ReviewOracle[Calls @oracle to review the changes suggested. implement with @fixer if needed. Call a new @reviewer-orchestrator agent to re-review]
+    LGTMCheck -- "Significant Concerns" --> ReviewOracle[Calls @oracle to review the changes. implement with @fixer. Call a new @reviewer-orchestrator agent to re-review]
     ReviewOracle -- "Re-reviews after implementation" --> Reviewer-Orchestrator
 
     Commits --> EndUser["Ask user about creating a pull request"]

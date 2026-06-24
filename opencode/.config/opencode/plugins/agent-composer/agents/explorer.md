@@ -1,7 +1,6 @@
 ---
 mode: subagent
 description: Fast codebase search and pattern matching. Use for finding files, locating code patterns, and answering 'where is X?' questions.
-temperature: 0.1
 shared:
   - coding-shared
 permission:
@@ -52,5 +51,3 @@ Concise answer to the question
 - READ-ONLY: Search and report, don't modify
 - Be exhaustive but concise
 - Include line numbers when relevant
-
-

@@ -3,7 +3,6 @@ description: Multi-LLM council agent that synthesizes responses from multiple mo
 mode: subagent
 shared:
   - coding-shared
-temperature: 0.1
 permission: 
   write: deny
   edit: deny
@@ -79,5 +78,3 @@ If a councillor failed or timed out, include that status briefly.
 Summarize where councillors agreed, where they disagreed, why you chose the \
 final answer, and any remaining uncertainty. Include a consensus confidence \
 rating: unanimous, majority, or split.
-
-

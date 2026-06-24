@@ -1,7 +1,6 @@
 ---
 mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
-temperature: 0.2
 shared:
   - coding-shared
 permission:
@@ -53,4 +52,3 @@ No changes required
 - Tests passed: [not run - reason]
 - LSP diagnostics: [not run - reason]
 </verification>
-

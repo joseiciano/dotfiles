@@ -18,4 +18,4 @@ Iterate on the changes mentioned in there that are `serious concerns` using @ora
 
 **IF THERE ARE NO SERIOUS CONCERNS IN THE REVIEW, STOP HERE AND PROMPT THE USER IF THEY WOULD LIKE TO REVIEW THE NON-SERIOUS CONCERNS (minor nits, warnings)**
 
-Once those changes are done, spawn a new @reviewer-orchestrator to re-reviewer and generate a new `code_review_(x+1).md` file. For reference on what the @reviewer-orchestrator is to do, reference `~/dotfiles/opencode/.config/opencode/command/review.md`
+Once those changes are done, spawn a new @reviewer-orchestrator and use the `review` skill to re-review and generate a new `code_review_(x+1).md` file. 

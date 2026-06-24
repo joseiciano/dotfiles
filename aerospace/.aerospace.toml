@@ -4,6 +4,7 @@
 # after-startup-command = [
 #   'exec-and-forget borders active_color=0xffea9999 inactive_color=0xff494d64 width=5.0'
 # ]
+#
 
 # Start AeroSpace at login
 start-at-login = true
@@ -64,6 +65,12 @@ outer.bottom = 16
 outer.top = 16
 outer.right = 16
 
+# 1. Set all windows to float by default
+[[on-window-detected]]
+check-further-callbacks = true
+run = ['layout floating', 'move-node-to-workspace current']
+
+# 2. Force specific browsers to tile
 # Main screen 
 [[on-window-detected]]
 if.app-id = 'com.docker.docker'
@@ -73,18 +80,23 @@ run = ['move-node-to-workspace terminal', 'layout accordion']
 if.app-id = 'com.mitchellh.ghostty'
 run = ['move-node-to-workspace terminal', 'layout accordion']
 
-# Secondary
-[[on-window-detected]]
-if.app-id = 'com.microsoft.edgemac'
-run = 'move-node-to-workspace browser'
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace browser'
+run = ['layout tiling']
 
 [[on-window-detected]]
-if.app-id = 'com.wizards.mtga'
-run = ['layout floating']
+if.app-id = 'com.microsoft.edgemac'
+run = ['layout tiling']
+
+# Secondary
+# [[on-window-detected]]
+# if.app-id = 'com.google.Chrome'
+# run = ['move-node-to-workspace terminal', 'layout tiling']
+#
+# [[on-window-detected]]
+# if.app-id = 'com.microsoft.edgemac'
+# run = ['move-node-to-workspace terminal', 'layout tiling']
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
@@ -93,14 +105,6 @@ run = ['move-node-to-workspace games', 'layout floating']
 [[on-window-detected]]
 if.app-id = 'com.epicgames.EpicGamesLauncher'
 run = ['move-node-to-workspace games', 'layout floating']
-
-[[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = ['layout floating']
-
-[[on-window-detected]]
-if.app-id = 'com.apple.Stickies'
-run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.pdfeditor.pdfeditormac'
@@ -131,21 +135,65 @@ run = ['move-node-to-workspace video-editing', 'layout floating']
 
 # Top level layer, used for most important commands + going to keytables
 [mode.main.binding]
-# Go to specific key tables
-alt-a = ['mode table']
-alt-h = ['focus left']
-alt-j = ['focus down']
-alt-k = ['focus up']
-alt-l = ['focus right']
+# Layout changes
+alt-space = 'layout floating tiling'
+alt-slash = 'layout tiles horizontal vertical'
+alt-semicolon = 'layout accordion horizontal vertical'
 
-alt-left = ['focus left']
-alt-down = ['focus down']
-alt-up = ['focus up']
-alt-right = ['focus right']
+# Focusing Windows
+alt-h = ['focus --boundaries-action wrap-around-the-workspace left']
+alt-j = ['focus --boundaries-action wrap-around-the-workspace down']
+alt-k = ['focus --boundaries-action wrap-around-the-workspace up']
+alt-l = ['focus --boundaries-action wrap-around-the-workspace right']
 
+alt-left = ['focus --boundaries-action wrap-around-the-workspace left']
+alt-down = ['focus --boundaries-action wrap-around-the-workspace down']
+alt-up = ['focus --boundaries-action wrap-around-the-workspace up']
+alt-right = ['focus --boundaries-action wrap-around-the-workspace right']
+
+# Move Windows in workspace
+ctrl-alt-shift-cmd-h = ['move left']
+ctrl-alt-shift-cmd-j = ['move up']
+ctrl-alt-shift-cmd-k = ['move down']
+ctrl-alt-shift-cmd-l = ['move right']
+
+ctrl-alt-shift-cmd-left = ['move left']
+ctrl-alt-shift-cmd-up = ['move up']
+ctrl-alt-shift-cmd-down = ['move down']
+ctrl-alt-shift-cmd-right = ['move right']
+
+# Join Windows
+alt-shift-cmd-h = ['join-with left']
+alt-shift-cmd-j = ['join-with up']
+alt-shift-cmd-k = ['join-with down']
+alt-shift-cmd-l = ['join-with right']
+
+alt-shift-cmd-left = ['join-with left']
+alt-shift-cmd-up = ['join-with up']
+alt-shift-cmd-down = ['join-with down']
+alt-shift-cmd-right = ['join-with right']
+
+alt-shift-cmd-f = ['flatten-workspace-tree', 'mode main']
+
+# Move Windows to workspace
+ctrl-alt-shift-cmd-t = ['move-node-to-workspace terminal', 'workspace terminal']
+ctrl-alt-shift-cmd-m = ['move-node-to-workspace misc', 'workspace misc']
+ctrl-alt-shift-cmd-p = ['move-node-to-workspace pdf', 'workspace pdf']
+ctrl-alt-shift-cmd-g = ['move-node-to-workspace games', 'workspace games']
+ctrl-alt-shift-cmd-v = [
+  'move-node-to-workspace video-editing',
+  'workspace video-editing',
+]
+
+# Go to last workspace 
 alt-tab = ['workspace-back-and-forth', 'mode main']
-alt-w = ['fullscreen']
 
+# Resize
+alt-w = ['fullscreen']
+ctrl-alt-shift-cmd-n = ['resize smart -50']
+ctrl-alt-shift-cmd-b = ['resize smart +50']
+
+# Go-to workspace
 alt-t = ['workspace terminal', 'mode main']
 alt-m = ['workspace misc', 'mode main']
 alt-b = ['workspace browser', 'mode main']
@@ -153,100 +201,9 @@ alt-p = ['workspace pdf', 'mode main']
 alt-g = ['workspace games', 'mode main']
 alt-v = ['workspace video-editing', 'mode main']
 
-[mode.table.binding]
-esc = ['mode main']
-alt-a = ['mode table']
-
-w = ['mode go_to_window']
-m = ['mode move_window']
-r = ['mode resize_window']
-
-h = ['focus left']
-j = ['focus down']
-k = ['focus up']
-l = ['focus right']
-
-left = ['focus left']
-down = ['focus down']
-up = ['focus up']
-right = ['focus right']
-
-tab = ['workspace-back-and-forth']
-
-[mode.go_to_window.binding]
-esc = ['mode main']
-alt-a = ['mode table']
-
-t = ['workspace terminal', 'mode main']
-m = ['workspace misc', 'mode main']
-b = ['workspace browser', 'mode main']
-p = ['workspace pdf', 'mode main']
-g = ['workspace games', 'mode main']
-v = ['workspace video-editing', 'mode main']
-
-[mode.join_window.binding]
-esc = ['mode main']
-alt-a = ['mode table']
-
-h = ['join-with left', 'mode main']
-j = ['join-with down', 'mode main']
-k = ['join-with up', 'mode main']
-l = ['join-with right', 'mode main']
-
-left = ['join-with left', 'mode main']
-down = ['join-with down', 'mode main']
-up = ['join-with up', 'mode main']
-right = ['join-with right', 'mode main']
-
-f = ['flatten-workspace-tree', 'mode main']
-
-[mode.move_window.binding]
-esc = ['mode main']
-alt-a = ['mode table']
-
-t = ['move-node-to-workspace terminal', 'workspace terminal', 'mode main']
-m = ['move-node-to-workspace misc', 'workspace misc', 'mode main']
-b = ['move-node-to-workspace browser', 'workspace browser', 'mode main']
-p = ['move-node-to-workspace pdf', 'workspace pdf', 'mode main']
-g = ['move-node-to-workspace games', 'workspace games', 'mode main']
-v = [
-  'move-node-to-workspace video-editing',
-  'workspace video-editing',
-  'mode main',
-]
-
-h = ['move left']
-j = ['move down']
-k = ['move up']
-l = ['move right']
-
-left = ['move left']
-down = ['move down']
-up = ['move up']
-right = ['move right']
-
-[mode.resize_window.binding]
-esc = ['mode main']
-alt-a = ['mode table']
-
-h = ['resize smart -50']
-j = ['resize smart -50']
-k = ['resize smart +50']
-l = ['resize smart +50']
-
-left = ['resize smart -50']
-down = ['resize smart -50']
-up = ['resize smart +50']
-right = ['resize smart +50']
-
-f = ['layout floating tiling']
-t = ['layout tiles horizontal vertical']
-a = ['layout accordion horizontal vertical']
-
 [workspace-to-monitor-force-assignment]
 terminal = 'main'
 misc = 'main'
-browser = 'secondary'
 pdf = 'secondary'
 games = 'secondary'
 video-editing = 'main'

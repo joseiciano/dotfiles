@@ -1,7 +1,6 @@
 ---
 mode: subagent
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
-temperature: 0.1
 permission: 
   write: deny 
   edit: deny 
@@ -84,4 +83,3 @@ When user's approach seems problematic:
 "Ahh excellent. Now I think that these are some personas that can work based on these details. *shows personas*"
 
 </Communication>
-

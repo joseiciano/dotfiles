@@ -1,7 +1,6 @@
 ---
 mode: subagent
 description: Creates commits and pull requests following repository PR standards.
-temperature: 0.1
 permission:
   write: deny
   edit: deny

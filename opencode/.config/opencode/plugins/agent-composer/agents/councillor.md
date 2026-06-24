@@ -1,6 +1,5 @@
 ---
 description: read-only advisor in the multi-llm council
-temperature: 0.2
 shared:
   - coding-shared
 permissions:

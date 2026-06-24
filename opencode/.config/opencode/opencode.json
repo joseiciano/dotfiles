@@ -1,7 +1,9 @@
 {
   "plugin": [
+    "./plugins/opencode-fallback/index.ts",
     "@angdrew/opencode-hashline-plugin@1.0.0",
-    "./plugins/agent-composer/index.ts"
+    "./plugins/agent-composer/index.ts",
+    "./plugins/agent-reviewer/index.ts"
   ],
   "default_agent": "orchestration",
   "agent": {
@@ -16,8 +18,13 @@
       "permission": {}
     },
     "council": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.5",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
+      ],
       "skills": [
         "*"
       ],
@@ -28,6 +35,14 @@
     "councillor": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "variant": "medium",
+      "temperature": 0.2,
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "opencode/nemotron-3-ultra-free",
+        "opencode/mimo-v2.5-free",
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [
         "*"
       ],
@@ -38,12 +53,20 @@
     "pull-requester": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-4.7-flash",
       "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [],
       "skills": [],
       "mcps": []
     },
     "orchestration": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.5",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "deepseek/deepseek-v4-pro",
+      ],
       "skills": [
         "*"
       ],
@@ -54,11 +77,26 @@
     "designer": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "variant": "medium",
+      "temperature": 0.7,
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [],
+      "mcps": []
     },
     "explorer": {
-      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "variant": "medium",
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [
+        "opencode/nemotron-3-ultra-free",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [],
       "mcps": [
         "*"
@@ -67,6 +105,12 @@
     "fixer": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "variant": "medium",
+      "temperature": 0.2,
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [
         "*"
       ],
@@ -75,7 +119,15 @@
       ]
     },
     "librarian": {
-      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [
+        "opencode/nemotron-3-ultra-free",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [
         "*"
       ],
@@ -85,17 +137,29 @@
     },
     "oracle": {
       "model": "openai/gpt-5.5",
-      "variant": "high",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
+      ],
       "skills": [
         "*"
       ],
       "mcps": [
         "*"
-      ],
+      ]
     },
     "product-manager": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.5",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "deepseek/deepseek-v4-pro",
+      ],
       "skills": [
         "persona"
       ],
@@ -103,53 +167,64 @@
     },
     "product-manager-mini": {
       "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "variant": "high",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "openai/gpt-5.5",
+        "deepseek/deepseek-v4-flash",
+      ],
       "skills": [
         "persona"
       ],
       "mcps": []
     },
     "reviewer-agents-md": {
-      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "variant": "high",
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [
+        "deepseek/deepseek-v4-flash",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.4-mini"
+      ],
       "skills": [],
-      "mcps": [],
-    },
-    "reviewer-code-quality": {
-      "model": "deepseek/deepseek-v4-pro",
-      "variant": "high",
-      "skills": [],
-      "mcps": [],
-    },
-    "reviewer-code": {
-      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "variant": "high",
-      "skills": [],
-      "mcps": [],
-    },
-    "reviewer-documentation": {
-      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-      "variant": "high",
-      "skills": [],
-      "mcps": [],
+      "mcps": []
     },
     "reviewer-orchestrator": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "deepseek/deepseek-v4-pro",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.5",
+      ],
       "skills": [],
-      "mcps": [],
+      "mcps": []
     },
     "reviewer-security": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "deepseek/deepseek-v4-flash",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "deepseek/deepseek-v4-flash",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.4-mini",
+      ],
       "skills": [],
-      "mcps": [],
+      "mcps": []
     },
     "reviewer-performance": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
       "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "deepseek/deepseek-v4-flash",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+        "openai/gpt-5.4-mini",
+      ],
       "skills": [],
-      "mcps": [],
+      "mcps": []
     }
   },
   "provider": {
@@ -191,7 +266,7 @@
             "context": 400000,
             "output": 128000
           }
-        },
+        }
       },
       "whitelist": [
         "gpt-5.5",
@@ -200,10 +275,14 @@
       ]
     },
     "cloudflare-ai-gateway": {
-      "whitelist": [
-        "workers-ai/@cf/moonshotai/kimi-k2.6",
-        "workers-ai/@cf/zai-org/glm-4.7-flash"
-      ]
+      // "whitelist": [
+      //   "workers-ai/@cf/zai-org/glm-5.2",
+      //   "workers-ai/@cf/moonshotai/kimi-k2.6",
+      //   "workers-ai/@cf/zai-org/glm-4.7-flash",
+      //   "workers-ai/@cf/moonshotai/kimi-k2.7-code",
+      //   "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
+      //   "cloudflare-workers-ai/@cf/moonshotai/kimi-k2.7-code"
+      // ]
     },
     "deepseek": {
       "whitelist": [
@@ -214,9 +293,10 @@
     "opencode": {
       "whitelist": [
         "big-pickle",
-        "mimo-v2-flash-free",
+        "mimo-v2.5-free",
         "minimax-m2.5-free",
-        "nemotron-3-super-free"
+        "nemotron-3-ultra-free",
+        "deepseek-v4-flash"
       ]
     },
     "openrouter": {
@@ -228,7 +308,7 @@
         "glm-4.7-flash",
         "glm-5"
       ]
-    },
+    }
   },
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
@@ -259,6 +339,6 @@
       "headers": {
         "Authorization": "Bearer {file:~/dotfiles/opencode/.config/opencode/envs/neon}"
       }
-    },
+    }
   }
 }

@@ -1,7 +1,6 @@
 ---
 mode: primary
 description: AI coding orchestrator that delegates tasks to specialist agents for optimal quality, speed, and cost
-temperature: 0.1
 shared:
   - coding-shared
 permission: 
