@@ -68,7 +68,7 @@ outer.right = 16
 # 1. Set all windows to float by default
 [[on-window-detected]]
 check-further-callbacks = true
-run = ['layout floating', 'move-node-to-workspace current']
+run = ['layout floating']
 
 # 2. Force specific browsers to tile
 # Main screen 
