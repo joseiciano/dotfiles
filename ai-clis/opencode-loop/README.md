@@ -2,28 +2,31 @@
 
 Iterative implement + review loop for [OpenCode](https://github.com/sst/opencode).
 
-Given a ticket, `opencode-loop` runs:
+Given a ticket, `opencode-loop` resolves the ticket's story file, then runs:
 
-1. **implement** — `opencode run --command implement <ticket>` in a fresh session
-2. **review** — `opencode run --command review <ticket>` in a separate fresh session (the ticket is passed as positional review context; the configured `/review` slash command still runs noninteractively)
-3. reads the generated review Markdown report (`prompts/code_review/code_review_x.md`)
-4. **repeats** implementation + review until the report's `**Final Decision**` is exactly `LGTM`
+1. **resolve story** — locate exactly one Markdown file at `docs/product/stories/stories/**/<ticket>-*.md` (relative to `--cwd`) before any work begins
+2. **implement** — `opencode run --command implement` in a fresh session, with the ticket plus story file path passed as a single positional prompt
+3. **review** — `opencode run --command review` in a separate fresh session, with the same ticket + story file positional (the configured `/review` slash command still runs noninteractively)
+4. reads the generated review Markdown report (`prompts/code_review/code_review_x.md`)
+5. **repeats** implementation + review until the report's `**Final Decision**` is exactly `LGTM`
 
 Every non-LGTM decision — `LGTM with Comments`, `Minor Issues`, `Blocked` — triggers another
 iteration. Follow-up implement commands use the `implement` slash command with a single positional
-argument that carries the ticket plus the exact review report path and directions to fix every
-`[BLOCKING]` and `[WARNING]` finding (the report body is never pasted into the argument).
+argument that carries the ticket plus the story file path, the exact review report path and
+directions to fix every `[BLOCKING]` and `[WARNING]` finding (the report body is never pasted into
+the argument).
 
 The full prompt is never passed as the `--command` value: `--command` always receives just the slash
-command name (`implement` or `review`), and the ticket/context is passed as separate positional
-arguments. That keeps argv parseable by the opencode CLI and preserves a fresh slash command session
-per invocation.
+command name (`implement` or `review`), and the ticket/story context is passed as a separate single
+positional argument. That keeps argv parseable by the opencode CLI and preserves a fresh slash
+command session per invocation.
 
 ## Requirements
 
 - [Bun](https://bun.sh) ≥ 1.x
 - [`opencode`](https://github.com/sst/opencode) on `PATH` (or pass `--opencode-bin`)
 - The `review` skill installed for the target project (writes reports to `prompts/code_review/code_review_x.md`)
+- A story file for the ticket at `docs/product/stories/stories/**/<ticket>-*.md` (relative to `--cwd`) — exactly one; zero or multiple abort before the loop starts
 
 ## Usage
 
@@ -48,9 +51,9 @@ opencode-loop TICKET-123 --cwd ../my-project
 
 | Option | Default | Description |
 |---|---|---|
-| `<ticket>` | *(required)* | Ticket/issue identifier passed to `implement` and `review`. |
+| `<ticket>` | *(required)* | Ticket/issue identifier. Resolves the story file at `docs/product/stories/stories/**/<ticket>-*.md` and is passed (with that path) to `implement` and `review`. |
 | `--max-attempts N` | `5` | Maximum implement→review iterations before giving up. Must be a positive integer. |
-| `--cwd DIR` | current directory | Project directory to run in. Must exist and be a directory. |
+| `--cwd DIR` | current directory | Project directory to run in. Must exist and be a directory; the story file is resolved relative to it. |
 | `--opencode-bin BIN` | `opencode` | Path or name of the opencode binary. |
 
 ### Exit codes
@@ -58,27 +61,46 @@ opencode-loop TICKET-123 --cwd ../my-project
 | Code | Meaning |
 |---|---|
 | `0` | Final Decision is exactly `LGTM`. |
-| `1` | Invalid arguments, child process failed, no fresh report found, malformed report, lock already held, or `--max-attempts` exhausted without `LGTM`. |
+| `1` | Invalid arguments, no or multiple matching story files, child process failed, no fresh report found, malformed report, lock already held, or `--max-attempts` exhausted without `LGTM`. |
 
 ## How it works
 
 ```
 opencode-loop <ticket>
+  └─▶ resolve story file: docs/product/stories/stories/**/<ticket>-*.md
+        ├─▶ exactly one match  → absolute path carried in every prompt
+        └─▶ zero / multiple    → clear error listing the problem, exit 1
   └─▶ acquire lock: prompts/code_review/.opencode-loop.lock (atomic exclusive create)
-  └─▶ opencode run --command implement <ticket>             (fresh session, stdout inherited)
+  └─▶ opencode run --command implement "<ticket>
+                                      Story file: <abs path>"       (fresh session, stdout inherited)
   └─▶ snapshot prompts/code_review/
-  └─▶ opencode run --command review <ticket>                (fresh session, stdout inherited)
+  └─▶ opencode run --command review "<ticket>
+                                     Story file: <abs path>"         (fresh session, stdout inherited)
   └─▶ find the NEW/MODIFIED code_review_x.md (never a stale one)
   └─▶ parse `**Final Decision**: <value>`
         ├─▶ "LGTM"                    → done, exit 0
         └─▶ anything else             → opencode run --command implement \
                                            "<ticket>
+                                            Story file: <abs path>
                                             The previous review was not approved (...)
                                             Read the review report at: <abs path>
                                             Fix every [BLOCKING] and [WARNING] finding..."
                                           then review again
   └─▶ release lock (always, success or failure)
 ```
+
+### Story file resolution
+
+Before the loop begins, `opencode-loop` recursively walks
+`docs/product/stories/stories/` (relative to `--cwd`) for Markdown files named `<ticket>-*.md`.
+Exactly one match is required:
+
+- no match → exit 1 with the ticket, the searched root, and the expected `<ticket>-*.md` pattern
+- multiple matches → exit 1 listing every candidate path
+
+The resolved absolute path is stored on `CliOptions.storyPath` and is passed as part of the single
+positional prompt to every `implement`, `review`, and follow-up invocation, so each agent reads the
+exact same story file.
 
 ### Concurrency safety
 
@@ -95,10 +117,10 @@ files count. `prompts/code_review/` is created on demand if it does not exist ye
 
 ### Review context
 
-The `review` step runs `opencode run --command review <ticket>` — the ticket is passed as positional
-review context so the review agent knows what was implemented. This does not modify the configured
-`/review` slash command workflow: it still runs noninteractively and produces the report at
-`prompts/code_review/code_review_x.md`.
+The `review` step runs `opencode run --command review` with a single positional holding the ticket
+plus the resolved story file path — the review agent knows what was implemented and can read the
+exact story file. This does not modify the configured `/review` slash command workflow: it still
+runs noninteractively and produces the report at `prompts/code_review/code_review_x.md`.
 
 ### Report contract
 
@@ -119,9 +141,9 @@ bun test               # run test suite
 bun run typecheck      # tsc --noEmit
 ```
 
-TDD: tests live next to sources (`src/*.test.ts`). The loop, command construction, lock lifecycle,
-decision parsing, and fresh-report selection are all unit-tested; the CLI itself is
-dependency-injected so the loop is tested without spawning real opencode processes.
+TDD: tests live next to sources (`src/*.test.ts`). The loop, command construction, story file
+resolution, lock lifecycle, decision parsing, and fresh-report selection are all unit-tested; the
+CLI itself is dependency-injected so the loop is tested without spawning real opencode processes.
 
 ## License
 

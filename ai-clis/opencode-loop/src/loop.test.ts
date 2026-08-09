@@ -44,9 +44,12 @@ function makeDeps(iters: IterStep[]) {
 	return { deps, calls, acquireLock, release }
 }
 
+const STORY = "/proj/docs/product/stories/stories/TICKET-42-add-login.md"
+
 function options(overrides?: Partial<CliOptions>): CliOptions {
 	return {
 		ticket: "TICKET-42",
+		storyPath: STORY,
 		maxAttempts: 5,
 		cwd: "/proj",
 		opencodeBin: "opencode",
@@ -79,14 +82,14 @@ describe("runLoop", () => {
 				"run",
 				"--command",
 				"implement",
-				"TICKET-42",
+				"TICKET-42\n\nStory file: " + STORY,
 			])
 			expect(calls[1].command).toEqual([
 				"opencode",
 				"run",
 				"--command",
 				"review",
-				"TICKET-42",
+				"TICKET-42\n\nStory file: " + STORY,
 			])
 			expect(calls[0].cwd).toBe("/proj")
 			expect(calls[1].cwd).toBe("/proj")
@@ -132,18 +135,19 @@ describe("runLoop", () => {
 			expect(followUp[3]).toBe("implement")
 			const arg = followUp[4]
 			expect(arg).toContain(r1)
+			expect(arg).toContain(STORY)
 			expect(arg).toContain("[BLOCKING]")
 			expect(arg).toContain("[WARNING]")
 			expect(arg).toContain("LGTM with Comments")
 			expect(arg).toContain("TICKET-42")
 			expect(arg).toContain("Do not paste")
-			// Final review carries the ticket too
+			// Final review carries the ticket and story file too
 			expect(calls[3].command).toEqual([
 				"opencode",
 				"run",
 				"--command",
 				"review",
-				"TICKET-42",
+				"TICKET-42\n\nStory file: " + STORY,
 			])
 		})
 	})

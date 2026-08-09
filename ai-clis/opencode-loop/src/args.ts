@@ -6,12 +6,15 @@
 
 import { statSync } from "node:fs"
 import { resolve } from "node:path"
+import { resolveStoryPath } from "./story"
 
 export const DEFAULT_MAX_ATTEMPTS = 5
 export const DEFAULT_OPENCODE_BIN = "opencode"
 
 export interface CliOptions {
 	ticket: string
+	/** Absolute path of the resolved story file (docs/product/stories/stories/<ticket>-*.md). */
+	storyPath: string
 	maxAttempts: number
 	cwd: string
 	opencodeBin: string
@@ -88,8 +91,14 @@ export function parseArgs(argv: string[], fallbackCwd: string = process.cwd()): 
 		throw new Error(`--cwd is not a directory: ${resolvedCwd}`)
 	}
 
+	const trimmedTicket = ticket.trim()
+	// Resolve the story file before the loop starts so a missing/ambiguous
+	// story fails fast with a clear error instead of mid-iteration.
+	const storyPath = resolveStoryPath(resolvedCwd, trimmedTicket)
+
 	return {
-		ticket: ticket.trim(),
+		ticket: trimmedTicket,
+		storyPath,
 		maxAttempts,
 		cwd: resolvedCwd,
 		opencodeBin: opencodeBin.trim(),

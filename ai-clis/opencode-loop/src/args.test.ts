@@ -1,12 +1,18 @@
 import { describe, test, expect, beforeAll, afterAll } from "bun:test"
-import { mkdtempSync, rmSync } from "node:fs"
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { parseArgs, DEFAULT_MAX_ATTEMPTS, DEFAULT_OPENCODE_BIN } from "./args"
+import { STORY_DIR } from "./story"
 
 let dir: string
+let storyPath: string
 beforeAll(() => {
 	dir = mkdtempSync(join(tmpdir(), "opencode-loop-args-"))
+	// parseArgs resolves the story file, so every valid-ticket test needs one.
+	storyPath = join(dir, STORY_DIR, "TICKET-1-add-login.md")
+	mkdirSync(join(dir, STORY_DIR), { recursive: true })
+	writeFileSync(storyPath, "# Story\n")
 })
 afterAll(() => {
 	rmSync(dir, { recursive: true, force: true })
@@ -26,9 +32,15 @@ describe("parseArgs", () => {
 		expect(opts.maxAttempts).toBe(3)
 	})
 
-	test("parses --cwd", () => {
+	test("parses --cwd and resolves the story file under it", () => {
 		const opts = parseArgs(["TICKET-1", "--cwd", dir], dir)
 		expect(opts.cwd).toBe(dir)
+		expect(opts.storyPath).toBe(storyPath)
+	})
+
+	test("throws when no story file exists for the ticket", () => {
+		expect(() => parseArgs(["NO-STORY-9"], dir)).toThrow(/NO-STORY-9/)
+		expect(() => parseArgs(["NO-STORY-9"], dir)).toThrow(STORY_DIR)
 	})
 
 	test("parses --opencode-bin", () => {
@@ -79,7 +91,7 @@ describe("parseArgs", () => {
 	})
 
 	test("defaults --cwd to process.cwd() when flag absent", () => {
-		const opts = parseArgs(["T"], dir)
+		const opts = parseArgs(["TICKET-1"], dir)
 		expect(opts.cwd).toBe(dir)
 	})
 })

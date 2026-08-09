@@ -15,6 +15,7 @@ async function main() {
 	const options = parseArgs(process.argv.slice(2))
 
 	console.log(`[opencode-loop] ticket:        ${options.ticket}`)
+	console.log(`[opencode-loop] story:         ${options.storyPath}`)
 	console.log(`[opencode-loop] cwd:           ${options.cwd}`)
 	console.log(`[opencode-loop] max-attempts:  ${options.maxAttempts}`)
 	console.log(`[opencode-loop] opencode-bin:  ${options.opencodeBin}`)

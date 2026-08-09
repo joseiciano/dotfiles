@@ -1,5 +1,7 @@
 /**
- * Core loop: implement -> review -> inspect report -> repeat until exact LGTM.
+ * Core loop: resolve story -> implement -> review -> inspect report -> repeat
+ * until exact LGTM. The story file path is resolved before the loop starts
+ * (see `src/story.ts`) and flows into every implement / review prompt.
  *
  * Dependencies are injected so the loop is testable without spawning real
  * opencode processes. `src/process-runner.ts` provides the production runner
@@ -55,10 +57,11 @@ export async function runLoop(options: CliOptions, deps: LoopDeps): Promise<Loop
 
 			const implementCommand =
 				attempt === 1
-					? buildImplementCommand(options.opencodeBin, options.ticket)
+					? buildImplementCommand(options.opencodeBin, options.ticket, options.storyPath)
 					: buildFollowUpCommand(
 							options.opencodeBin,
 							options.ticket,
+							options.storyPath,
 							lastReportPath as string,
 							lastDecision as string
 						)
@@ -75,7 +78,11 @@ export async function runLoop(options: CliOptions, deps: LoopDeps): Promise<Loop
 			// be distinguished from stale ones purely by the snapshot diff.
 			const before = await deps.snapshotReportDir(options.cwd)
 
-			const reviewCommand = buildReviewCommand(options.opencodeBin, options.ticket)
+			const reviewCommand = buildReviewCommand(
+				options.opencodeBin,
+				options.ticket,
+				options.storyPath
+			)
 			console.log(`[opencode-loop] $ ${reviewCommand.join(" ")}`)
 			const reviewResult = await deps.runner.run(reviewCommand, { cwd: options.cwd })
 			if (reviewResult.code !== 0) {

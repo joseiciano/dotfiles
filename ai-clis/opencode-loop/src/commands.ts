@@ -9,30 +9,55 @@
  * The opencode `--command` flag takes the custom command NAME (`implement` /
  * `review`); everything else is passed as message positionals. That keeps the
  * prompt out of argv[0] position and out of any shell.
+ *
+ * Every prompt carries the resolved story file path
+ * (`docs/product/stories/stories/` subdirectory, `<ticket>-*.md`) so the
+ * agent reads the exact story Markdown file it is implementing / reviewing.
  */
 
-/** First implementation pass argv: `opencode run --command implement <ticket>`. */
-export function buildImplementCommand(bin: string, ticket: string): string[] {
-	return [bin, "run", "--command", "implement", ticket]
+/**
+ * Single message positional carrying the ticket plus the exact story file
+ * path. Used as the one positional for both the first `implement` pass and the
+ * `review` pass.
+ */
+export function buildStoryArg(ticket: string, storyPath: string): string {
+	return [ticket, "", `Story file: ${storyPath}`].join("\n")
 }
 
-/** Review pass argv: `opencode run --command review <ticket>`. */
-export function buildReviewCommand(bin: string, ticket: string): string[] {
-	return [bin, "run", "--command", "review", ticket]
+/**
+ * First implementation pass argv:
+ * `opencode run --command implement` followed by one message positional
+ * holding the ticket and the story file path.
+ */
+export function buildImplementCommand(bin: string, ticket: string, storyPath: string): string[] {
+	return [bin, "run", "--command", "implement", buildStoryArg(ticket, storyPath)]
+}
+
+/**
+ * Review pass argv: `opencode run --command review` followed by one message
+ * positional holding the ticket and the story file path (so the review agent
+ * knows what was implemented).
+ */
+export function buildReviewCommand(bin: string, ticket: string, storyPath: string): string[] {
+	return [bin, "run", "--command", "review", buildStoryArg(ticket, storyPath)]
 }
 
 /**
  * Single message positional carrying all follow-up directives. The agent
- * receives the ticket, the exact path of the review report and what to fix —
- * WITHOUT pasting the report body; the agent must read the file itself.
+ * receives the ticket, the story file path, the exact path of the review
+ * report and what to fix — WITHOUT pasting the report body; the agent must
+ * read the files itself.
  */
 export function buildFollowUpArg(
 	ticket: string,
+	storyPath: string,
 	reportPath: string,
 	decision: string
 ): string {
 	return [
 		ticket,
+		"",
+		`Story file: ${storyPath}`,
 		"",
 		`The previous review was not approved (Final Decision: ${decision}).`,
 		`Read the review report at: ${reportPath}`,
@@ -49,8 +74,15 @@ export function buildFollowUpArg(
 export function buildFollowUpCommand(
 	bin: string,
 	ticket: string,
+	storyPath: string,
 	reportPath: string,
 	decision: string
 ): string[] {
-	return [bin, "run", "--command", "implement", buildFollowUpArg(ticket, reportPath, decision)]
+	return [
+		bin,
+		"run",
+		"--command",
+		"implement",
+		buildFollowUpArg(ticket, storyPath, reportPath, decision),
+	]
 }
