@@ -384,14 +384,6 @@
       "type": "remote",
       "url": "https://observability.mcp.cloudflare.com/mcp",
       "enabled": false
-    },
-    "Neon": {
-      "type": "remote",
-      "url": "https://mcp.neon.tech/mcp",
-      "enabled": false,
-      "headers": {
-        "Authorization": "Bearer {file:~/dotfiles/opencode/.config/opencode/envs/neon}"
-      }
     }
   }
 }

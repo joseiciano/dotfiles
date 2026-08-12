@@ -5,19 +5,17 @@ agents:
 	./setup/agent-setup/generate-agents-md-opencode.sh
 
 setup: agents
-	rm -rf output/opencode/command output/opencode/skills output/opencode/envs output/opencode/plugins output/opencode/opencode.json output/opencode/config.json output/opencode/opencode-fallback.jsonc
-	rm -rf output/claude-code/command output/claude-code/skills output/claude-code/envs
+	rm -rf output/opencode/command output/opencode/skills output/opencode/plugins output/opencode/opencode.json output/opencode/config.json output/opencode/opencode-fallback.jsonc
+	rm -rf output/claude-code/command output/claude-code/skills
 	rm -rf output/reasonix/command
 	mkdir -p output/opencode output/claude-code output/reasonix
 	cp -R setup/command-setup/command output/opencode/command
 	cp -R setup/skills-setup/skills output/opencode/skills
-	cp -R setup/envs output/opencode/envs
 	cp -R setup/plugins/opencode-and-clones-only output/opencode/plugins
 	cp setup/config/opencode-and-clones-only/opencode-fallback.jsonc output/opencode/opencode-fallback.jsonc
 	./setup/config/opencode-and-clones-only/generate-config.sh output/opencode opencode
 	cp -R setup/command-setup/command output/claude-code/command
 	cp -R setup/skills-setup/skills output/claude-code/skills
-	cp -R setup/envs output/claude-code/envs
 	cp -R setup/command-setup/command output/reasonix/command
 	rm -rf output/mimocode
 	cp -R output/opencode output/mimocode
