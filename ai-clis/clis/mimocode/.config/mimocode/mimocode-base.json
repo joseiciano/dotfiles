@@ -1,0 +1,21 @@
+{
+  "$schema": "https://mimo.xiaomi.com/mimocode/config.json",
+  "share": "manual",
+  "autoupdate": true,
+  "server": {
+    "port": 4096,
+    "hostname": "0.0.0.0",
+    "mdns": true
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "tail_turns": 2
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      "dist/**"
+    ]
+  },
+}

@@ -64,7 +64,7 @@ export EDITOR="nvim"
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
 
 # Java
 export JAVA_HOME=$HOME/OpenJDK/jdk-23.0.1.jdk/Contents/Home
@@ -88,19 +88,21 @@ export obsidianpath="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents
 # Bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-[ -s "/Users/joseiciano/.bun/_bun" ] && source "/Users/joseiciano/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # Local bin
-export PATH=/Users/joseiciano/.local/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 # Google Cloud SDK
-if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/joseiciano/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-if [ -f '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/joseiciano/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
 
 # fzf integration
-source <(fzf --zsh)
+command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
 
-source $HOME/dotfiles/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
+[ -f $HOME/dotfiles/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme ] && source $HOME/dotfiles/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
+
+alias opencode-loop='bun run /Users/joseiciano/dotfiles/ai-clis/opencode-loop/src/cli.ts'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -1,0 +1,397 @@
+{
+  "default_agent": "orchestration",
+  "plugin": [
+    "./plugins/opencode-fallback/index.ts",
+    "./plugins/agent-composer/index.ts",
+    // [
+    //   "opencode-auto-resume",
+    //   {
+    //     "chunkTimeoutMs": 45000,
+    //     "gracePeriodMs": 3000,
+    //     "maxRetries": 4
+    //   }
+    // ]
+  ],
+  "subagent_depth": 3,
+  "agent": {
+    "general": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    },
+    "explore": {
+      "disable": true,
+      "options": {},
+      "permission": {}
+    },
+    "council": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "opencode/mimo-v2.5-free",
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "councillor": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+      "variant": "medium",
+      "temperature": 0.2,
+      "fallback_models": [
+        "openai/gpt-5.6-luna",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "mass-orchestration": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+      ],
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "orchestration": {
+      "model": "openai/gpt-5.6-terra",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "designer": {
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "medium",
+      "temperature": 0.7,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "explorer": {
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.5",
+        "openai/gpt-5.6-luna",
+      ],
+      "skills": [],
+      "mcps": [
+        "*"
+      ]
+    },
+    "fixer": {
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "opencode/mimo-v2.5-free",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "openai/gpt-5.6-luna"
+      ],
+      "skills": [],
+      "mcps": [
+        "*"
+      ]
+    },
+    "engineering-manager": {
+      "model": "openai/gpt-5.6-sol",
+      "variant": "high",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "product-manager": {
+      "model": "openai/gpt-5.6-sol",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [
+        "persona"
+      ],
+      "mcps": []
+    },
+    "product-manager-mini": {
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.6-terra",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [
+        "persona"
+      ],
+      "mcps": []
+    },
+    "reviewer-agents-md": {
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "low",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.5",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "openai/gpt-5.6-luna",
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "reviewer-code-quality": {
+      "model": "opencode/mimo-v2.5-free",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.6-luna",
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "reviewer-code": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.7-code",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "reviewer-orchestrator": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "openai/gpt-5.6-terra"
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "reviewer-security": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.5",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "openai/gpt-5.6-luna"
+      ],
+      "skills": [],
+      "mcps": []
+    },
+    "reviewer-performance": {
+      "model": "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.5",
+      "variant": "medium",
+      "temperature": 0.1,
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "openai/gpt-5.6-terra"
+      ],
+      "skills": [],
+      "mcps": []
+    }
+  },
+  "provider": {
+    "xiaomi": {
+      "whitelist": []
+    },
+    "openai": {
+      "options": {
+        "baseURL": "http://127.0.0.1:2455/v1",
+        "apiKey": "sk-clb-OBoJ3NWrIqr4c7kgCwtJ6iStNHOvSKMrb5RmGaSPG2A"
+      },
+      "models": {
+        "gpt-5.6-luna": {
+          "name": "GPT-5.6-Luna",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 1050000,
+            "output": 128000
+          }
+        },
+        "gpt-5.6-terra": {
+          "name": "GPT-5.6-Terra",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 1050000,
+            "output": 128000
+          }
+        },
+        "gpt-5.6-sol": {
+          "name": "GPT-5.6-Sol",
+          "reasoning": true,
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed"
+          },
+          "limit": {
+            "context": 1050000,
+            "output": 128000
+          }
+        },
+        "gpt-5.4-mini": {
+          "name": "GPT-5.4-mini",
+          "reasoning": true,
+          "options": {},
+          "limit": {
+            "context": 400000,
+            "output": 128000
+          }
+        }
+      },
+      "whitelist": [
+        "gpt-5.6-terra",
+        "gpt-5.6-sol",
+        "gpt-5.6-luna",
+        "gpt-5.4-mini"
+      ]
+    },
+    "cloudflare-ai-gateway": {
+      "whitelist": [
+        "workers-ai/@cf/zai-org/glm-4.7-flash",
+        "workers-ai/@cf/moonshotai/kimi-k2.6",
+        "workers-ai/@cf/moonshotai/kimi-k2.5",
+        "workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "workers-ai/@cf/zai-org/glm-5.2",
+        "workers-ai/@cf/qwen/qwen2.5-coder-32b-instruct",
+        "workers-ai/@cf/meta/llama-3.1-8b-instruct"
+      ]
+    },
+    "cloudflare-workers-ai": {
+      "whitelist": []
+    },
+    "deepseek": {
+      "whitelist": [
+        "deepseek-v4-pro",
+        "deepseek-v4-flash"
+      ]
+    },
+    "opencode": {
+      "whitelist": [
+        "big-pickle",
+        "mimo-v2.5-free",
+        "minimax-m2.5-free",
+        "nemotron-3-ultra-free",
+        "deepseek-v4-flash-free"
+      ]
+    },
+    "opencode-go": {
+      "whitelist": [
+        "deepseek-v4-flash",
+        "glm-5.2",
+        "kimi-k2.6",
+        "mimo-v2.5",
+        "mimo-v2.5-pro",
+        "mimimax-m3"
+      ]
+    },
+    "openrouter": {
+      "models": {
+        "deepseek/deepseek-v4-flash-0731": {
+          "options": {
+            "provider": {
+              "order": [
+                "DeepSeek"
+              ],
+              "allow_fallbacks": false
+            }
+          }
+        },
+        "deepseek/deepseek-v4-pro": {
+          "options": {
+            "provider": {
+              "order": [
+                "DeepSeek"
+              ],
+              "allow_fallbacks": false
+            }
+          }
+        },
+        "moonshotai/kimi-k3": {
+          "options": {
+            "provider": {
+              "order": [
+                "moonshotai"
+              ],
+              "allow_fallbacks": false
+            }
+          }
+        }
+      },
+      "whitelist": [
+        "deepseek/deepseek-v4-flash-0731",
+        "deepseek/deepseek-v4-pro",
+        "moonshotai/kimi-k3",
+        "xiaomi/mimo-v2.5",
+        "xiaomi/mimo-v2.5-pro"
+      ]
+    }
+  },
+  "mcp": {
+    "cloudflare-observability": {
+      "type": "remote",
+      "url": "https://observability.mcp.cloudflare.com/mcp",
+      "enabled": false
+    },
+    "Neon": {
+      "type": "remote",
+      "url": "https://mcp.neon.tech/mcp",
+      "enabled": false,
+      "headers": {
+        "Authorization": "Bearer {file:~/dotfiles/opencode/.config/opencode/envs/neon}"
+      }
+    }
+  }
+}

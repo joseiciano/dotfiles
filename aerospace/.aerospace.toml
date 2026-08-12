@@ -78,8 +78,7 @@ run = ['move-node-to-workspace terminal', 'layout accordion']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = ['move-node-to-workspace terminal', 'layout accordion']
-
+run = ['move-node-to-workspace terminal', 'layout tiling']
 
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'

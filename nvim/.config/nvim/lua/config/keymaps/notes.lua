@@ -88,3 +88,9 @@ local function link_file_with_snacks()
 end
 
 vim.keymap.set("n", "<leader>an", link_file_with_snacks, { desc = "Spawn Worktree Session" })
+
+local function embolden()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("gsaiw*", true, false, true), "m", false)
+end
+
+vim.keymap.set("n", "gsawb", embolden, { desc = 'Bolden Current Word"' })

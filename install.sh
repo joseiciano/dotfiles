@@ -47,6 +47,8 @@ link_file "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 link_file "$DOTFILES_DIR/.tmux" "$HOME/.tmux"
 
+# --- Claude ---
+link_file "$DOTFILES_DIR/ai-clis/clis/claude/.claude" "$HOME/.claude"
 # --- ZSH (if organized in zsh/ subdir) ---
 if [ -d "$DOTFILES_DIR/zsh" ]; then
   link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
@@ -56,7 +58,7 @@ fi
 # --- Automatically handle .config directories ---
 # Find directories that contain a .config folder (like nvim/ and karabiner/)
 # and symlink their contents to ~/.config/
-find "$DOTFILES_DIR" -maxdepth 2 -name ".config" -type d | while read -r config_parent; do
+find "$DOTFILES_DIR" -maxdepth 4 -name ".config" -type d | while read -r config_parent; do
   for item in "$config_parent"/*; do
     if [ -e "$item" ]; then
       basename_item=$(basename "$item")

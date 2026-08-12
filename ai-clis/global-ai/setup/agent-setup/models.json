@@ -1,0 +1,62 @@
+{
+  "council": {
+    "claude": "claude-opus-4-8"
+  },
+  "councillor": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "designer": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "explorer": {
+    "claude": "claude-haiku-4-5"
+  },
+  "fixer": {
+    "claude": "claude-haiku-4-5"
+  },
+  "librarian": {
+    "claude": "claude-haiku-4-5"
+  },
+  "oracle": {
+    "claude": "claude-opus-4-8"
+  },
+  "mass-orchestration": {
+    "claude": "claude-opus-4-8"
+  },
+  "orchestration": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "engineering-manager": {
+    "claude": "claude-opus-4-8"
+  },
+  "product-manager": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "product-manager-mini": {
+    "claude": "claude-haiku-4-5"
+  },
+  "pull-requester": {
+    "claude": "claude-haiku-4-5"
+  },
+  "reviewer-agents-md": {
+    "claude": "claude-haiku-4-5"
+  },
+  "reviewer-code-quality": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "reviewer-code": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "reviewer-documentation": {
+    "claude": "claude-haiku-4-5"
+  },
+  "reviewer-orchestrator": {
+    "claude": "claude-sonnet-4-5"
+  },
+  "reviewer-performance": {
+    "claude": "claude-haiku-4-5"
+  },
+  "reviewer-security": {
+    "claude": "claude-haiku-4-5"
+  }
+}
