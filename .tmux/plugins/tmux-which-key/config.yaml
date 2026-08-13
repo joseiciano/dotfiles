@@ -295,7 +295,7 @@ items:
         command: run-shell "workmux sidebar"
       - name: New Worktree
         key: n
-        command: command-prompt -p "Worktree name:" "run-shell true"
+        command: command-prompt -p "Worktree name:" "run-shell 'workmux add \"%%\"'"
   - name: +Client
     key: C
     menu:
