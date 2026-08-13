@@ -287,6 +287,15 @@ items:
       - name: Rename
         key: r
         command: rename
+  - name: +Workmux
+    key: a
+    menu:
+      - name: Sidebar
+        key: s
+        command: run-shell "workmux sidebar"
+      - name: New Worktree
+        key: n
+        command: command-prompt -p "Worktree name:" "run-shell true"
   - name: +Client
     key: C
     menu:
