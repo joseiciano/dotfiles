@@ -299,6 +299,10 @@ items:
       - name: Rename Worktree
         key: r
         command: command-prompt -p "Worktree name:" "run-shell 'workmux rename \"%%\"'"
+      - name: Remove Worktree
+        key: R
+        command: run-shell "workmux remove"
+
   - name: +Client
     key: C
     menu:
