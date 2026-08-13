@@ -293,6 +293,12 @@ items:
       - name: Sidebar
         key: s
         command: run-shell "workmux sidebar"
+      - name: Dashboard
+        key: d
+        command: run-shell "workmux dashboard"
+      - name: Resurrect
+        key: l
+        command: run-shell "workmux resurrect"
       - name: New Worktree
         key: n
         command: command-prompt -p "Worktree name:" "run-shell 'workmux add \"%%\"'"
