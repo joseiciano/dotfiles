@@ -296,6 +296,9 @@ items:
       - name: New Worktree
         key: n
         command: command-prompt -p "Worktree name:" "run-shell 'workmux add \"%%\"'"
+      - name: Rename Worktree
+        key: r
+        command: command-prompt -p "Worktree name:" "run-shell 'workmux rename \"%%\"'"
   - name: +Client
     key: C
     menu:
