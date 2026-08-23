@@ -19,6 +19,10 @@ return {
           explorer = {
             hidden = true,
             ignored = true,
+            git_status = false,
+            diagnostics = false,
+            git_untracked = false,
+
             layout = {
               layout = {
                 width = 30,
@@ -34,6 +38,13 @@ return {
       },
     },
     keys = {
+      {
+        "<leader>PP",
+        function()
+          Snacks.profiler.toggle()
+        end,
+        desc = "Toggle Snacks Profiler",
+      },
       {
         "<leader>be",
         function()

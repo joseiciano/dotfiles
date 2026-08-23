@@ -1,6 +1,3 @@
 .state/
-/ai-clis/clis/opencode/.config/opencode/plugins/agent-composer/agents/reviewer-*.md
-/ai-clis/clis/opencode/.config/opencode/plugins/agent-composer/agents_shared/reviewer-*.md
-/ai-clis/clis/opencode/.config/command/review.md
 /ai-clis/global-ai/envs/
-/ai-clis/global-ai/**/review*
+**/.env

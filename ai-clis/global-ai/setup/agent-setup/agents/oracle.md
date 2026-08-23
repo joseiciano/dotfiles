@@ -9,7 +9,7 @@ permission:
   edit: deny
   bash: allow
   external_directory:
-    "*": ask
+    "*": allow
     "~/.config/opencode/references/**": allow
     "~/.config/opencode/command/**": allow
 ---

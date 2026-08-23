@@ -12,7 +12,7 @@ permission:
   grep: allow
   glob: allow
   external_directory:
-    "*": ask
+    "*": allow
     "~/.config/opencode/references/**": allow
     "~/.config/opencode/command/**": allow
 

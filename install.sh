@@ -46,6 +46,7 @@ link_file() {
 link_file "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 link_file "$DOTFILES_DIR/.tmux" "$HOME/.tmux"
+link_file "$DOTFILES_DIR/opencodereview" "$HOME/.opencodereview"
 
 # --- Claude ---
 link_file "$DOTFILES_DIR/ai-clis/clis/claude/.claude" "$HOME/.claude"

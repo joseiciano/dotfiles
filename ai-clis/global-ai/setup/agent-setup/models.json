@@ -38,25 +38,7 @@
   "pull-requester": {
     "claude": "claude-haiku-4-5"
   },
-  "reviewer-agents-md": {
-    "claude": "claude-haiku-4-5"
-  },
-  "reviewer-code-quality": {
-    "claude": "claude-sonnet-4-5"
-  },
-  "reviewer-code": {
-    "claude": "claude-sonnet-4-5"
-  },
-  "reviewer-documentation": {
-    "claude": "claude-haiku-4-5"
-  },
-  "reviewer-orchestrator": {
-    "claude": "claude-sonnet-4-5"
-  },
-  "reviewer-performance": {
-    "claude": "claude-haiku-4-5"
-  },
-  "reviewer-security": {
+  "reviewer": {
     "claude": "claude-haiku-4-5"
   }
 }

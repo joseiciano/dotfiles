@@ -308,7 +308,6 @@ items:
       - name: Remove Worktree
         key: R
         command: run-shell "workmux remove"
-
   - name: +Client
     key: C
     menu:

@@ -1,6 +1,6 @@
 ---
 description: Run a comprehensive AI review against current changes. 
-agent: orchestrator
+agent: reviewer
 permissions:
   bash: allow
   read: allow
@@ -12,8 +12,6 @@ permissions:
 ---
 
 Run the `review` SKILL on the work given to you, analyzing the changes we current have on this Git branch.
-
-Run it with an 8 minute timeout. 
 
 ## Review-Result Output File
 
@@ -30,4 +28,8 @@ The code review should be outputted to `code_reviews/<ticket>/code_review_x.md` 
    ```
 
 2. Output the review to the user as well. Do not show anything other what the review/skill mentions as the output. 
+
+## Review Background
+
+Analyze the `docs/` path and pass in as `--background` flag information any product and functional spec docs that are relevant to the ticket at hand. 
 

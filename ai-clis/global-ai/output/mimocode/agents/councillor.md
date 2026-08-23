@@ -9,7 +9,7 @@ permission:
   lsp: allow
   list: allow
   external_directory:
-    "*": ask
+    "*": allow
     "~/.config/opencode/references/**": allow
     "~/.config/opencode/command/**": allow
 ---

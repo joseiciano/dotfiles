@@ -109,6 +109,14 @@ set -g @wk_menu_sessions \
 New "c" new \
 Rename "r" rename'
 
+set -g @wk_menu_workmux \
+'Sidebar "s" "run-shell \"workmux sidebar\"" \
+Dashboard "d" "run-shell \"workmux dashboard\"" \
+Resurrect "l" "run-shell \"workmux resurrect\"" \
+"New Worktree" "n" "command-prompt -p \"Worktree name:\" \"run-shell 'workmux add \\"%%\\"'\"" \
+"Rename Worktree" "r" "command-prompt -p \"Worktree name:\" \"run-shell 'workmux rename \\"%%\\"'\"" \
+"Remove Worktree" "R" "run-shell \"workmux remove\""'
+
 set -g @wk_menu_plugins \
 'Install "i" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins" \
 Update "u" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/update_plugins" \
@@ -150,6 +158,7 @@ Refresh "r" "source-file ~/dotfiles/.tmux.conf \; display \"Reloaded!\"" \
 "+Terminals" "t" "show-wk-menu #{@wk_menu_terminals}" \
 "+Buffers" "b" "show-wk-menu #{@wk_menu_buffers}" \
 "+Sessions" "s" "show-wk-menu #{@wk_menu_sessions}" \
+"+Workmux" "a" "show-wk-menu #{@wk_menu_workmux}" \
 "+Client" "C" "show-wk-menu #{@wk_menu_client}" \
 "" \
 Time "T" clock-mode \

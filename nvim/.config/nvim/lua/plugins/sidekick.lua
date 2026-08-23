@@ -59,6 +59,9 @@ return {
         enabled = false,
       },
       tools = {
+        pi = {
+          cmd = { "omp" },
+        },
         reasonix = {
           cmd = { "reasonix" },
         },
