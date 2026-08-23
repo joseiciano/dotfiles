@@ -107,6 +107,13 @@ alias opencode-loop='bun run /Users/joseiciano/dotfiles/ai-clis/opencode-loop/sr
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Load shell-wide env
+if [ -f $HOME/dotfiles/zsh/.env ]; then
+  set -a
+  source $HOME/dotfiles/zsh/.env
+  set +a
+fi
+
 # Go into Tmux right away
 if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ] && [ -n "$PS1" ]; then
   exec tmux new-session -A -s main
