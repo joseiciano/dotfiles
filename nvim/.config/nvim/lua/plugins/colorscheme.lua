@@ -6,7 +6,7 @@ return {
       "folke/snacks.nvim",
     },
     opts = {
-      colorscheme = "catppuccin",
+      colorscheme = "catppuccin-macchiato",
     },
   },
 

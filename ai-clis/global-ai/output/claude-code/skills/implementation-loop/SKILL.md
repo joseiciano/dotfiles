@@ -16,17 +16,11 @@ Parse the following from `$ARGUMENTS`:
 
 ## Task
 
-### Step 1: Generate Spec_Plan if nonexistant
-
-For this, load the `plan-implementation-plan` skill to see the proper format of an implementation plan. 
-
-For the following cases:
-
-- **IMPLEMENTATION PLAN EXISTS, SAME FORMAT AS `plan-implementation-plan`**: SKIP THE REST OF THIS STEP AND GO TO STEP 2
-- **IMPLEMENTATION PLAN EXISTS, NOT SAME FORMAT AS `plan-implementation-plan`**: Modify the implementation plan to fit the expected format. SKIP EVERYTHING AFTER THIS AND GO TO STEP 2
-- **IMPLEMENTATION PLAN DOES NOT EXIST**: If we do not have an implementation plan, we have to create one first. 
+### Pre-requisite, Generate Spec_Plan if nonexistant
 
 **SKIP THIS STEP IF WE ARE ALREADY GIVEN AN IMPLEMENTATION PLAN**
+
+If we are not given an implementation plan, we have to create one first. 
 
 Spawn 1 @council subagent to handle generating the implementation plan. Use this prompt **exactly**:
 
@@ -35,62 +29,93 @@ You are a council needed to draft up an implementation plan for the given scenar
 
 View it from different viewpoints using multiple @councillor subagents, scour the codebase and any documentation for relevant information. 
 
-Detail any changes that will be needed, what files to add/change, what variables/logic will we need. Use @explorer to dig through the codebase to figure, @librarian to check on documentation. 
+## Task
+
+1. Spawn 3 @councillor subagents. Give them the following prompt:
+```
+```
 ```
 
-### Step 2: Implement Plan
 
-Analyze the implementation plan from Step 1. Implement it to completion. 
+Implement `$SPEC_PLAN` end to end. 
 
-- Use parallel @explorer subagents to review codebases where needed
-- Use parallel @librarian subagents to review codebase documentation
-- Use parallel @fixer subagents where possible to implement as quickly as possible, while still maintaining thoroughness
 
-Do not stop until all details are implemented from the implementation file and that all files planned are completed.
+1. Analyze if we are given a detailed plan. If `$SPEC_PLAN` is a full implementation plan, **SKIP TO STEP 2**. Otherwise,
 
-### Step 3: Review Implementation
+Complete the following checklist: 
+- [ ] Analyze the difficulty and clarity of the task we are given, 
+  - [ ] If we are given a detailed plan, focus on implementing it and go to the next major bullet point. 
+  - [ ] If we are not, generate a plan first to understand implementation details
+    - [ ] If the task is simple, spawn an @oracle subagent to generate a plan on what to implement 
+    - [ ] If the task is not simple, spawn 3 @council subagents to get viewpoints on what to implement, then use @oracle to generate the plan
+  - [ ] Detail any changes that will be needed, what files to add/change, what variables/logic will we need. Use @explorer to dig through the codebase to figure, @librarian to check on documentation. 
+- [ ] Based on the plan created above, implement using @fixer subagents. 
+  - [ ]  For the implementation, make sure there are tests validating successful implementation. 
+  - [ ] Make sure there are documentation changes included, if needed
+- [ ] Cycle through revisions. **DO NOT** address comments modifying future tickets, only handle ones modifying the ticket we are working on right now. 
+For each cycle, do the following:
+  - [ ] Spawn a new @reviewer-orchestrator and do a code review using the  [`review`](~/dotfiles/opencode/.config/opencode/skills/review/SKILL.md) skill.   
+  - [ ] Analyze if review status was "LGTM" or "LGTM with Comments". If so, stop here. 
+  - [ ] If status was not "LGTM" or "LGTM with Comments", review changes needed and implement using @fixer
+  - [ ] Spawn a new @reviewer-orchestrator subagent after the previous set of iterations, and repeat.
+- [ ] Separate implementation into concise commits 
+- [ ] Prompt the user if we would like to make a pull request. 
 
-Review the current implementation we completed from Step 2. Call a @reviewer with the following prompt:
+**Note**: For the review cycles you **must** always use the `review` skill.
 
+## Implementation Diagram
+
+```mermaid
+flowchart TD
+    Client[Client calls /implement to start implementation process] --> Orchestration[Create implementation plan]
+
+    Orchestration --> Planner[Use @oracle to analyze if plan exists]
+    Planner -- "Plan Exists" --> Plan[Spawn @oracle to implement plan]
+
+    Planner -- "No plan - simple or concise task" --> OraclePlanner[spawn @oracle to generate plan]
+    OraclePlanner <--> ExplorerPlanner[Use @explorer for codebase discovery]
+    OraclePlanner <--> LibraryPlanner[Use @librarian for documentation discovery]
+    OraclePlanner -- Using data from explorer and librarian, generate plan --> Plan[spawn @oracle to implement plan]
+    
+    Planner -- "No plan - large, complicated task" --> CouncilCall[Call the council to generate a detailed plan]
+    CouncilCall --> Council1[Use @council to generate viewpoint 1]
+    Council1 --> Oracle1[Use @oracle to generate plan]
+    Oracle1 <--> Explorer1[Use @explorer for codebase discovery]
+    Oracle1 <--> Library1[Use @librarian for documentation discovery]
+    Oracle1 --> Plan1[Generates implementation plan based on research]
+
+    CouncilCall --> Council2[Use @council to generate viewpoint 2]
+    Council2 --> Oracle2[Use @oracle to generate plan]
+    Oracle2 <--> Explorer2[Use @explorer for codebase discovery]
+    Oracle2 <--> Library2[Use @librarian for documentation discovery]
+    Oracle2 --> Plan2[Generates implementation plan based on research]
+
+    CouncilCall --> Council3[Use @council to generate viewpoint 3]
+    Council3 --> Oracle3[Use @oracle to generate plan]
+    Oracle3 <--> Explorer3[Use @explorer for codebase discovery]
+    Oracle3 <--> Library3[Use @librarian for documentation discovery]
+    Oracle3 --> Plan3[Generates implementation plan based on research]
+
+    Plan1 --> Council[Council selects the best of the implementation plans]
+    Plan2 --> Council[Council selects the best of the implementation plans]
+    Plan3 --> Council[Council selects the best of the implementation plans]
+
+    Council -- "Using final plan generated by the council" --> Plan[spawn @oracle to implement plan]
+
+    Plan --> FixerBlock1[Orchestration calls @fixer subagents to implement]
+    Plan --> FixerBlock2[Orchestration calls @fixer subagents for tests]
+    Plan --> FixerBlock3[Orchestration calls @fixer subagents to implement documentation if needed]
+
+    FixerBlock1 --> Imp[Fixers implement code changes, enters review cycle]
+    FixerBlock2 --> Imp[Fixers implement code changes, enters review cycle]
+    FixerBlock3 --> Imp[Fixers implement code changes, enters review cycle]
+    Imp --> Reviewer-Orchestrator[Orchestration spawns @reviewer-orchestrator agent for review, runs review skill]
+    Reviewer-Orchestrator --> LGTMCheck["LGTM | LGTM with Comments | Minor Issues | Significant Concerns"]
+    LGTMCheck -- "LGTM | LGTM with Comments" --> Commits[Split into concise commits]
+    LGTMCheck -- "Minor Issues" --> ReviewOracle[Calls @oracle to review the changes suggested. implement with @fixer if needed. Call a new @reviewer-orchestrator agent to re-review]
+    LGTMCheck -- "Significant Concerns" --> ReviewOracle[Calls @oracle to review the changes. implement with @fixer. Call a new @reviewer-orchestrator agent to re-review]
+    ReviewOracle -- "Re-reviews after implementation" --> Reviewer-Orchestrator
+
+    Commits --> EndUser["Ask user about creating a pull request"]
 ```
-Review the current work on this branch. Use the `review` skill to review current changes.  
-```
-
-You must **always** use the `review` skill for code reviews. 
-
-The code review should be outputted to `code_reviews/<ticket>/code_review_x.md` where `x` starts at 1 and increments up each time if the previous exists. If the ticket includes numbers (e.g. "5-7-new-api-route.md"), the numbers are the ticket number (file created should be `code_reviews/5-7/code_review_1.md` for example).
-
-**Note**: If `<ticket>` does not exist, prior to calling the AI reviewer CLI, generate a 1-3 hyphenated summary (e.g. `test-local-dev`) to be the name. 
-
-**Note**: Always verify if there is already a folder for the current of work. If one already exists, do not create another. Ensure that if there is a number associated with the ticket, that is the ticket name. 
-
-### Step 4: Address Concerns
-
-**IF NO POINTS WERE BROUGHT UP IN THE CODE REVIEW FROM STEP 3 - SKIP TO STEP 5**
-
-Analyze the code review generated in Step 3. We want to address any **high**, **medium** comments brought up in them. 
-
-- Review with @explorer subagents what is needed to implement the points addressed. 
-- Implement fixes with @fixer subagents. 
-
-After implementing, spawn a new @reviewer and repeat steps 3-4 until we have no more **high** or **medium** comments. 
-
-### Step 5: Final Output
-
-Output completion of implementation to the end user. 
-
-```
-Status: Complete
-Revisions: <Number of code reviews generated>
-Outcome: 1-2 short non-dense sentence describing the outcome from this ticket. 
-
-Would you like to create a pull request?
-```
-
-### Step 6: Pull Request
-
-If the answer to the pull request question in Step 5 is yes, run the `commit-pull-request` skill to:
-
-- Create commits for current changes
-- Create a pull request for current changes
 
