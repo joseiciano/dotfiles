@@ -54,6 +54,14 @@ if [ -d "$DOTFILES_DIR/zsh" ]; then
   link_file "$DOTFILES_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
 fi
 
+# --- AI CLIs ---
+# Generate and link per-CLI configs (opencode, claude, mimocode, reasonix) via
+# ai-clis/global-ai's `make init`. Guarded so partial dotfiles copies without
+# the Makefile don't fail; if present and `make init` fails, set -e aborts.
+if [ -d "$DOTFILES_DIR/ai-clis/global-ai" ] && [ -f "$DOTFILES_DIR/ai-clis/global-ai/Makefile" ]; then
+  make -C "$DOTFILES_DIR/ai-clis/global-ai" init
+fi
+
 # --- Automatically handle .config directories ---
 # Find directories that contain a .config folder (like nvim/ and karabiner/)
 # and symlink their contents to ~/.config/.
