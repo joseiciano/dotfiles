@@ -28,8 +28,10 @@ setup: agents
 	cp -R setup/plugins/opencode-and-clones-only output/opencode/plugins
 	cp setup/config/opencode-and-clones-only/opencode-fallback.jsonc output/opencode/opencode-fallback.jsonc
 	./setup/config/opencode-and-clones-only/generate-config.sh output/opencode opencode
+	./setup/skills-setup/generate-skill-commands.sh setup/skills-setup/skills output/opencode/command
 	cp -R setup/command-setup/command output/claude-code/command
 	cp -R setup/skills-setup/skills output/claude-code/skills
+	./setup/skills-setup/generate-skill-commands.sh setup/skills-setup/skills output/claude-code/command
 	cp -R setup/command-setup/command output/reasonix/command
 	rm -rf output/mimocode
 	cp -R output/opencode output/mimocode
