@@ -48,8 +48,6 @@ link_file "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 link_file "$DOTFILES_DIR/.tmux" "$HOME/.tmux"
 link_file "$DOTFILES_DIR/opencodereview" "$HOME/.opencodereview"
 
-# --- Claude ---
-link_file "$DOTFILES_DIR/ai-clis/clis/claude/.claude" "$HOME/.claude"
 # --- ZSH (if organized in zsh/ subdir) ---
 if [ -d "$DOTFILES_DIR/zsh" ]; then
   link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
@@ -58,8 +56,14 @@ fi
 
 # --- Automatically handle .config directories ---
 # Find directories that contain a .config folder (like nvim/ and karabiner/)
-# and symlink their contents to ~/.config/
+# and symlink their contents to ~/.config/.
+# Skip AI CLI-owned trees (owned by ai-clis/global-ai's `make link`) and legacy
+# top-level opencode/mimocode staging dirs. Patterns are anchored to this repo
+# root so unrelated nested `*/opencode/.config` trees are still handled.
 find "$DOTFILES_DIR" -maxdepth 4 -name ".config" -type d | while read -r config_parent; do
+  case "$config_parent" in
+    "$DOTFILES_DIR/ai-clis/clis/"* | "$DOTFILES_DIR/opencode/.config" | "$DOTFILES_DIR/mimocode/.config") continue ;;
+  esac
   for item in "$config_parent"/*; do
     if [ -e "$item" ]; then
       basename_item=$(basename "$item")
