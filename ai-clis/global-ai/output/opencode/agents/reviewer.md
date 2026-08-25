@@ -1,6 +1,5 @@
 ---
 mode: all
-model: cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 description: Read-only code reviewer. Runs the open-code-review delegation workflow: previews changed files via ocr, applies review rules, and reports only meaningful issues grouped by priority with full coverage accounting.
 permission:
   edit: deny

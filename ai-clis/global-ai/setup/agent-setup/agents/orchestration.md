@@ -1,4 +1,9 @@
 ---
+model: openai/gpt-5.6-sol
+fallback_models:
+  - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
+  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
+  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 mode: all
 description: AI coding orchestrator that delegates tasks to specialist agents for optimal quality, speed, and cost
 shared:

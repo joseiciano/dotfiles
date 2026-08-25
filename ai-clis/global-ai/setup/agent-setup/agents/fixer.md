@@ -1,4 +1,10 @@
 ---
+model: openrouter/deepseek/deepseek-v4-flash-0731
+fallback_models:
+  - opencode/mimo-v2.5-free
+  - openai/gpt-5.6-luna
+  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731
+  - workers-ai/@cf/moonshotai/kimi-k2.7-code
 mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 shared:

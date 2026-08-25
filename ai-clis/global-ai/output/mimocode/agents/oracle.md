@@ -1,6 +1,5 @@
 ---
 mode: subagent
-fallback_models: []
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
 permission:
   edit: deny

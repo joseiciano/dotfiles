@@ -1,4 +1,10 @@
 ---
+model: opencode/mimo-v2.5-free
+fallback_models:
+  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731
+  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
+  - openai/gpt-5.6-terra
+  - openrouter/deepseek/deepseek-v4-flash-0731
 mode: subagent
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
 permission: 

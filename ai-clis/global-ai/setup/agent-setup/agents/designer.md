@@ -1,4 +1,9 @@
 ---
+model: opencode/mimo-v2.5-free
+fallback_models:
+  - openai/gpt-5.6-luna
+  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731
+  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 mode: subagent
 description: UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish.
 shared:

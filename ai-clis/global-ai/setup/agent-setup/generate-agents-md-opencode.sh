@@ -17,8 +17,11 @@ set -euo pipefail
 #     edit: deny
 #   ---
 #
-# The `shared` frontmatter key is build-only metadata. Generated agent files
-# omit that key, then append matching files from agents-shared/ to end.
+# The `shared`, `model`, and `fallback_models` frontmatter keys are build-only
+# metadata. `model` and `fallback_models` are the source of truth for the
+# generated OpenCode config (agent.<name>.model / fallback_models) and never
+# appear in generated agent Markdown. Generated agent files omit those keys,
+# then append matching files from agents-shared/ to end.
 #
 # Output layout:
 #   global-ai/output/opencode/agents/<agent>.md
@@ -64,9 +67,17 @@ write_agent_without_shared_key() {
   local output_file="$2"
 
   awk '
-    BEGIN { in_frontmatter = 0; in_shared = 0; in_permission_block = 0; seen_edit = 0 }
+    BEGIN { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_permission_block = 0; seen_edit = 0 }
     NR == 1 && $0 == "---" { in_frontmatter = 1; print; next }
-    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { in_frontmatter = 0; in_shared = 0; in_permission_block = 0; seen_edit = 0; print; next }
+    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_permission_block = 0; seen_edit = 0; print; next }
+
+    # Strip build-only model / fallback_models metadata (block or inline []).
+    in_frontmatter && /^[[:space:]]*model:[[:space:]]*/ { next }
+    in_frontmatter && /^[[:space:]]*fallback_models:[[:space:]]*\[[[:space:]]*\]/ { next }
+    in_frontmatter && /^[[:space:]]*fallback_models:[[:space:]]*$/ { in_fallback = 1; next }
+    in_frontmatter && in_fallback && /^[[:space:]]*-[[:space:]]*/ { next }
+    in_frontmatter && in_fallback { in_fallback = 0 }
+
     in_frontmatter && /^[[:space:]]*shared:[[:space:]]*$/ { in_shared = 1; next }
     in_frontmatter && in_shared && /^[[:space:]]*-[[:space:]]*/ { next }
     in_frontmatter && in_shared { in_shared = 0 }
@@ -166,6 +177,14 @@ main() {
 
   for agent_file in "${agent_files[@]}"; do
     output_file="${OUTPUT_DIR}/$(basename -- "$agent_file")"
+
+    # Skip empty source templates and drop any stale output from older runs.
+    if [[ ! -s "$agent_file" ]]; then
+      printf 'skipping empty agent template: %s\n' "$agent_file"
+      rm -f "$output_file"
+      continue
+    fi
+
     mapfile -t shared_names < <(extract_shared_names "$agent_file")
 
     write_agent_without_shared_key "$agent_file" "$output_file"

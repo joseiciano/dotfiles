@@ -14,9 +14,12 @@ set -euo pipefail
 #     - coding-shared
 #   ---
 #
-# The `shared` frontmatter key is build-only metadata. Generated agent files
-# omit that key, convert `permissions` frontmatter to Claude Code `tools`,
-# then append matching files from agents-shared/ to end.
+# The `shared`, `model`, and `fallback_models` frontmatter keys are build-only
+# metadata. `model` and `fallback_models` are the source of truth for the
+# generated OpenCode config, never for Claude: the source `model` is replaced
+# by the Claude model from models.json, and `fallback_models` is dropped.
+# Generated agent files also omit `shared`, convert `permissions` frontmatter
+# to Claude Code `tools`, then append matching files from agents-shared/.
 #
 # Output layout:
 #   global-ai/output/claude-code/agents/<agent>.md
@@ -153,13 +156,21 @@ write_agent_for_claude() {
     BEGIN {
       in_frontmatter = 0
       in_shared = 0
+      in_fallback = 0
       in_permissions = 0
       permissions_child_indent = -1
     }
 
     NR == 1 && $0 == "---" { in_frontmatter = 1; print; print "model: " model; next }
-    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { flush_permissions(); in_frontmatter = 0; in_shared = 0; print "---"; next }
+    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { flush_permissions(); in_frontmatter = 0; in_shared = 0; in_fallback = 0; print "---"; next }
     in_frontmatter && /^[[:space:]]*model:[[:space:]]*/ { next }
+
+    # Strip build-only fallback_models metadata (block or inline []).
+    in_frontmatter && /^[[:space:]]*fallback_models:[[:space:]]*\[[[:space:]]*\]/ { next }
+    in_frontmatter && /^[[:space:]]*fallback_models:[[:space:]]*$/ { in_fallback = 1; next }
+    in_frontmatter && in_fallback && /^[[:space:]]*-[[:space:]]*/ { next }
+    in_frontmatter && in_fallback { in_fallback = 0 }
+
     in_frontmatter && /^[[:space:]]*shared:[[:space:]]*$/ { in_shared = 1; next }
     in_frontmatter && in_shared && /^[[:space:]]*-[[:space:]]*/ { next }
     in_frontmatter && in_shared { in_shared = 0 }
@@ -231,9 +242,17 @@ main() {
   local agent_file agent_name model output_file shared_names shared_name
 
   for agent_file in "${agent_files[@]}"; do
+    output_file="${OUTPUT_DIR}/$(basename -- "$agent_file")"
+
+    # Skip empty source templates and drop any stale output from older runs.
+    if [[ ! -s "$agent_file" ]]; then
+      printf 'skipping empty agent template: %s\n' "$agent_file"
+      rm -f "$output_file"
+      continue
+    fi
+
     agent_name="$(basename -- "$agent_file" .md)"
     model="$(get_claude_model "$agent_name")" || die "model not found for agent '${agent_name}' in ${MODELS_FILE}"
-    output_file="${OUTPUT_DIR}/$(basename -- "$agent_file")"
     mapfile -t shared_names < <(extract_shared_names "$agent_file")
 
     write_agent_for_claude "$agent_file" "$output_file" "$model"

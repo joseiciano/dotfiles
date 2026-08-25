@@ -17,122 +17,115 @@
       "permission": {}
     },
     "council": {
-      "model": "openai/gpt-5.6-terra",
       "variant": "medium",
       "temperature": 0.1,
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ],
+      "model": "openai/gpt-5.6-terra",
       "fallback_models": [
         "opencode/mimo-v2.5-free",
         "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
         "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
+      ]
+    },
+    "councillor": {
+      "variant": "medium",
+      "temperature": 0.2,
       "skills": [
         "*"
       ],
       "mcps": [
         "*"
-      ]
-    },
-    "councillor": {
+      ],
       "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-      "variant": "medium",
-      "temperature": 0.2,
       "fallback_models": [
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
         "openai/gpt-5.6-luna",
         "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
+      ]
+    },
+    "mass-orchestration": {
+      "variant": "medium",
+      "temperature": 0.1,
       "skills": [
         "*"
       ],
       "mcps": [
         "*"
-      ]
-    },
-    "mass-orchestration": {
+      ],
       "model": "openai/gpt-5.6-terra",
-      "variant": "medium",
-      "temperature": 0.1,
       "fallback_models": [
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
         "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
         "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
+      ]
+    },
+    "orchestration": {
+      "variant": "medium",
+      "temperature": 0.1,
       "skills": [
         "*"
       ],
       "mcps": [
         "*"
-      ]
-    },
-    "orchestration": {
+      ],
       "model": "openai/gpt-5.6-sol",
-      "variant": "medium",
-      "temperature": 0.1,
       "fallback_models": [
         "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
-      ],
-      "skills": [
-        "*"
-      ],
-      "mcps": [
-        "*"
       ]
     },
     "oracle": {
-      "model": "openai/gpt-5.6-sol",
       "variant": "high",
       "temperature": 0.1,
-      "fallback_models": [
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
-      ],
       "skills": [
         "*"
       ],
       "mcps": [
         "*"
+      ],
+      "model": "openai/gpt-5.6-sol",
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
       ]
     },
     "designer": {
-      "model": "opencode/mimo-v2.5-free",
       "variant": "medium",
       "temperature": 0.7,
+      "skills": [],
+      "mcps": [],
+      "model": "opencode/mimo-v2.5-free",
       "fallback_models": [
         "openai/gpt-5.6-luna",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
-      ],
-      "skills": [],
-      "mcps": []
+      ]
     },
     "explorer": {
-      "model": "opencode/mimo-v2.5-free",
       "variant": "low",
       "temperature": 0.1,
+      "skills": [],
+      "mcps": [
+        "*"
+      ],
+      "model": "opencode/mimo-v2.5-free",
       "fallback_models": [
         "openai/gpt-5.6-luna",
         "openrouter/deepseek/deepseek-v4-flash-0731",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
-      ],
-      "skills": [],
-      "mcps": [
-        "*"
       ]
     },
     "fixer": {
-      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
       "variant": "medium",
       "temperature": 0.1,
-      "fallback_models": [
-        "opencode/mimo-v2.5-free",
-        "openai/gpt-5.6-luna",
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "workers-ai/@cf/moonshotai/kimi-k2.7-code"
-      ],
       "skills": [
         "cloudflare",
         "controller-service-repo",
@@ -154,17 +147,18 @@
       ],
       "mcps": [
         "*"
+      ],
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+      "fallback_models": [
+        "opencode/mimo-v2.5-free",
+        "openai/gpt-5.6-luna",
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
+        "workers-ai/@cf/moonshotai/kimi-k2.7-code"
       ]
     },
     "engineering-manager": {
-      "model": "openai/gpt-5.6-sol",
       "variant": "high",
       "temperature": 0.1,
-      "fallback_models": [
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
-        "workers-ai/@cf/moonshotai/kimi-k2.7-code",
-        "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
       "skills": [
         "plan-implementation-plan",
         "cloudflare",
@@ -188,53 +182,59 @@
         "web-design-guidelines",
         "web-perf"
       ],
-      "mcps": []
+      "mcps": [],
+      "model": "openai/gpt-5.6-sol",
+      "fallback_models": [
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "openrouter/deepseek/deepseek-v4-flash-0731"
+      ]
     },
     "product-manager": {
-      "model": "openai/gpt-5.6-sol",
       "variant": "medium",
       "temperature": 0.1,
+      "skills": [
+        "persona",
+        "plan-prd"
+      ],
+      "mcps": [],
+      "model": "openai/gpt-5.6-sol",
       "fallback_models": [
         "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
         "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
+      ]
+    },
+    "product-manager-mini": {
+      "variant": "medium",
+      "temperature": 0.1,
       "skills": [
         "persona",
         "plan-prd"
       ],
-      "mcps": []
-    },
-    "product-manager-mini": {
+      "mcps": [],
       "model": "opencode/mimo-v2.5-free",
-      "variant": "medium",
-      "temperature": 0.1,
       "fallback_models": [
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
         "openai/gpt-5.6-terra",
         "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
-      "skills": [
-        "persona",
-        "plan-prd"
-      ],
-      "mcps": []
+      ]
     },
     "reviewer": {
-      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
       "variant": "medium",
       "temperature": 0.1,
+      "skills": [
+        "review"
+      ],
+      "mcps": [],
+      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
       "fallback_models": [
         "workers-ai/@cf/moonshotai/kimi-k2.7-code",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
         "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
-      ],
-      "skills": [
-        "review"
-      ],
-      "mcps": []
+      ]
     }
   },
   "provider": {

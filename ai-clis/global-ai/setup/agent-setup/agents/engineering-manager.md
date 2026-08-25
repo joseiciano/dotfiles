@@ -1,4 +1,9 @@
 ---
+model: openai/gpt-5.6-sol
+fallback_models:
+  - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
+  - workers-ai/@cf/moonshotai/kimi-k2.7-code
+  - openrouter/deepseek/deepseek-v4-flash-0731
 mode: all
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
 permission: 

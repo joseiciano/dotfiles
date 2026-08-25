@@ -1,4 +1,9 @@
 ---
+model: cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
+fallback_models:
+  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
+  - openai/gpt-5.6-luna
+  - openrouter/deepseek/deepseek-v4-flash-0731
 description: read-only advisor in the multi-llm council
 shared:
   - coding-shared
