@@ -301,10 +301,10 @@ items:
         command: run-shell "workmux resurrect"
       - name: New Worktree
         key: n
-        command: command-prompt -p "Worktree name:" "run-shell 'workmux add \"%%\"'"
+        command: 'command-prompt -p "Worktree name:" "run-shell \"workmux add %%\""'
       - name: Rename Worktree
         key: r
-        command: command-prompt -p "Worktree name:" "run-shell 'workmux rename \"%%\"'"
+        command: 'command-prompt -p "Worktree name:" "run-shell \"workmux rename %%\""'
       - name: Remove Worktree
         key: R
         command: run-shell "workmux remove"
