@@ -1,6 +1,7 @@
 ---
 name: implementation-loop
 description: End-to-end workflow for implementing a given ticket or well-defined multi-step plan. Should be used when given a plan or spec sheet to implement. 
+command: true
 ---
 
 This skill covers the end-to-end workflow for implementing a given plan. It should only be used when it's a multi-step plan that requires multiple steps to implement. 

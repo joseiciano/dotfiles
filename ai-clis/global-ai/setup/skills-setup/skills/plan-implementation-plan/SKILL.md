@@ -7,7 +7,22 @@ description: Design and format an implementation plan to be used by another agen
 
 ## Summary 
 
-Use this skill when you want to plan and format an implementation plan to be used by another agent. This skill explains what to look for as well as the final format needed for creating an implementation plan. 
+Use this skill when you want to plan and format an implementation plan to be used by another agent. this skill explains what to look for as well as the final format needed for creating an implementation plan. 
+
+## Parsed Arguments
+
+Arguments Received: `$ARGUMENTS`
+
+Parse the following arguments:
+
+- `$TICKET`: (**optional**) a high-level description, or just the name, of the body of work. 
+- `$MILESTONE`: (**optional**) specific milestone we want to create tickets for. 
+  - If `$MILESTONE` is provided, we will be developing multiple tickets. **THIS IS ONLY VALID IF `$MILESTONE` IS GIVEN**
+- `$DESCRIPTION`: (**optional**) plain-text description of the body of work.
+
+**At least one must be filled out for this skill.**
+
+**IF NO ARGUMENT IS RECEIVED, STOP HERE AND PROMPT THE USER.**
 
 ### Execution Context
 
@@ -57,6 +72,7 @@ Plans must consist of discrete, atomic phases containing executable tasks. Each 
 - Tasks within phases must be executable in parallel unless dependencies are specified
 - All task descriptions must include specific file paths, function names, and exact implementation details
 - No task should require human interpretation or decision-making
+- Make sure to identify if a unit of work is part of a larger goal (i.e. there will be follow ups), or if the completion of the ticket is completion of the overarching goal. 
 
 ### AI-Optimized Implementation Standards
 
@@ -212,4 +228,13 @@ tags: [Optional: List of relevant tags or categories, e.g., `feature`, `upgrade`
 [Link to related spec 1]
 [Link to relevant external documentation]
 ```
+
+## Output File
+Output the final plan to `plans/<ticket>.md` if `ticket` exists. 
+
+If `ticket` is handed to you (parse `$ARGUMENTS`), use that. 
+
+If not, see if you can pull it from the branch name (i.e. if the branch is `5-7-implement-api`), that should be the ticket.
+
+If not, see what we are to implement and generate a 1-3 sentence title. 
 

@@ -2,7 +2,7 @@
 model: openai/gpt-5.6-terra
 fallback_models:
   - opencode/mimo-v2.5-free
-  - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
+  - cloudflare-workers-ai/@cf/zai-org/glm-5.2
   - openrouter/deepseek/deepseek-v4-flash-0731
 description: Multi-LLM council agent that synthesizes responses from multiple models for higher-quality outputs on critical decisions.
 variant: medium

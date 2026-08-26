@@ -60,6 +60,10 @@ Stop here and ask the user to provide credentials — never invent or hardcode A
 
 ## Workflow
 
+### Proper Agent Usage
+
+**Note**: This skill is only to be used within a @reviewer subagent. If not within a reviewer subagent, call one and have it run the review. 
+
 ### Step 1: Gather Business Context
 
 Analyze the review target (commits, branch, or changes) to extract concise business context. Pass this context via `--background` to improve review quality.
@@ -120,6 +124,13 @@ When fixing issues and suggestions:
 - Apply fixes directly to the code when safe and well-defined
 - For complex fixes requiring manual intervention, clearly describe what needs to be done
 - Always verify fixes with the user before committing
+
+
+### Step 5: Re-review
+
+If there were fixes that needed to be addressed in step 4, **after** the fixes are implemented we want to run a new code review. 
+
+Redo steps 1-4 with a new review and repeat until we have no **high** or **medium** errors.
 
 ## Output Format
 
@@ -224,9 +235,24 @@ After the review completes, verify success by checking:
 
 If errors occurred, check the stderr warnings for details about which files failed and why.
 
+## Final Output
+
+1. Output the code review to the `code_reviews/<ticket>/code_review_x.md` where `x` starts at 1 and increments up each time if the previous exists. If the ticket includes numbers (e.g. "5-7-new-api-route.md"), the numbers are the ticket number (file created should be `code_reviews/5-7/code_review_1.md` for example). The command/orchestrator must create the parent directory and write the final Markdown review using shell redirection or `tee` — not the edit/write tools (these are denied). For example:
+
+   ```bash
+   mkdir -p "$(dirname "$output_file")"; <review-output-command> | tee "$output_file"
+   ```
+
+**Note**: If `<ticket>` does not exist, prior to calling the AI reviewer CLI, generate a 1-3 hyphenated summary (e.g. `test-local-dev`) to be the name. 
+
+2. Output the review to the user as well. Do not show anything other what the review/skill mentions as the output. 
+
+## Review Background
+
+Analyze the `docs/` path and pass in as `--background` flag information any product and functional spec docs that are relevant to the ticket at hand. 
+
 ## References
 
 - Full docs: https://github.com/alibaba/open-code-review
 - NPM package: https://www.npmjs.com/package/@alibaba-group/open-code-review
 - Issue tracker: https://github.com/alibaba/open-code-review/issues
-

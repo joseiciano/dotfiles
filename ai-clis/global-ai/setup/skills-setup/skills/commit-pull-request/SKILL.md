@@ -1,6 +1,6 @@
 ---
 name: commit-pull-request
-description: Formatting and guidelines for creating commits and github pull requests
+description: Formatting and guidelines for creating commits and github pull requests. Should be load whenever a commit or pull request are to be created. 
 ---
 
 ## Goal

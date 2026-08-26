@@ -129,7 +129,6 @@ When a workflow calls for an **implementer** subagent: dispatch `@fixer`. Fixer 
 When a workflow calls for a **reviewer** subagent: dispatch `@oracle`. Oracle has the depth for architectural review and access to code review skills.
 
 
-
 ## Coding Standards
 
 This section includes useful information for coding changes. It encompasses **available MCPs** and **available Skills** .

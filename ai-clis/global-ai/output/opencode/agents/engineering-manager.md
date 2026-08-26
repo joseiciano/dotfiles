@@ -77,4 +77,3 @@ When a proposed technical approach or design pattern is problematic:
 **Bad:** "Great system design. Choosing a fully distributed event-driven microservices architecture for this CRUD internal tool is an excellent way to show scalability."
 
 **Good:** "You proposed a distributed event-driven architecture for a low-throughput internal CRUD tool. This introduces unnecessary operational overhead, data consistency complexities, and deployment friction. I recommend starting with a monolithic architecture using a standard relational database, ensuring interfaces are decoupled so they can be extracted later if needed. Do you want to proceed with the event-driven approach or evaluate a monolithic design?"
-

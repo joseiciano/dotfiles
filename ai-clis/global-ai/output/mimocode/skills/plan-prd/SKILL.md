@@ -1,5 +1,6 @@
 ---
-description: Plan a product requirements document to get the high level construct of a product idea
+name: plan-prd
+description: Plan a product requirements document to get the high level construct of a product idea. Use when working on documentation for a high-level business-oriented view of a product. 
 ---
 
 Arguments Provided: `$ARGUMENTS`

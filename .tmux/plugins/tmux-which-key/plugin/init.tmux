@@ -113,8 +113,8 @@ set -g @wk_menu_workmux \
 'Sidebar "s" "run-shell \"workmux sidebar\"" \
 Dashboard "d" "run-shell \"workmux dashboard\"" \
 Resurrect "l" "run-shell \"workmux resurrect\"" \
-"New Worktree" "n" "command-prompt -p \"Worktree name:\" \"run-shell 'workmux add \\"%%\\"'\"" \
-"Rename Worktree" "r" "command-prompt -p \"Worktree name:\" \"run-shell 'workmux rename \\"%%\\"'\"" \
+"New Worktree" "n" "command-prompt -p \"Worktree name:\" { run-shell \"workmux add %%\" }" \
+"Rename Worktree" "r" "command-prompt -p \"Worktree name:\" { run-shell \"workmux rename %%\" }" \
 "Remove Worktree" "R" "run-shell \"workmux remove\""'
 
 set -g @wk_menu_plugins \
