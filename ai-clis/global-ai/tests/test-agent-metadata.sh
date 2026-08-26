@@ -3,34 +3,34 @@
 #
 # Source agent frontmatter under setup/agent-setup/agents/*.md is the sole
 # source for OpenCode/clones `model`, `fallback_models`, `variant`,
-# `temperature`, and `skills`. Those fields are source-owned: the generators
-# strip them (including skill list items) from generated agent Markdown, and
-# config generation migrates them into agent.<filename-without-.md> while
-# `mcps` stays config-owned.
+# `temperature`, `skills`, and `mcps`. Those fields are source-owned: the
+# generators strip them (including skill/mcp list items) from generated agent
+# Markdown, and config generation migrates them into
+# agent.<filename-without-.md>.
 #
 # Proves:
 #   1. Source frontmatter containing `model`, block-list `fallback_models`,
-#      `variant`, `temperature`, block-list `skills`, and `shared` generates
-#      OpenCode agent Markdown that omits all of them (including their list
-#      items) while preserving the body.
+#      `variant`, `temperature`, block-list `skills`, block-list `mcps`, and
+#      `shared` generates OpenCode agent Markdown that omits all of them
+#      (including their list items) while preserving the body.
 #   2. Claude generated agent uses the models.json Claude model and omits the
-#      OpenCode `model`/`fallback_models`/`variant`/`temperature`/`skills`
-#      values.
+#      OpenCode `model`/`fallback_models`/`variant`/`temperature`/`skills`/
+#      `mcps` values.
 #   3. Generated config receives `model`, `fallback_models`, `variant`,
-#      `temperature`, and `skills` at agent.<filename-without-.md> while
-#      preserving the config-owned `mcps` field.
-#   4. Inline `fallback_models: []` and `skills: []` yield empty lists in
-#      config and are stripped from generated Markdown.
+#      `temperature`, `skills`, and `mcps` at
+#      agent.<filename-without-.md>.
+#   4. Inline `fallback_models: []`, `skills: []`, and `mcps: []` yield empty
+#      lists in config and are stripped from generated Markdown.
 #   5. Agents without metadata and without a config entry create nothing;
 #      config-only agent entries without a source file are preserved.
 #   6. Malformed frontmatter metadata (empty scalar, nonnumeric temperature,
-#      malformed skills) fails with a clear error instead of silently
-#      producing bad config.
+#      malformed skills, malformed mcps) fails with a clear error instead of
+#      silently producing bad config.
 #   7. Empty source agent templates are skipped by both generators and any
 #      stale output file for them is removed.
-#   8. Root-only enforcement: nested `variant`/`temperature`/`skills` under an
-#      `options:` block stay in generated OpenCode/Claude Markdown and create
-#      no top-level config entry for a metadata-less agent.
+#   8. Root-only enforcement: nested `variant`/`temperature`/`skills`/`mcps`
+#      under an `options:` block stay in generated OpenCode/Claude Markdown and
+#      create no top-level config entry for a metadata-less agent.
 #   9. Root skills block with a comment and blank line between items: generated
 #      config still gets both items in order, and generated Markdown strips the
 #      whole block (both items + comment) without leaking list items.
@@ -68,6 +68,8 @@ skills:
   # SKILL-COMMENT-MARKER
 
   - test-driven-development
+mcps:
+  - "*"
 description: Metadata regression agent.
 mode: subagent
 shared:
@@ -85,6 +87,7 @@ fallback_models: []
 variant: low
 temperature: 0.5
 skills: []
+mcps: []
 description: Empty fallback regression agent.
 shared:
   - coding-shared
@@ -103,6 +106,8 @@ options:
   temperature: 0.2
   skills:
     - nested-skill-one
+  mcps:
+    - nested-mcp-one
 ---
 Body marker: BODY-PLAIN
 MD
@@ -123,16 +128,12 @@ JSON
 
 # --- fixture: config generation tree (real scripts, test config.jsonc) ---
 cp -R "$ROOT/setup/config/opencode-and-clones-only" "$CONFIG_TREE"
+# Intentionally do not seed build-test or empty-test here: their `mcps` arrays
+# must be sourced exclusively from agent frontmatter during config generation.
 cat > "$CONFIG_TREE/config.jsonc" <<'JSONC'
 {
   "default_agent": "build-test",
   "agent": {
-    "build-test": {
-      "mcps": ["*"]
-    },
-    "empty-test": {
-      "mcps": []
-    },
     "general": {
       "disable": true,
       "options": {},
@@ -178,7 +179,7 @@ check "claude agent generation succeeds" \
 check "config generation succeeds" \
   env AGENTS_DIR="$AGENTS_SRC" bash "$CONFIG_TREE/generate-config.sh" "$OP_OUT" opencode
 
-# --- 1. OpenCode generated Markdown strips model/fallback_models/variant/temperature/skills/shared ---
+# --- 1. OpenCode generated Markdown strips model/fallback_models/variant/temperature/skills/mcps/shared ---
 op_agent="$OP_OUT/agents/build-test.md"
 check "opencode markdown exists: build-test" [ -f "$op_agent" ]
 check_no_match "opencode markdown omits source model" "^model:" "$op_agent"
@@ -191,14 +192,16 @@ check_no_match "opencode markdown omits skills key" "^skills:" "$op_agent"
 check_no_match "opencode markdown omits skill list item 1" "cloudflare" "$op_agent"
 check_no_match "opencode markdown omits skill list item 2" "test-driven-development" "$op_agent"
 check_no_match "opencode markdown omits skills comment marker" "SKILL-COMMENT-MARKER" "$op_agent"
+check_no_match "opencode markdown omits mcps key" "^mcps:" "$op_agent"
+check_no_match "opencode markdown omits mcps list item" '"\*"' "$op_agent"
 check_no_match "opencode markdown omits shared key" "^shared:" "$op_agent"
 check "opencode markdown preserves body" grep -q 'BODY-LINE-1' "$op_agent"
 check "opencode markdown appends shared content" grep -q 'Shared prompt appended' "$op_agent"
 
 # --- 1b. Nested metadata under an `options:` block is NOT source-owned ---
-# `variant`, `temperature`, and `skills` nested below `options:` are regular
-# frontmatter content: they must survive into generated Markdown untouched and
-# must not be captured as root source-owned metadata.
+# `variant`, `temperature`, `skills`, and `mcps` nested below `options:` are
+# regular frontmatter content: they must survive into generated Markdown
+# untouched and must not be captured as root source-owned metadata.
 op_plain="$OP_OUT/agents/plain-test.md"
 check "opencode markdown exists: plain-test" [ -f "$op_plain" ]
 check "opencode markdown keeps nested options block" grep -q '^options:' "$op_plain"
@@ -206,14 +209,17 @@ check "opencode markdown keeps nested variant" grep -q '  variant: medium' "$op_
 check "opencode markdown keeps nested temperature" grep -q '  temperature: 0.2' "$op_plain"
 check "opencode markdown keeps nested skills key" grep -q '  skills:' "$op_plain"
 check "opencode markdown keeps nested skill item" grep -q 'nested-skill-one' "$op_plain"
+check "opencode markdown keeps nested mcps key" grep -q '  mcps:' "$op_plain"
+check "opencode markdown keeps nested mcps item" grep -q 'nested-mcp-one' "$op_plain"
 
-# --- 4a. inline fallback_models: [] / skills: [] stripped from OpenCode Markdown ---
+# --- 4a. inline fallback_models: [] / skills: [] / mcps: [] stripped from OpenCode Markdown ---
 op_empty="$OP_OUT/agents/empty-test.md"
 check "opencode markdown exists: empty-test" [ -f "$op_empty" ]
 check_no_match "opencode markdown omits inline fallback_models" "fallback_models" "$op_empty"
 check_no_match "opencode markdown omits inline skills" "^skills:" "$op_empty"
 check_no_match "opencode markdown omits empty-test variant" "^variant:" "$op_empty"
 check_no_match "opencode markdown omits empty-test temperature" "^temperature:" "$op_empty"
+check_no_match "opencode markdown omits inline mcps" "^mcps:" "$op_empty"
 
 # --- 7a. empty source template: no OpenCode output file (fresh or stale) ---
 check "opencode skips empty source agent output" [ ! -e "$OP_OUT/agents/empty-source-test.md" ]
@@ -231,12 +237,15 @@ check_no_match "claude markdown omits skills key" "^skills:" "$cl_agent"
 check_no_match "claude markdown omits skill list item 1" "cloudflare" "$cl_agent"
 check_no_match "claude markdown omits skill list item 2" "test-driven-development" "$cl_agent"
 check_no_match "claude markdown omits skills comment marker" "SKILL-COMMENT-MARKER" "$cl_agent"
+check_no_match "claude markdown omits mcps key" "^mcps:" "$cl_agent"
+check_no_match "claude markdown omits mcps list item" '"\*"' "$cl_agent"
 
 cl_empty="$CLAUDE_OUT/agents/empty-test.md"
 check_no_match "claude markdown omits inline fallback_models" "fallback_models" "$cl_empty"
 check_no_match "claude markdown omits inline skills" "^skills:" "$cl_empty"
 check_no_match "claude markdown omits empty-test variant" "^variant:" "$cl_empty"
 check_no_match "claude markdown omits empty-test temperature" "^temperature:" "$cl_empty"
+check_no_match "claude markdown omits inline mcps" "^mcps:" "$cl_empty"
 check "claude markdown uses models.json model for empty-test" grep -q '^model: claude-sonnet-4-5' "$cl_empty"
 
 # --- 2b. Nested metadata under `options:` survives Claude generation too ---
@@ -247,11 +256,13 @@ check "claude markdown keeps nested variant" grep -q '  variant: medium' "$cl_pl
 check "claude markdown keeps nested temperature" grep -q '  temperature: 0.2' "$cl_plain"
 check "claude markdown keeps nested skills key" grep -q '  skills:' "$cl_plain"
 check "claude markdown keeps nested skill item" grep -q 'nested-skill-one' "$cl_plain"
+check "claude markdown keeps nested mcps key" grep -q '  mcps:' "$cl_plain"
+check "claude markdown keeps nested mcps item" grep -q 'nested-mcp-one' "$cl_plain"
 
 # --- 7b. empty source template: no Claude output file (fresh or stale) ---
 check "claude skips empty source agent output" [ ! -e "$CLAUDE_OUT/agents/empty-source-test.md" ]
 
-# --- 3/4b/5. Config merge: source-owned variant/temperature/skills migrated in, config-owned mcps preserved, nothing extra ---
+# --- 3/4b/5. Config merge: source-owned variant/temperature/skills/mcps migrated in, nothing extra ---
 if node - "$OP_OUT/opencode.json" <<'JS'
 const fs = require('fs');
 const cfg = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -264,7 +275,8 @@ const checks = [
   ['build-test temperature merged', agent['build-test'].temperature === 0.1],
   ['build-test skills merged', JSON.stringify(agent['build-test'].skills) ===
     JSON.stringify(['cloudflare', 'test-driven-development'])],
-  ['build-test mcps preserved', JSON.stringify(agent['build-test'].mcps) === JSON.stringify(['*'])],
+  ['build-test mcps merged as array', Array.isArray(agent['build-test'].mcps) &&
+    JSON.stringify(agent['build-test'].mcps) === JSON.stringify(['*'])],
   ['empty-test inline fallback_models -> []', Array.isArray(agent['empty-test'].fallback_models) &&
     agent['empty-test'].fallback_models.length === 0],
   ['empty-test no model key', !('model' in agent['empty-test'])],
@@ -272,7 +284,8 @@ const checks = [
   ['empty-test temperature merged', agent['empty-test'].temperature === 0.5],
   ['empty-test inline skills -> []', Array.isArray(agent['empty-test'].skills) &&
     agent['empty-test'].skills.length === 0],
-  ['empty-test mcps preserved', JSON.stringify(agent['empty-test'].mcps) === JSON.stringify([])],
+  ['empty-test mcps merged as empty array', Array.isArray(agent['empty-test'].mcps) &&
+    agent['empty-test'].mcps.length === 0],
   ['plain-test (no metadata) creates no agent entry', !('plain-test' in agent)],
   ['config-only entry preserved: general', agent['general'] && agent['general'].disable === true],
 ];
@@ -332,6 +345,13 @@ body
 check_bad_metadata "malformed skills (scalar instead of list) fails" "skills" "bad-skills" \
 '---
 skills: not-a-list
+---
+body
+'
+
+check_bad_metadata "malformed mcps (scalar instead of list) fails" "mcps" "bad-mcps" \
+'---
+mcps: not-a-list
 ---
 body
 '

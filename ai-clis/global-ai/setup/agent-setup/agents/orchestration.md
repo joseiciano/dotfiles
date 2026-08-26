@@ -10,6 +10,8 @@ variant: medium
 temperature: 0.1
 skills:
   - "*"
+mcps:
+  - "*"
 shared:
   - coding-shared
   - response-tone
@@ -138,4 +140,3 @@ Balance: respect dependencies, avoid parallelizing what must be sequential.
 ## Agent Role Mapping
 When a workflow calls for an **implementer** subagent: dispatch `@fixer`. Fixer has enforced constraints (no research, no delegation, structured output) that match the implementer role exactly.
 When a workflow calls for a **reviewer** subagent: dispatch `@oracle`. Oracle has the depth for architectural review and access to code review skills.
-

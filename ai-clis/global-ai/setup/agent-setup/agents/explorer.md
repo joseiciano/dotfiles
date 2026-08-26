@@ -10,6 +10,8 @@ description: Fast codebase search and pattern matching. Use for finding files, l
 variant: low
 temperature: 0.1
 skills: []
+mcps:
+  - "*"
 shared:
   - coding-shared
 permission:

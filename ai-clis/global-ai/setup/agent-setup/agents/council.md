@@ -9,6 +9,8 @@ variant: medium
 temperature: 0.1
 skills:
   - "*"
+mcps:
+  - "*"
 mode: subagent
 shared:
   - coding-shared

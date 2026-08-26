@@ -14,14 +14,14 @@ set -euo pipefail
 #     - coding-shared
 #   ---
 #
-# The `shared`, `model`, `fallback_models`, `variant`, `temperature`, and
-# `skills` frontmatter keys are build-only metadata. `model` and
+# The `shared`, `model`, `fallback_models`, `variant`, `temperature`, `skills`,
+# and `mcps` frontmatter keys are build-only metadata. `model` and
 # `fallback_models` are the source of truth for the generated OpenCode config,
 # never for Claude: the source `model` is replaced by the Claude model from
-# models.json, and `fallback_models`, `variant`, `temperature`, and `skills`
-# are dropped. Generated agent files also omit `shared`, convert `permissions`
-# frontmatter to Claude Code `tools`, then append matching files from
-# agents-shared/.
+# models.json, and `fallback_models`, `variant`, `temperature`, `skills`, and
+# `mcps` are dropped. Generated agent files also omit `shared`, convert
+# `permissions` frontmatter to Claude Code `tools`, then append matching files
+# from agents-shared/.
 #
 # Output layout:
 #   global-ai/output/claude-code/agents/<agent>.md
@@ -161,19 +161,20 @@ write_agent_for_claude() {
       in_shared = 0
       in_fallback = 0
       in_skills = 0
+      in_mcps = 0
       in_permissions = 0
       permissions_child_indent = -1
     }
 
     NR == 1 && $0 == "---" { in_frontmatter = 1; print; print "model: " model; next }
-    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { flush_permissions(); in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; print "---"; next }
+    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { flush_permissions(); in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; in_mcps = 0; print "---"; next }
     in_frontmatter && /^model:[[:space:]]*/ { next }
 
     # Strip build-only metadata. Owned keys (model / fallback_models /
-    # variant / temperature / skills) are recognized only at column zero, so
-    # nested options.variant / temperature / skills survive. Root list blocks
-    # stay open across blank and comment-only lines and end at the next root
-    # key or the frontmatter delimiter; while open, the whole block (items,
+    # variant / temperature / skills / mcps) are recognized only at column zero,
+    # so nested options.variant / temperature / skills / mcps survive. Root list
+    # blocks stay open across blank and comment-only lines and end at the next
+    # root key or the frontmatter delimiter; while open, the whole block (items,
     # comments, blanks) is stripped.
     in_frontmatter && /^fallback_models:[[:space:]]*\[[[:space:]]*\]/ { next }
     in_frontmatter && /^fallback_models:[[:space:]]*$/ { in_fallback = 1; next }
@@ -186,6 +187,11 @@ write_agent_for_claude() {
     in_frontmatter && /^skills:[[:space:]]*$/ { in_skills = 1; next }
     in_frontmatter && in_skills && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_skills = 0 }
     in_frontmatter && in_skills { next }
+
+    in_frontmatter && /^mcps:[[:space:]]*\[[[:space:]]*\]/ { next }
+    in_frontmatter && /^mcps:[[:space:]]*$/ { in_mcps = 1; next }
+    in_frontmatter && in_mcps && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_mcps = 0 }
+    in_frontmatter && in_mcps { next }
 
     in_frontmatter && /^shared:[[:space:]]*$/ { in_shared = 1; next }
     in_frontmatter && in_shared && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_shared = 0 }

@@ -12,6 +12,7 @@ temperature: 0.1
 skills:
   - persona
   - plan-prd
+mcps: []
 permission: 
   write: deny 
   edit: deny 

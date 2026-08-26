@@ -1,10 +1,10 @@
 #!/bin/bash
 # Generate merged config files for opencode and clones.
 #
-# `model`, `fallback_models`, `variant`, `temperature`, and `skills` for each
-# agent are build-only metadata owned by the source agent frontmatter under
-# AGENTS_DIR (default: setup/agent-setup/agents). parse-jsonc.js reads them and
-# merges them into agent.<filename-without-.md>. AGENTS_DIR is
+# `model`, `fallback_models`, `variant`, `temperature`, `skills`, and `mcps`
+# for each agent are build-only metadata owned by the source agent frontmatter
+# under AGENTS_DIR (default: setup/agent-setup/agents). parse-jsonc.js reads
+# them and merges them into agent.<filename-without-.md>. AGENTS_DIR is
 # environment-overridable so tests can point at a fixture.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -31,7 +31,7 @@ output_file="$OUTPUT_DIR/$VARIANT.json"
 mkdir -p "$OUTPUT_DIR"
 
 # Source agent dir owning build-only `model` / `fallback_models` / `variant` /
-# `temperature` / `skills` metadata
+# `temperature` / `skills` / `mcps` metadata
 AGENTS_DIR="${AGENTS_DIR:-"$(cd "$SCRIPT_DIR/../../agent-setup/agents" && pwd)"}"
 export AGENTS_DIR
 

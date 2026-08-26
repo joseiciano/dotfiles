@@ -27,6 +27,8 @@ skills:
   - tanstack-start-best-practices
   - vercel-react-best-practices
   - test-driven-development
+mcps:
+  - "*"
 shared:
   - coding-shared
 permission:

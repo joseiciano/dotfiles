@@ -11,6 +11,8 @@ variant: medium
 temperature: 0.1
 skills:
   - "*"
+mcps:
+  - "*"
 permission: 
   edit: deny 
   bash: deny

@@ -9,6 +9,8 @@ variant: high
 temperature: 0.1
 skills:
   - "*"
+mcps:
+  - "*"
 shared:
   - coding-shared
 permission:

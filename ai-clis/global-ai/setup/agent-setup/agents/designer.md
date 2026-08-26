@@ -9,6 +9,7 @@ description: UI/UX design and implementation. Use for styling, responsive design
 variant: medium
 temperature: 0.7
 skills: []
+mcps: []
 shared:
   - coding-shared
 permission:

@@ -16,56 +16,6 @@
       "options": {},
       "permission": {}
     },
-    "council": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "councillor": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "mass-orchestration": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "orchestration": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "oracle": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "designer": {
-      "mcps": []
-    },
-    "explorer": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "fixer": {
-      "mcps": [
-        "*"
-      ]
-    },
-    "engineering-manager": {
-      "mcps": []
-    },
-    "product-manager": {
-      "mcps": []
-    },
-    "product-manager-mini": {
-      "mcps": []
-    },
-    "reviewer": {
-      "mcps": []
-    },
   },
   "provider": {
     "xiaomi": {

@@ -20,9 +20,9 @@ function parseJsonc(content) {
 
 // --- Build-only agent metadata -------------------------------------------------
 // Source agents under AGENTS_DIR (setup/agent-setup/agents by default) are the
-// sole source for `model`, `fallback_models`, `variant`, `temperature`, and
-// `skills`. The filename (without .md) maps to the config key agent.<name>.
-// Other agent.<name> fields (mcps, ...) remain owned by config.jsonc.
+// sole source for `model`, `fallback_models`, `variant`, `temperature`,
+// `skills`, and `mcps`. The filename (without .md) maps to the config key
+// agent.<name>.
 const agentsDir = process.env.AGENTS_DIR || path.join(__dirname, '..', '..', 'agent-setup', 'agents');
 
 // Parse only the root frontmatter keys this pipeline owns, robustly:
@@ -35,6 +35,9 @@ const agentsDir = process.env.AGENTS_DIR || path.join(__dirname, '..', '..', 'ag
 //   skills:                   (indented YAML list)
 //     - <item>
 //   skills: []                (inline empty list)
+//   mcps:                     (indented YAML list)
+//     - <item>
+//   mcps: []                  (inline empty list)
 // Malformed metadata raises a clear error naming the file and field instead of
 // silently producing bad config. Returns null when the file has no frontmatter
 // or no owned keys.
@@ -84,7 +87,7 @@ function parseFrontmatterMeta(file) {
         if (line.trim() === '---') break;
 
         // Owned metadata keys are root-only: only column-zero keys count, so
-        // nested options.variant / temperature / skills stay inert here.
+        // nested options.variant / temperature / skills / mcps stay inert here.
         const keyMatch = line.match(/^([A-Za-z_][A-Za-z0-9_-]*)\s*:(.*)$/);
         if (!keyMatch) continue; // blank lines and non-key lines inside frontmatter
 
@@ -108,7 +111,7 @@ function parseFrontmatterMeta(file) {
             }
             meta.temperature = num;
             sawKey = true;
-        } else if (key === 'fallback_models' || key === 'skills') {
+        } else if (key === 'fallback_models' || key === 'skills' || key === 'mcps') {
             const list = parseStringList(path.basename(file), key, rest, lines, i + 1);
             meta[key] = list.items;
             i = list.nextIndex;
@@ -148,6 +151,7 @@ for (const file of agentFiles) {
     if (meta.variant !== undefined) merged.agent[name].variant = meta.variant;
     if (meta.temperature !== undefined) merged.agent[name].temperature = meta.temperature;
     if (meta.skills !== undefined) merged.agent[name].skills = meta.skills;
+    if (meta.mcps !== undefined) merged.agent[name].mcps = meta.mcps;
 }
 
 fs.writeFileSync(outputFile, JSON.stringify(merged, null, 2));

@@ -17,11 +17,11 @@ set -euo pipefail
 #     edit: deny
 #   ---
 #
-# The `shared`, `model`, `fallback_models`, `variant`, `temperature`, and
-# `skills` frontmatter keys are build-only metadata. `model` and
+# The `shared`, `model`, `fallback_models`, `variant`, `temperature`, `skills`,
+# and `mcps` frontmatter keys are build-only metadata. `model` and
 # `fallback_models` are the source of truth for the generated OpenCode config
-# (agent.<name>.model / fallback_models); `variant`, `temperature`, and
-# `skills` feed the generated config. None of these keys appear in generated
+# (agent.<name>.model / fallback_models); `variant`, `temperature`, `skills`,
+# and `mcps` feed the generated config. None of these keys appear in generated
 # agent Markdown: generated agent files omit them, then append matching files
 # from agents-shared/ to end.
 #
@@ -70,15 +70,15 @@ write_agent_without_shared_key() {
   local output_file="$2"
 
   awk '
-    BEGIN { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; in_permission_block = 0; seen_edit = 0 }
+    BEGIN { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; in_mcps = 0; in_permission_block = 0; seen_edit = 0 }
     NR == 1 && $0 == "---" { in_frontmatter = 1; print; next }
-    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; in_permission_block = 0; seen_edit = 0; print; next }
+    in_frontmatter && /^[[:space:]]*---[[:space:]]*$/ { in_frontmatter = 0; in_shared = 0; in_fallback = 0; in_skills = 0; in_mcps = 0; in_permission_block = 0; seen_edit = 0; print; next }
 
     # Strip build-only metadata. Owned keys (model / fallback_models /
-    # variant / temperature / skills) are recognized only at column zero, so
-    # nested options.variant / temperature / skills survive. Root list blocks
-    # stay open across blank and comment-only lines and end at the next root
-    # key or the frontmatter delimiter; while open, the whole block (items,
+    # variant / temperature / skills / mcps) are recognized only at column zero,
+    # so nested options.variant / temperature / skills / mcps survive. Root list
+    # blocks stay open across blank and comment-only lines and end at the next
+    # root key or the frontmatter delimiter; while open, the whole block (items,
     # comments, blanks) is stripped.
     in_frontmatter && /^model:[[:space:]]*/ { next }
     in_frontmatter && /^fallback_models:[[:space:]]*\[[[:space:]]*\]/ { next }
@@ -92,6 +92,11 @@ write_agent_without_shared_key() {
     in_frontmatter && /^skills:[[:space:]]*$/ { in_skills = 1; next }
     in_frontmatter && in_skills && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_skills = 0 }
     in_frontmatter && in_skills { next }
+
+    in_frontmatter && /^mcps:[[:space:]]*\[[[:space:]]*\]/ { next }
+    in_frontmatter && /^mcps:[[:space:]]*$/ { in_mcps = 1; next }
+    in_frontmatter && in_mcps && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_mcps = 0 }
+    in_frontmatter && in_mcps { next }
 
     in_frontmatter && /^shared:[[:space:]]*$/ { in_shared = 1; next }
     in_frontmatter && in_shared && /^[A-Za-z_][A-Za-z0-9_-]*[[:space:]]*:/ { in_shared = 0 }

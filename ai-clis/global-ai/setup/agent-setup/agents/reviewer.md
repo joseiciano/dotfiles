@@ -10,6 +10,7 @@ variant: medium
 temperature: 0.1
 skills:
   - review
+mcps: []
 shared:
   - coding-shared
 permission:
