@@ -7,6 +7,26 @@ fallback_models:
   - workers-ai/@cf/moonshotai/kimi-k2.7-code
 mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
+variant: medium
+temperature: 0.1
+skills:
+  - cloudflare
+  - controller-service-repo
+  - agents-sdk
+  - better-auth-best-practices
+  - smart-dumb-component
+  - neon-postgres
+  - durable-objects
+  - workers-best-practices
+  - wrangler
+  - tanstack-integration-best-practices
+  - sandbox-sdk
+  - tanstack-postgres-best-practices
+  - tanstack-query-best-practices
+  - tanstack-router-best-practices
+  - tanstack-start-best-practices
+  - vercel-react-best-practices
+  - test-driven-development
 shared:
   - coding-shared
 permission:

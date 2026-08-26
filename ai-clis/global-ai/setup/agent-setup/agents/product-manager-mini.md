@@ -7,6 +7,11 @@ fallback_models:
   - openrouter/deepseek/deepseek-v4-flash-0731
 mode: subagent
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
+variant: medium
+temperature: 0.1
+skills:
+  - persona
+  - plan-prd
 permission: 
   write: deny 
   edit: deny 

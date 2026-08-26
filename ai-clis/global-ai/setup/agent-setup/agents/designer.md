@@ -6,6 +6,9 @@ fallback_models:
   - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 mode: subagent
 description: UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish.
+variant: medium
+temperature: 0.7
+skills: []
 shared:
   - coding-shared
 permission:

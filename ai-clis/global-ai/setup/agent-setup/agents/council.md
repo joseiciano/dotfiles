@@ -5,6 +5,10 @@ fallback_models:
   - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
   - openrouter/deepseek/deepseek-v4-flash-0731
 description: Multi-LLM council agent that synthesizes responses from multiple models for higher-quality outputs on critical decisions.
+variant: medium
+temperature: 0.1
+skills:
+  - "*"
 mode: subagent
 shared:
   - coding-shared

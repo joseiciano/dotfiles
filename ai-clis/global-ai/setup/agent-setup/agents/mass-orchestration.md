@@ -7,6 +7,10 @@ fallback_models:
   - openrouter/deepseek/deepseek-v4-flash-0731
 mode: all
 description: Handles calling multiple orchestrator's to work on multiple tickets
+variant: medium
+temperature: 0.1
+skills:
+  - "*"
 permission: 
   edit: deny 
   bash: deny

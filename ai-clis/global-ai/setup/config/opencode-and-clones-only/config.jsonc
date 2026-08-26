@@ -17,147 +17,53 @@
       "permission": {}
     },
     "council": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
       "mcps": [
         "*"
       ]
     },
     "councillor": {
-      "variant": "medium",
-      "temperature": 0.2,
-      "skills": [
-        "*"
-      ],
       "mcps": [
         "*"
       ]
     },
     "mass-orchestration": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
       "mcps": [
         "*"
       ]
     },
     "orchestration": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
       "mcps": [
         "*"
       ]
     },
     "oracle": {
-      "variant": "high",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
       "mcps": [
         "*"
       ]
     },
     "designer": {
-      "variant": "medium",
-      "temperature": 0.7,
-      "skills": [],
       "mcps": []
     },
     "explorer": {
-      "variant": "low",
-      "temperature": 0.1,
-      "skills": [],
       "mcps": [
         "*"
       ]
     },
     "fixer": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "cloudflare",
-        "controller-service-repo",
-        "agents-sdk",
-        "better-auth-best-practices",
-        "smart-dumb-component",
-        "neon-postgres",
-        "durable-objects",
-        "workers-best-practices",
-        "wrangler",
-        "tanstack-integration-best-practices",
-        "sandbox-sdk",
-        "tanstack-postgres-best-practices",
-        "tanstack-query-best-practices",
-        "tanstack-router-best-practices",
-        "tanstack-start-best-practices",
-        "vercel-react-best-practices",
-        "test-driven-development",
-      ],
       "mcps": [
         "*"
       ]
     },
     "engineering-manager": {
-      "variant": "high",
-      "temperature": 0.1,
-      "skills": [
-        "plan-implementation-plan",
-        "cloudflare",
-        "controller-service-repo",
-        "agents-sdk",
-        "better-auth-best-practices",
-        "smart-dumb-component",
-        "neon-postgres",
-        "frontend-design",
-        "durable-objects",
-        "workers-best-practices",
-        "wrangler",
-        "tanstack-integration-best-practices",
-        "sandbox-sdk",
-        "tanstack-postgres-best-practices",
-        "tanstack-query-best-practices",
-        "tanstack-router-best-practices",
-        "tanstack-start-best-practices",
-        "vercel-react-best-practices",
-        "test-driven-development",
-        "web-design-guidelines",
-        "web-perf"
-      ],
       "mcps": []
     },
     "product-manager": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "persona",
-        "plan-prd",
-      ],
       "mcps": []
     },
     "product-manager-mini": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "persona",
-        "plan-prd",
-      ],
       "mcps": []
     },
     "reviewer": {
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "review"
-      ],
       "mcps": []
     },
   },

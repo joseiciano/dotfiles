@@ -5,6 +5,10 @@ fallback_models:
   - openai/gpt-5.6-luna
   - openrouter/deepseek/deepseek-v4-flash-0731
 description: read-only advisor in the multi-llm council
+variant: medium
+temperature: 0.2
+skills:
+  - "*"
 shared:
   - coding-shared
 permissions:

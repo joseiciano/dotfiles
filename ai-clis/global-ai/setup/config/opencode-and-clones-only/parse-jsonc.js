@@ -20,18 +20,56 @@ function parseJsonc(content) {
 
 // --- Build-only agent metadata -------------------------------------------------
 // Source agents under AGENTS_DIR (setup/agent-setup/agents by default) are the
-// sole source for `model` and `fallback_models`. The filename (without .md)
-// maps to the config key agent.<name>. Other agent.<name> fields (variant,
-// temperature, skills, mcps, ...) remain owned by config.jsonc.
+// sole source for `model`, `fallback_models`, `variant`, `temperature`, and
+// `skills`. The filename (without .md) maps to the config key agent.<name>.
+// Other agent.<name> fields (mcps, ...) remain owned by config.jsonc.
 const agentsDir = process.env.AGENTS_DIR || path.join(__dirname, '..', '..', 'agent-setup', 'agents');
 
 // Parse only the root frontmatter keys this pipeline owns, robustly:
-//   model: <scalar>
+//   model: <scalar string>
+//   variant: <scalar string>
+//   temperature: <finite numeric scalar>
 //   fallback_models:          (indented YAML list)
 //     - <item>
 //   fallback_models: []       (inline empty list)
-// Malformed metadata raises a clear error instead of silently producing bad
-// config. Returns null when the file has no frontmatter or no owned keys.
+//   skills:                   (indented YAML list)
+//     - <item>
+//   skills: []                (inline empty list)
+// Malformed metadata raises a clear error naming the file and field instead of
+// silently producing bad config. Returns null when the file has no frontmatter
+// or no owned keys.
+function parseStringList(file, key, rest, lines, startIndex) {
+    if (/^\s*\[\s*\]/.test(rest)) {
+        return { items: [], nextIndex: startIndex - 1 };
+    }
+    if (rest.trim() !== '') {
+        throw new Error(file + ": malformed frontmatter '" + key + "': expected indented list items or inline []");
+    }
+
+    const items = [];
+    let j = startIndex;
+    for (; j < lines.length; j++) {
+        const l = lines[j];
+        // List block ends only at the frontmatter delimiter or the next root
+        // (column-zero) frontmatter key. Blank lines and comment-only lines
+        // keep the list open so later items are still captured.
+        if (l.trim() === '---' || /^[A-Za-z_][A-Za-z0-9_-]*\s*:/.test(l)) break;
+        // List items must be indented under the root list key.
+        const itemMatch = l.match(/^\s+-\s+(.*)$/);
+        if (!itemMatch) continue;
+
+        let item = itemMatch[1].replace(/\s*#.*$/, '').trim();
+        item = item.replace(/^["']|["']$/g, '');
+        if (!item) {
+            throw new Error(file + ": malformed frontmatter '" + key + "': empty list item");
+        }
+        items.push(item);
+    }
+    if (items.length === 0) {
+        throw new Error(file + ": malformed frontmatter '" + key + "': block form requires list items (use inline [] for an empty list)");
+    }
+    return { items: items, nextIndex: j - 1 };
+}
 function parseFrontmatterMeta(file) {
     const content = fs.readFileSync(file, 'utf8');
     const lines = content.split('\n');
@@ -45,52 +83,35 @@ function parseFrontmatterMeta(file) {
         const line = lines[i];
         if (line.trim() === '---') break;
 
-        const keyMatch = line.match(/^\s*([A-Za-z_][A-Za-z0-9_-]*)\s*:(.*)$/);
+        // Owned metadata keys are root-only: only column-zero keys count, so
+        // nested options.variant / temperature / skills stay inert here.
+        const keyMatch = line.match(/^([A-Za-z_][A-Za-z0-9_-]*)\s*:(.*)$/);
         if (!keyMatch) continue; // blank lines and non-key lines inside frontmatter
 
         const key = keyMatch[1];
         const rest = keyMatch[2];
 
-        if (key === 'model') {
+        if (key === 'model' || key === 'variant') {
             let value = rest.replace(/\s*#.*$/, '').trim();
             value = value.replace(/^["']|["']$/g, '');
-            if (!value) {
-                throw new Error(path.basename(file) + ": malformed frontmatter 'model': expected a scalar value (e.g. model: openai/gpt-5.6-sol)");
+            if (!value || /^\[/.test(value)) {
+                throw new Error(path.basename(file) + ": malformed frontmatter '" + key + "': expected a scalar string (e.g. " + key + ": <value>)");
             }
-            meta.model = value;
+            meta[key] = value;
             sawKey = true;
-        } else if (key === 'fallback_models') {
-            if (/^\s*\[\s*\]/.test(rest)) {
-                meta.fallback_models = [];
-                sawKey = true;
-                continue;
+        } else if (key === 'temperature') {
+            let value = rest.replace(/\s*#.*$/, '').trim();
+            value = value.replace(/^["']|["']$/g, '');
+            const num = Number(value);
+            if (!value || !Number.isFinite(num)) {
+                throw new Error(path.basename(file) + ": malformed frontmatter 'temperature': expected a finite numeric value (e.g. temperature: 0.1)");
             }
-            if (rest.trim() !== '') {
-                throw new Error(path.basename(file) + ": malformed frontmatter 'fallback_models': expected indented list items or inline []");
-            }
-
-            const items = [];
-            let j = i + 1;
-            for (; j < lines.length; j++) {
-                const l = lines[j];
-                if (l.trim() === '---') break;
-                if (l.trim() === '') continue;
-
-                const itemMatch = l.match(/^\s*-\s*(.*)$/);
-                if (!itemMatch) break; // next root frontmatter key: block ended
-
-                let item = itemMatch[1].replace(/\s*#.*$/, '').trim();
-                item = item.replace(/^["']|["']$/g, '');
-                if (!item) {
-                    throw new Error(path.basename(file) + ": malformed frontmatter 'fallback_models': empty list item");
-                }
-                items.push(item);
-            }
-            if (items.length === 0) {
-                throw new Error(path.basename(file) + ": malformed frontmatter 'fallback_models': block form requires list items (use inline [] for an empty list)");
-            }
-            meta.fallback_models = items;
-            i = j - 1;
+            meta.temperature = num;
+            sawKey = true;
+        } else if (key === 'fallback_models' || key === 'skills') {
+            const list = parseStringList(path.basename(file), key, rest, lines, i + 1);
+            meta[key] = list.items;
+            i = list.nextIndex;
             sawKey = true;
         }
     }
@@ -124,6 +145,9 @@ for (const file of agentFiles) {
     if (!merged.agent[name]) merged.agent[name] = {};
     if (meta.model !== undefined) merged.agent[name].model = meta.model;
     if (meta.fallback_models !== undefined) merged.agent[name].fallback_models = meta.fallback_models;
+    if (meta.variant !== undefined) merged.agent[name].variant = meta.variant;
+    if (meta.temperature !== undefined) merged.agent[name].temperature = meta.temperature;
+    if (meta.skills !== undefined) merged.agent[name].skills = meta.skills;
 }
 
 fs.writeFileSync(outputFile, JSON.stringify(merged, null, 2));

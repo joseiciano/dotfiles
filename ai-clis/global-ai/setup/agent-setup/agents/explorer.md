@@ -7,6 +7,9 @@ fallback_models:
   - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 mode: subagent
 description: Fast codebase search and pattern matching. Use for finding files, locating code patterns, and answering 'where is X?' questions.
+variant: low
+temperature: 0.1
+skills: []
 shared:
   - coding-shared
 permission:

@@ -5,6 +5,10 @@ fallback_models:
   - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
   - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
+variant: high
+temperature: 0.1
+skills:
+  - "*"
 shared:
   - coding-shared
 permission:

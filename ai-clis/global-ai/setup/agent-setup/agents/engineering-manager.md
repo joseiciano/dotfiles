@@ -6,6 +6,30 @@ fallback_models:
   - openrouter/deepseek/deepseek-v4-flash-0731
 mode: all
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
+variant: high
+temperature: 0.1
+skills:
+  - plan-implementation-plan
+  - cloudflare
+  - controller-service-repo
+  - agents-sdk
+  - better-auth-best-practices
+  - smart-dumb-component
+  - neon-postgres
+  - frontend-design
+  - durable-objects
+  - workers-best-practices
+  - wrangler
+  - tanstack-integration-best-practices
+  - sandbox-sdk
+  - tanstack-postgres-best-practices
+  - tanstack-query-best-practices
+  - tanstack-router-best-practices
+  - tanstack-start-best-practices
+  - vercel-react-best-practices
+  - test-driven-development
+  - web-design-guidelines
+  - web-perf
 permission: 
   write: allow 
   edit: deny 

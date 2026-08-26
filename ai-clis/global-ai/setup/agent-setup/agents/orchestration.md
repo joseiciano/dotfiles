@@ -6,6 +6,10 @@ fallback_models:
   - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
 mode: all
 description: AI coding orchestrator that delegates tasks to specialist agents for optimal quality, speed, and cost
+variant: medium
+temperature: 0.1
+skills:
+  - "*"
 shared:
   - coding-shared
   - response-tone

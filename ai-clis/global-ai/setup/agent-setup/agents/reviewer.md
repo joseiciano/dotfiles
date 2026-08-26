@@ -6,6 +6,10 @@ fallback_models:
   - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
   - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
 description: Read-only code reviewer. Runs the open-code-review delegation workflow: previews changed files via ocr, applies review rules, and reports only meaningful issues grouped by priority with full coverage accounting.
+variant: medium
+temperature: 0.1
+skills:
+  - review
 shared:
   - coding-shared
 permission:
