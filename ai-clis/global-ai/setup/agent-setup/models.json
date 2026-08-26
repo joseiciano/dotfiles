@@ -40,5 +40,8 @@
   },
   "reviewer": {
     "claude": "claude-haiku-4-5"
+  },
+  "tester": {
+    "claude": "claude-haiku-4-5"
   }
 }

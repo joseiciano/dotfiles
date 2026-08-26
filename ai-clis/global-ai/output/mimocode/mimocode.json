@@ -20,7 +20,7 @@
       "model": "openai/gpt-5.6-terra",
       "fallback_models": [
         "opencode/mimo-v2.5-free",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "openrouter/deepseek/deepseek-v4-flash-0731"
       ],
       "variant": "medium",
@@ -63,7 +63,7 @@
     "engineering-manager": {
       "model": "openai/gpt-5.6-sol",
       "fallback_models": [
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "workers-ai/@cf/moonshotai/kimi-k2.7-code",
         "openrouter/deepseek/deepseek-v4-flash-0731"
       ],
@@ -146,7 +146,7 @@
       "model": "openai/gpt-5.6-terra",
       "fallback_models": [
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
         "openrouter/deepseek/deepseek-v4-flash-0731"
       ],
@@ -177,7 +177,7 @@
     "orchestration": {
       "model": "openai/gpt-5.6-sol",
       "fallback_models": [
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
       ],
@@ -209,7 +209,7 @@
     "product-manager": {
       "model": "openai/gpt-5.6-sol",
       "fallback_models": [
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
         "openrouter/deepseek/deepseek-v4-flash-0731"
@@ -227,7 +227,7 @@
       "fallback_models": [
         "workers-ai/@cf/moonshotai/kimi-k2.7-code",
         "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2"
       ],
       "variant": "medium",
       "temperature": 0.1,
@@ -235,6 +235,22 @@
         "review"
       ],
       "mcps": []
+    },
+    "tester": {
+      "model": "openai/gpt-5.6-sol",
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6"
+      ],
+      "variant": "high",
+      "temperature": 0.1,
+      "skills": [
+        "test-driven-development"
+      ],
+      "mcps": [
+        "*"
+      ]
     }
   },
   "provider": {
