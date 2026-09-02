@@ -2,7 +2,16 @@
 mode: subagent
 description: Strategic technical advisor. Use for architecture decisions, complex debugging, code review, and engineering guidance.
 permission:
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow

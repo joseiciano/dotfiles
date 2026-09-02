@@ -2,7 +2,16 @@
 mode: all
 description: Handles calling multiple orchestrator's to work on multiple tickets
 permission: 
-  edit: deny 
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

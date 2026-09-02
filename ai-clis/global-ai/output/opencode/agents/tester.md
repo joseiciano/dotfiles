@@ -2,7 +2,16 @@
 mode: subagent
 description: Authoritative test writer. ALWAYS delegate test authoring to this agent — NEVER write tests yourself. Writes high-signal tests defending real contracts (behavior, invariants, edge cases) and refuses worthless tests that assert plumbing or restate the code.
 permission:
-  edit: allow
+  edit:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow

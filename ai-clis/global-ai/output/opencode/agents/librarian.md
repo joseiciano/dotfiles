@@ -2,7 +2,16 @@
 mode: subagent
 description: External documentation and library research. Use for official docs lookup, GitHub examples, and understanding library internals.
 permission:
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow

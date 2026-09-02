@@ -2,7 +2,16 @@
 mode: all
 description: AI coding orchestrator that delegates tasks to specialist agents for optimal quality, speed, and cost
 permission: 
-  edit: deny 
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

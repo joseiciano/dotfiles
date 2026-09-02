@@ -2,10 +2,18 @@
 description: Multi-LLM council agent that synthesizes responses from multiple models for higher-quality outputs on critical decisions.
 mode: subagent
 permission: 
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   webfetch: allow
-  read: allow
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   list: allow
   grep: allow
   glob: allow

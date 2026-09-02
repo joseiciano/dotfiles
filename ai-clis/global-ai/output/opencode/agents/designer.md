@@ -2,7 +2,16 @@
 mode: subagent
 description: UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish.
 permission:
-  edit: allow
+  edit:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

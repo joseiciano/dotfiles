@@ -15,11 +15,18 @@ mode: subagent
 shared:
   - coding-shared
 permission: 
-  write: deny
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   webfetch: allow
-  read: allow
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   list: allow
   grep: allow
   glob: allow

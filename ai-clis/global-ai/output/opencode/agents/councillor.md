@@ -1,7 +1,16 @@
 ---
 description: read-only advisor in the multi-llm council
 permission:
-  read: allow
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   '*': deny
   question: deny
   glob: allow

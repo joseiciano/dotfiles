@@ -2,7 +2,16 @@
 mode: all
 description: Read-only code reviewer. Runs the open-code-review delegation workflow - previews changed files via ocr, applies review rules, and reports only meaningful issues grouped by priority with full coverage accounting.
 permission:
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow

@@ -14,8 +14,16 @@ skills:
   - plan-prd
 mcps: []
 permission: 
-  write: deny 
-  edit: deny 
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": ask

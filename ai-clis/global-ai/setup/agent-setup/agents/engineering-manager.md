@@ -32,8 +32,16 @@ skills:
   - web-perf
 mcps: []
 permission: 
-  write: allow 
-  edit: deny 
+  write:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

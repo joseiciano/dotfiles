@@ -2,7 +2,16 @@
 mode: all
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
 permission: 
-  edit: allow 
+  edit:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

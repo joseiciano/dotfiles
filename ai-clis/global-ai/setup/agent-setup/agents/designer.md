@@ -13,8 +13,16 @@ mcps: []
 shared:
   - coding-shared
 permission:
-  write: allow
-  edit: allow
+  edit:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

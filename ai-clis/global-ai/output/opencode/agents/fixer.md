@@ -2,7 +2,16 @@
 mode: subagent
 description: Fast implementation specialist. Receives complete context and task spec, executes code changes efficiently.
 permission:
-  edit: allow
+  edit:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow

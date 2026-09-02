@@ -16,8 +16,16 @@ shared:
   - coding-shared
   - response-tone
 permission: 
-  write: deny 
-  edit: deny 
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: deny
   external_directory:
     "*": allow

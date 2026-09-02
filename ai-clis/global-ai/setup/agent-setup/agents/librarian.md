@@ -4,8 +4,16 @@ description: External documentation and library research. Use for official docs 
 shared:
   - coding-shared
 permission:
-  write: deny
-  edit: deny
+  edit:
+    "*": deny
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
+  read:
+    "*": allow
+    "*.env": deny
+    "*.env.*": deny
+    "*.env.example": deny
   bash: allow
   external_directory:
     "*": allow
