@@ -15,10 +15,7 @@ tools:
 spawns: 
   - explore
 model: 
-  - openai/gpt-5.6-sol:high
-  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813:high
-  - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2:high
-  - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6:high
+  - "@slow"
 thinkingLevel: high
 shared: 
   - response-tone

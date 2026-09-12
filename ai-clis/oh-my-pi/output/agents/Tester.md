@@ -15,7 +15,7 @@ tools:
 spawns: 
   - explore
 model: 
-  - pi/task
+  - "@slow"
 thinkingLevel: high
 ---
 
