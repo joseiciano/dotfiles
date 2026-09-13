@@ -1,4 +1,4 @@
-.PHONY: init init-opencode-base init-opencode-slim init-oh-my-pi opencode-base opencode-slim oh-my-pi
+.PHONY: init init-opencode-base init-opencode-slim init-omp init-oh-my-pi opencode-base opencode-slim oh-my-pi
 
 init:
 	@:
@@ -9,9 +9,10 @@ init-opencode-base:
 init-opencode-slim:
 	$(MAKE) -C oh-my-opencode-slim init
 
-init-oh-my-pi:
+init-omp:
 	$(MAKE) -C oh-my-pi init
 
+init-oh-my-pi: init-omp
 opencode-base: init-opencode-base
 opencode-slim: init-opencode-slim
-oh-my-pi: init-oh-my-pi
+oh-my-pi: init-omp
