@@ -2,9 +2,7 @@
 name: designer
 description: "UI/UX specialist for design implementation, review, visual refinement"
 model: 
-  - openai/gpt-5.6-sol:medium
-  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813:medium
-  - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6:medium
+  - "@slow"
 shared: 
   - response-tone
   - coding-shared
