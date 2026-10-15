@@ -1,0 +1,4 @@
+source: https://github.com/michael-denyer/pstack-claude
+commit: 94f5ce95abe8a9dec976967d79941f631cf477cd
+version: 0.9.84
+path: plugins/pstack
