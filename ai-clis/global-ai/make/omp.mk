@@ -1,4 +1,4 @@
-# oh-my-pi: agents, APPEND_SYSTEM.md and workflows in output/omp. Skills and
+# oh-my-pi: agents, APPEND_SYSTEM.md, extensions and workflows in output/omp. Skills and
 # commands come from the Claude build in ~/.claude; `link-omp` turns on
 # oh-my-pi's settings for reading them from there.
 OMP_OUT := $(OUTPUT_DIR)/omp
@@ -12,6 +12,7 @@ build-omp:
 	mkdir -p $(OMP_OUT)/workflows
 	$(RENDER) omp --out $(OMP_OUT)/agents
 	$(RENDER) prompt $(APPEND_SYSTEM) $(OMP_OUT)/APPEND_SYSTEM.md
+	cp -R $(SETUP_DIR)/omp-specific/extensions $(OMP_OUT)/extensions
 	cp $(WORKFLOWS_SETUP)/*/* $(OMP_OUT)/workflows/
 
 # Link only after the build completes, even under `make -j`.
@@ -53,6 +54,25 @@ link-omp:
 	else \
 		echo "WARNING: omp not found; set skills.enableClaudeUser and commands.enableClaudeUser to true yourself" >&2; \
 	fi; \
+	extensions_dir="$(HOME)/.omp/agent/extensions"; \
+	mkdir -p "$$extensions_dir"; \
+	for src in "$(OMP_OUT)/extensions"/*; do \
+		[ -e "$$src" ] || continue; \
+		dest="$$extensions_dir/$$(basename "$$src")"; \
+		if [ -e "$$dest" ] && [ ! -L "$$dest" ]; then \
+			echo "ERROR: refusing to replace existing extension file: $$dest" >&2; \
+			exit 1; \
+		fi; \
+	done; \
+	for dest in "$$extensions_dir"/*; do \
+		[ -L "$$dest" ] || continue; \
+		target=$$(readlink "$$dest"); \
+		if managed "$$target" && [ ! -e "$$target" ]; then rm -f "$$dest"; fi; \
+	done; \
+	for src in "$(OMP_OUT)/extensions"/*; do \
+		[ -e "$$src" ] || continue; \
+		ln -sfn "$$src" "$$extensions_dir/$$(basename "$$src")"; \
+	done; \
 	workflows_root="$(OMP_OUT)/workflows"; \
 	saved_dir="$(HOME)/.pi/workflows/saved"; \
 	for src in "$$workflows_root"/*; do \
@@ -74,4 +94,4 @@ link-omp:
 		[ -L "$$dest" ] && rm -f "$$dest"; \
 		ln -s "$$src" "$$dest"; \
 	done; \
-	echo "link complete: agents and APPEND_SYSTEM.md symlinked into ~/.omp/agent, skills and commands read from ~/.claude, workflows linked into ~/.pi/workflows/saved"
+	echo "link complete: agents, APPEND_SYSTEM.md and extensions symlinked into ~/.omp/agent, skills and commands read from ~/.claude, workflows linked into ~/.pi/workflows/saved"
