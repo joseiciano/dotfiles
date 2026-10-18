@@ -15,6 +15,7 @@ mcps:
 shared:
   - coding-shared
   - response-tone
+  - knowledge-base
 permission: 
   edit:
     "*": deny

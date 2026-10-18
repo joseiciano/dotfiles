@@ -1,6 +1,7 @@
 ---
 shared:
   - response-tone
+  - knowledge-base
 ---
 
 # Orchestration
