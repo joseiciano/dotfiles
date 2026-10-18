@@ -142,6 +142,84 @@ check_link "skills entry stable after re-run" \
   "$HOME_DIR/.claude/skills/ours" "$OUT/skills/ours"
 check_link "agents link stable after re-run" "$HOME_DIR/.claude/agents" "$OUT/agents"
 
+# --- skills are linked per entry into a real dir ---
+SKILLS_DIR="$CLAUDE_DIR/skills"
+
+# Every built skill has its own link in the real skills dir.
+skills_linked_per_entry() {
+  [ -d "$SKILLS_DIR" ] && [ ! -L "$SKILLS_DIR" ] || return 1
+  local src name
+  for src in "$OUT/skills"/*; do
+    name="$(basename "$src")"
+    [ -L "$SKILLS_DIR/$name" ] && [ "$(readlink "$SKILLS_DIR/$name")" = "$src" ] || return 1
+  done
+}
+
+link_claude_fails_with() {
+  local expected="$1" err
+  if err="$(make -C "$GAI" link-claude 2>&1)"; then return 1; fi
+  case "$err" in *"$expected"*) return 0 ;; esac
+  return 1
+}
+
+# 6. a whole-dir skills link into a managed root becomes a real dir of links
+for target in "$OUT/skills" "$OLD_CC/skills" "$OLD_GA/skills"; do
+  label="${target#"$REPO"/}"
+  rm -rf "$SKILLS_DIR"
+  ln -s "$target" "$SKILLS_DIR"
+  check "link-claude succeeds with skills -> $label" make -C "$GAI" link-claude
+  check "skills -> $label replaced by real dir of per-skill links" skills_linked_per_entry
+done
+check "no links written into output/claude/skills" \
+  bash -c '! find "$1" -mindepth 1 -maxdepth 1 -type l | grep -q .' _ "$OUT/skills"
+
+# 7. a skills link to an unrelated path is refused and left untouched
+# (output/claudeX shares a prefix with output/claude but is not managed)
+for target in "$ELSEWHERE" "$GAI/output/claudeX/skills"; do
+  label="${target#"$TMP"/}"
+  rm -rf "$SKILLS_DIR"
+  ln -s "$target" "$SKILLS_DIR"
+  check "link-claude refuses skills -> $label" \
+    link_claude_fails_with "refusing to replace unrelated symlink"
+  check_link "unrelated skills link -> $label kept" "$SKILLS_DIR" "$target"
+done
+rm -f "$SKILLS_DIR"
+check "link-claude restores skills dir" make -C "$GAI" link-claude
+
+# 8. real entries Claude Code writes survive link-claude and a full rebuild
+mkdir -p "$SKILLS_DIR/synced/foo" "$SKILLS_DIR/user-skill"
+printf 'mine\n' > "$SKILLS_DIR/user-skill/SKILL.md"
+ln -s "$ELSEWHERE/missing" "$SKILLS_DIR/foreign-dangling"
+printf 'synced\n' > "$SKILLS_DIR/synced/foo/SKILL.md"
+mkdir -p "$SKILLS_SRC/extra"
+printf -- '---\nname: extra\ndescription: Fixture skill removed later.\n---\n\nExtra.\n' \
+  > "$SKILLS_SRC/extra/SKILL.md"
+check "make install-claude with real synced/ dir succeeds" make -C "$GAI" install-claude
+check "synced/ kept after rebuild" [ -f "$SKILLS_DIR/synced/foo/SKILL.md" ]
+check "synced/ is still a real dir" [ ! -L "$SKILLS_DIR/synced" ]
+check "synced/ not in build output" absent "$OUT/skills/synced"
+check "user skill not in build output" absent "$OUT/skills/user-skill"
+check_link "new skill linked" "$SKILLS_DIR/extra" "$OUT/skills/extra"
+
+# 9. a removed skill's link is pruned; other links and real entries stay
+rm -rf "$SKILLS_SRC/extra"
+check "make install-claude after removing a skill succeeds" make -C "$GAI" install-claude
+check "removed skill link pruned" absent "$SKILLS_DIR/extra"
+check_link "remaining skill link kept" "$SKILLS_DIR/ours" "$OUT/skills/ours"
+check "synced/ kept after pruning" [ -f "$SKILLS_DIR/synced/foo/SKILL.md" ]
+check "user skill kept after pruning" [ -f "$SKILLS_DIR/user-skill/SKILL.md" ]
+check_link "foreign dangling skill link kept after pruning" \
+  "$SKILLS_DIR/foreign-dangling" "$ELSEWHERE/missing"
+
+# 10. a real entry under a built skill name is refused and preserved
+rm -f "$SKILLS_DIR/ours"
+mkdir -p "$SKILLS_DIR/ours"
+printf 'mine\n' > "$SKILLS_DIR/ours/SKILL.md"
+check "link-claude refuses real dir colliding with built skill" \
+  link_claude_fails_with "refusing to replace existing path"
+check "colliding real skill dir preserved" \
+  bash -c '[ ! -L "$1" ] && [ "$(cat "$1/SKILL.md")" = mine ]' _ "$SKILLS_DIR/ours"
+
 if [ "$fail" -ne 0 ]; then
   echo "install-claude-test FAILED" >&2
   exit 1

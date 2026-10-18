@@ -1,20 +1,3 @@
----
-name: review
-description: >
-  Code review on Git changes using the `ocr` CLI from alibaba/open-code-review
-  in delegation mode: OCR handles deterministic engineering (file selection,
-  rule resolution) while the host agent performs the review itself with its
-  own intelligence and tools. Use when the user asks to review code, review
-  a pull request, review staged/unstaged changes, review a commit, or
-  compare branches for code quality issues. Produces line-level review
-  comments and can automatically apply fixes when requested.
-compatibility: >
-  Requires the `ocr` CLI installed (via `npm install -g
-  @alibaba-group/open-code-review` or GitHub release binary). Does NOT
-  require a configured LLM endpoint — delegation mode is LLM-free on the
-  OCR side.
----
-
 # Open Code Review — Delegation Mode
 
 A skill for performing AI code review where OCR provides deterministic engineering (file filtering, rule resolution) and the host agent performs the actual review using its own intelligence and tools.

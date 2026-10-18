@@ -16,15 +16,13 @@ build-claude:
 	$(RENDER) prompt $(APPEND_SYSTEM) $(CLAUDE_OUT)/APPEND_SYSTEM.md
 	cp -R $(SETUP_DIR)/claude-specific/hooks $(CLAUDE_OUT)/hooks
 	cp $(WORKFLOWS_SETUP)/*/*.js $(CLAUDE_OUT)/workflows/
-	cp -R $(SKILLS_SETUP)/skills $(CLAUDE_OUT)/skills
-	@if [ -d $(CLAUDE_OUT)/skills/review ]; then \
-		mv $(CLAUDE_OUT)/skills/review $(CLAUDE_OUT)/skills/ai-review; \
-		perl -pi -e 's/^name: review$$/name: ai-review/' $(CLAUDE_OUT)/skills/ai-review/SKILL.md; \
-	fi
+	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/skills $(CLAUDE_OUT)/skills --references $(SKILLS_SETUP)/addyskills/references
+	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/addyskills/skills $(CLAUDE_OUT)/skills --references $(SKILLS_SETUP)/addyskills/references
+	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/mattskills/skills $(CLAUDE_OUT)/skills
+	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/pstack/skills $(CLAUDE_OUT)/skills
 	if [ -d $(SEEDED_COMMANDS) ]; then cp -R $(SEEDED_COMMANDS)/. $(CLAUDE_OUT)/commands/; fi
 	$(SKILLS_SETUP)/generate-skill-commands.sh $(CLAUDE_OUT)/skills $(CLAUDE_OUT)/commands
 	$(SKILLS_SETUP)/strip-command-flags.sh $(CLAUDE_OUT)/skills
-	find $(CLAUDE_OUT)/agents $(CLAUDE_OUT)/skills $(CLAUDE_OUT)/commands -type f -name '*.md' -exec perl -pi -e 's/\@explorers?\b/\@scout/g; s/\@fixers?\b/\@sonic/g; s/`explorer`/`scout`/g; s/`fixer`/`sonic`/g; s/`review`/`ai-review`/g; s{skills/review/SKILL\.md}{skills/ai-review/SKILL.md}g' {} +
 
 # Link only after the build completes, even under `make -j`.
 install-claude: build-claude
@@ -32,7 +30,9 @@ install-claude: build-claude
 
 # Link each managed directory into the retained Claude config. If a destination
 # is a real directory, preserve it and reconcile only entries managed by this
-# build (or one of the legacy build locations).
+# build (or one of the legacy build locations). With `per-entry`, the destination
+# is always a real directory of per-entry links, so files Claude Code writes there
+# itself (e.g. skills/synced/) stay out of the build output and survive rebuilds.
 link-claude:
 	@set -e; \
 	managed() { \
@@ -42,9 +42,18 @@ link-claude:
 		return 1; \
 	}; \
 	link_directory() { \
-		src_root=$$1; mapped_dest=$$2; \
+		src_root=$$1; mapped_dest=$$2; per_entry=$${3:-}; \
 		[ -d "$$src_root" ] || return 0; \
-		if [ -L "$$mapped_dest" ]; then \
+		if [ -n "$$per_entry" ]; then \
+			if [ -L "$$mapped_dest" ]; then \
+				if ! managed "$$(readlink "$$mapped_dest")/" ; then \
+					echo "ERROR: refusing to replace unrelated symlink: $$mapped_dest" >&2; \
+					return 1; \
+				fi; \
+				rm -f "$$mapped_dest"; \
+			fi; \
+			mkdir -p "$$mapped_dest"; \
+		elif [ -L "$$mapped_dest" ]; then \
 			rm -f "$$mapped_dest"; \
 			ln -s "$$src_root" "$$mapped_dest"; \
 			return 0; \
@@ -94,7 +103,7 @@ link-claude:
 	fi; \
 	link_directory "$(CLAUDE_OUT)/agents" "$(CLAUDE_DIR)/agents"; \
 	link_directory "$(CLAUDE_OUT)/commands" "$(CLAUDE_DIR)/commands"; \
-	link_directory "$(CLAUDE_OUT)/skills" "$(CLAUDE_DIR)/skills"; \
+	link_directory "$(CLAUDE_OUT)/skills" "$(CLAUDE_DIR)/skills" per-entry; \
 	link_directory "$(CLAUDE_OUT)/workflows" "$(CLAUDE_DIR)/workflows"; \
 	link_home_dir "$(CLAUDE_DIR)" "$(HOME)/.claude"; \
 	echo "Linked Claude Code agents, commands, skills, and workflows into $$HOME/.claude."

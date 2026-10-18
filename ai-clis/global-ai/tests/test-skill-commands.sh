@@ -21,8 +21,23 @@
 #      literal `command: true` in the body-only fixture.
 #   6. Seeded commands from setup/command-setup/command are copied into
 #      output/claude/commands alongside generated ones.
-#   7. The `review` skill is published as `ai-review` (dir and `name:`), and a
-#      `command: true` review skill generates ai-review.md, not review.md.
+#   7. build-claude renames nothing: every source skill is published under
+#      its source dir name.
+#  7a. Every setup/skills-setup/addyskills/skills/<skill>/ dir is copied into
+#      output/claude/skills alongside the own skills, with links into
+#      addyskills/references/ inlined into the skill's own references/;
+#      addyskills/README.md is not copied. (copy-skills.js details live in
+#      test-copy-skills.sh.)
+#  7b. Every setup/skills-setup/mattskills/skills/<skill>/ dir (with its
+#      sidecar files) is copied into output/claude/skills alongside the
+#      others; mattskills/README.md is not copied.
+#  7c. Every setup/skills-setup/pstack/skills/<skill>/ dir (with its
+#      references/) is copied into output/claude/skills alongside the others;
+#      pstack/README.md is not copied.
+#
+# Every skill source dir that make/claude.mk passes to copy-skills.js is
+# emptied in the fixture, so a newly added source cannot leak live skills into
+# the exact listings below.
 #   8. Without a seeded command folder, `make build-claude` still succeeds
 #      and output/claude/commands holds only generated commands (the rebuild
 #      drops the stale seeded command).
@@ -60,6 +75,9 @@ export HOME="$TMP/home"
 GAI="$REPO/ai-clis/global-ai"
 SKILLS_SRC="$GAI/setup/skills-setup/skills"
 SEEDED="$GAI/setup/command-setup/command"
+ADDY_SRC="$GAI/setup/skills-setup/addyskills"
+MATT_SRC="$GAI/setup/skills-setup/mattskills"
+PSTACK_SRC="$GAI/setup/skills-setup/pstack"
 
 # --- fixture: mirror real repo layout (Makefile, make/ and setup trees) ---
 mkdir -p "$GAI"
@@ -67,10 +85,24 @@ cp "$ROOT/Makefile" "$GAI/Makefile"
 cp -R "$ROOT/make" "$GAI/make"
 cp -R "$ROOT/setup" "$GAI/setup"
 
-# Replace the live skills with fixtures only, so the expected command set is
-# exactly known. A live seeded folder (if any) is replaced by a fixture one.
-rm -rf "$SKILLS_SRC" "$SEEDED"
-mkdir -p "$SKILLS_SRC" "$SEEDED"
+# Replace the live skills with fixtures only, so the expected skill and
+# command sets are exactly known. Every source dir build-claude copies skills
+# from (read from the copy-skills.js calls in make/claude.mk) is emptied first;
+# the named source roots are then rebuilt below from fixtures. A live seeded
+# folder (if any) is replaced by a fixture one.
+SKILL_SOURCES="$(grep -oE 'copy-skills\.js \$\(SKILLS_SETUP\)/[^ ]+' "$GAI/make/claude.mk" \
+  | sed -E 's#^copy-skills\.js \$\(SKILLS_SETUP\)/##' | LC_ALL=C sort -u)"
+case " $(echo $SKILL_SOURCES) " in
+  *" skills "*) ;;
+  *) echo "FAIL - could not read skill sources from make/claude.mk (got: $(echo $SKILL_SOURCES))" >&2; exit 1 ;;
+esac
+for src in $SKILL_SOURCES; do
+  [ -d "$GAI/setup/skills-setup/$src" ] || { echo "FAIL - make/claude.mk skill source missing: $src" >&2; exit 1; }
+  rm -rf "${GAI:?}/setup/skills-setup/$src"
+  mkdir -p "$GAI/setup/skills-setup/$src"
+done
+rm -rf "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC" "$PSTACK_SRC"
+mkdir -p "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC" "$PSTACK_SRC"
 
 # 1. command-enabled: frontmatter declares command: true -> command generated.
 mkdir -p "$SKILLS_SRC/command-enabled"
@@ -111,16 +143,71 @@ For reference, command: true appears in this body but never in the
 frontmatter, so it must not enable a generated command.
 MD
 
-# 7. review: renamed to ai-review in output, and enabled as a command.
-mkdir -p "$SKILLS_SRC/review"
-cat > "$SKILLS_SRC/review/SKILL.md" <<'MD'
+# 7a. imported addyskills (upstream layout): skills/<skill>/ + shared
+#     references/ + a README.md that is not a skill.
+mkdir -p "$ADDY_SRC/skills/addy-alpha/references" "$ADDY_SRC/skills/addy-beta" \
+  "$ADDY_SRC/references"
+cat > "$ADDY_SRC/skills/addy-alpha/SKILL.md" <<'MD'
 ---
-name: review
-description: Test review skill.
-command: true
+name: addy-alpha
+description: Imported skill with its own checklist and a shared one.
 ---
 
-Review the change.
+See [the checklist](references/checklist.md) and
+[the shared checklist](../../references/shared-checklist.md).
+MD
+cat > "$ADDY_SRC/skills/addy-alpha/references/checklist.md" <<'MD'
+- [ ] Imported checklist item.
+MD
+cat > "$ADDY_SRC/references/shared-checklist.md" <<'MD'
+- [ ] Shared checklist item.
+MD
+cat > "$ADDY_SRC/skills/addy-beta/SKILL.md" <<'MD'
+---
+name: addy-beta
+description: Second imported skill.
+---
+
+Run addy-beta.
+MD
+cat > "$ADDY_SRC/README.md" <<'MD'
+# addyskills (imported) -- not a skill
+MD
+
+# 7b. imported mattskills: skills/<skill>/ with a sidecar doc + a README.md
+#     that is not a skill.
+mkdir -p "$MATT_SRC/skills/matt-gamma"
+cat > "$MATT_SRC/skills/matt-gamma/SKILL.md" <<'MD'
+---
+name: matt-gamma
+description: Imported mattskills skill with a sidecar doc.
+---
+
+Read [the format](FORMAT.md).
+MD
+cat > "$MATT_SRC/skills/matt-gamma/FORMAT.md" <<'MD'
+Sidecar format doc.
+MD
+cat > "$MATT_SRC/README.md" <<'MD'
+# mattskills (imported) -- not a skill
+MD
+
+# 7c. imported pstack: skills/<skill>/ with a references/ doc + a README.md
+#     that is not a skill.
+mkdir -p "$PSTACK_SRC/skills/pstack-delta/references"
+cat > "$PSTACK_SRC/skills/pstack-delta/SKILL.md" <<'MD'
+---
+name: pstack-delta
+description: Imported pstack skill with a reference doc.
+---
+
+Read [the prompt](references/prompt.md).
+MD
+cat > "$PSTACK_SRC/skills/pstack-delta/references/prompt.md" <<'MD'
+Reference prompt.
+MD
+cat > "$PSTACK_SRC/README.md" <<'MD'
+# pstack (imported) -- not a skill
 MD
 
 # 6. seeded command copied verbatim.
@@ -142,14 +229,6 @@ description: Calls command-enabled skill with given arguments
 Call the `command-enabled` skill with the following `$ARGUMENTS`:
 EOF
 
-EXPECTED_REVIEW="$TMP/expected-ai-review.md"
-cat > "$EXPECTED_REVIEW" <<'EOF'
----
-description: Calls ai-review skill with given arguments
----
-
-Call the `ai-review` skill with the following `$ARGUMENTS`:
-EOF
 
 fail=0
 check() {
@@ -186,7 +265,7 @@ check_fail() {
 
 check_listing() {
   local desc="$1" dir="$2" expected="$3" actual
-  actual="$(cd "$dir" && LC_ALL=C ls -1 | tr '\n' ' ')"
+  actual="$(cd "$dir" 2>/dev/null && LC_ALL=C ls -1 | tr '\n' ' ')" || true
   if [ "$actual" = "$expected" ]; then
     echo "ok   - $desc"
   else
@@ -206,21 +285,31 @@ check "make build-claude succeeds" make -C "$GAI" build-claude
 check_content "command generated with exact content: command-enabled.md" \
   "$OUT_CMDS/command-enabled.md" "$EXPECTED"
 
-# --- 2/3/6/7. exact command set: no disabled/body-only/review.md entries ---
+# --- 2/3/6. exact command set: no disabled/body-only entries ---
 check_listing "output/claude/commands holds generated + seeded commands only" \
-  "$OUT_CMDS" "ai-review.md command-enabled.md seeded-cmd.md "
+  "$OUT_CMDS" "command-enabled.md seeded-cmd.md "
 check_content "seeded command copied verbatim" \
   "$OUT_CMDS/seeded-cmd.md" "$SEEDED/seeded-cmd.md"
 
-# --- 7. review -> ai-review rename ---
-check_content "review skill command generated as ai-review.md" \
-  "$OUT_CMDS/ai-review.md" "$EXPECTED_REVIEW"
-check_listing "output/claude/skills renames review -> ai-review" \
-  "$OUT_SKILLS" "ai-review body-only command-disabled command-enabled "
-check "ai-review SKILL.md declares name: ai-review" \
-  grep -qx 'name: ai-review' "$OUT_SKILLS/ai-review/SKILL.md"
-check "ai-review SKILL.md has command flag stripped" \
-  bash -c "! grep -q '^command:' '$OUT_SKILLS/ai-review/SKILL.md'"
+# --- 7/7a. own + imported skills under their source names; README.md is not ---
+check_listing "output/claude/skills holds own + addyskills + mattskills + pstack skills, no README.md" \
+  "$OUT_SKILLS" "addy-alpha addy-beta body-only command-disabled command-enabled matt-gamma pstack-delta "
+check "pstack skill copied with its references/ verbatim" \
+  diff -r "$PSTACK_SRC/skills/pstack-delta" "$OUT_SKILLS/pstack-delta"
+check_listing "mattskills skill copied with its sidecar files" \
+  "$OUT_SKILLS/matt-gamma" "FORMAT.md SKILL.md "
+check_content "mattskills skill copied verbatim" \
+  "$OUT_SKILLS/matt-gamma/SKILL.md" "$MATT_SRC/skills/matt-gamma/SKILL.md"
+check_content "imported skill keeps its own references/ file" \
+  "$OUT_SKILLS/addy-alpha/references/checklist.md" \
+  "$ADDY_SRC/skills/addy-alpha/references/checklist.md"
+check_content "imported skill's shared checklist inlined into its references/" \
+  "$OUT_SKILLS/addy-alpha/references/shared-checklist.md" \
+  "$ADDY_SRC/references/shared-checklist.md"
+check "imported skill links the inlined copy, not the shared dir" \
+  grep -qF '(references/shared-checklist.md)' "$OUT_SKILLS/addy-alpha/SKILL.md"
+check_content "second addyskills skill copied verbatim" \
+  "$OUT_SKILLS/addy-beta/SKILL.md" "$ADDY_SRC/skills/addy-beta/SKILL.md"
 
 # --- 4/5. output skills stripped of command: true; sources and bodies intact ---
 STRIP_EXPECTED="$TMP/expected-stripped-command-enabled.md"
@@ -233,13 +322,12 @@ check_content "output body-only skill unchanged" \
   "$OUT_SKILLS/body-only/SKILL.md" "$SKILLS_SRC/body-only/SKILL.md"
 check "source skill keeps command: true (stripping touches output only)" \
   grep -q '^command: true$' "$SKILLS_SRC/command-enabled/SKILL.md"
-check "source review skill is not renamed" [ -f "$SKILLS_SRC/review/SKILL.md" ]
 
 # --- 8. no seeded folder: rebuild yields generated commands only ---
 rm -rf "$SEEDED"
 check "make build-claude succeeds without seeded command folder" make -C "$GAI" build-claude
 check_listing "rebuild drops stale seeded command, keeps generated" \
-  "$OUT_CMDS" "ai-review.md command-enabled.md "
+  "$OUT_CMDS" "command-enabled.md "
 
 # --- 9. built hook enforces the spawn policy from the settings.json path ---
 # Exit status of the built hook for one PreToolUse Agent payload.

@@ -91,6 +91,15 @@ check_no_decision() {
 check_allow \
   'parent allows scout Agent spawn' \
   '{"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"subagent_type":"scout"}}'
+check_allow \
+  'parent allows security-reviewer Agent spawn' \
+  '{"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"subagent_type":"security-reviewer"}}'
+check_allow \
+  'parent allows web-performance-auditor Agent spawn' \
+  '{"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"subagent_type":"web-performance-auditor"}}'
+check_allow \
+  'parent allows comment-sicko Agent spawn (no-comments starts it)' \
+  '{"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"subagent_type":"comment-sicko"}}'
 check_deny \
   'parent denies councillor Agent spawn' \
   '{"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"subagent_type":"councillor"}}'
