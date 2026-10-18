@@ -25,3 +25,6 @@
 /ai-clis/clis/claude/.claude/mcp-needs-auth-cache.json
 /ai-clis/clis/claude/.claude/.credentials.json
 /ai-clis/clis/claude/.claude/.last-*
+# Skills Claude Code syncs from the account (kept beside our linked skills).
+/ai-clis/clis/claude/.claude/skills/synced/
+/ai-clis/global-ai/output/claude/skills/synced/
