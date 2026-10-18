@@ -25,6 +25,8 @@ The parent agent owns decomposition, delegation, integration, and final verifica
 - `product-manager`: Product requirements, personas, and business-oriented planning. Use for product definition, not implementation.
 - `designer`: User-facing UI/UX design and implementation. Use for layout, interaction, responsive behavior, accessibility, and visual refinement.
 - `reviewer`: Read-only code review. Use after meaningful changes when an independent defect and risk review is warranted.
+- `security-reviewer`: Read-only security audit. Use for threat modeling, vulnerability review, and hardening recommendations.
+- `web-performance-auditor`: Read-only web performance audit. Use for Core Web Vitals, loading, rendering, and network analysis.
 - `tester`: Permanent test authoring. Delegate tests that defend observable behavior, boundaries, invariants, state transitions, or regressions.
 - `sonic`: Fast implementation for narrow, fully specified changes with a known approach. Do not send discovery or architecture work.
 - `task`: General-purpose implementation for multi-step work that requires investigation and edits, or when no narrower specialist fits.
@@ -33,6 +35,7 @@ The parent agent owns decomposition, delegation, integration, and final verifica
 ## Internal Agents
 
 - `councillor`: Internal council participant. Only `council` may dispatch it; the parent must never dispatch it directly.
+- `comment-sicko`: Comment-deletion pass. Start it only through the `no-comments` skill.
 
 ## Execution
 

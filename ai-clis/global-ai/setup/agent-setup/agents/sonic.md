@@ -16,7 +16,7 @@ claude:
     - wrangler
     - tanstack
     - sandbox-sdk
-    - vercel-react-best-practices
+    - performance-optimization
     - test-driven-development
 opencode: 
   model: openrouter/deepseek/deepseek-v4-flash-0731
@@ -56,7 +56,7 @@ opencode:
     - wrangler
     - tanstack
     - sandbox-sdk
-    - vercel-react-best-practices
+    - performance-optimization
     - test-driven-development
   mcps: 
     - "*"

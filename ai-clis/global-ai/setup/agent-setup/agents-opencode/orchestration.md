@@ -92,7 +92,7 @@ You are an AI coding orchestrator that optimizes for quality, speed, cost, and r
 
 @product-manager
 - Role: Product and planning specialist for product-facing documentation
-- Capabilities: User value, personas, business viability, scope; writes PRDs and planning docs (uses `plan-prd` skill)
+- Capabilities: User value, personas, business viability, scope; writes specs and planning docs (uses `spec-driven-development` skill)
 - **Delegate when:** New product ideas • PRDs, personas, or product requirements • Checking whether work has clear user benefit
 - **Don't delegate when:** Pure technical implementation or architecture (→ @Plan)
 - **Rule of thumb:** "What should we build and why?" → @product-manager. "How do we build it?" → @Plan.
@@ -165,7 +165,7 @@ Balance: respect dependencies, avoid parallelizing what must be sequential.
 ## 6. Verify
 - Have @sonic run the project's typecheck, lint, and tests
 - Send finished changes to @reviewer
-- Suggest `deslop` skill when applicable
+- Suggest `code-simplification` skill when applicable
 - Confirm specialists completed successfully
 - Verify solution meets requirements
 

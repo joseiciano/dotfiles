@@ -98,7 +98,7 @@ Create a checklist containing every `reviewable_files` entry. Use `(path, status
 For each reviewable file:
 1. Get its diff (Step 3)
 2. Consult its rule group (from Step 2) for the review checklist
-3. Conduct a thorough review, using read/grep/glob context tools as needed to understand surrounding code
+3. Conduct a thorough review against the rule group and the five axes in the `ai-review` skill's `references/code-review-and-quality/guide.md` (correctness, readability, architecture, security, performance), using read/grep/glob context tools as needed to understand surrounding code
 4. Mark the file `reviewed`, or `skipped` with a concrete reason
 
 For large changes, review in bounded batches grouped by shared rules and diff size.

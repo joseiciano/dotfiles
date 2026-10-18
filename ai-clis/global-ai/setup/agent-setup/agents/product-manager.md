@@ -5,7 +5,7 @@ claude:
   model: claude-opus-5-5
   tools: "Read, Grep, Glob, Skill"
   skills: 
-    - plan-prd
+    - spec-driven-development
 opencode: 
   model: opencode/mimo-v2.5-free
   permission: 
@@ -33,7 +33,7 @@ opencode:
   temperature: 0.1
   skills: 
     - persona
-    - plan-prd
+    - spec-driven-development
   mcps: 
     []
 omp: 
