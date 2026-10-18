@@ -1,9 +1,5 @@
 {
   "default_agent": "orchestration",
-  "plugin": [
-    "./plugins/opencode-fallback/index.ts",
-    "./plugins/agent-composer/index.ts",
-  ],
   "subagent_depth": 3,
   "agent": {
     "general": {
@@ -84,7 +80,6 @@
       "whitelist": [
         "workers-ai/@cf/zai-org/glm-4.7-flash",
         "workers-ai/@cf/moonshotai/kimi-k2.6",
-        "workers-ai/@cf/zai-org/glm-5.2",
         "workers-ai/@cf/qwen/qwen2.5-coder-32b-instruct",
         "workers-ai/@cf/meta/llama-3.1-8b-instruct"
       ]
@@ -93,7 +88,8 @@
       "whitelist": [
         "@cf/moonshotai/kimi-k2.7-code",
         "@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "@cf/deepseek-ai/deepseek-v4-pro-0813"
+        "@cf/deepseek-ai/deepseek-v4-pro-0813",
+        "@cf/zai-org/glm-5.2",
       ]
     },
     "opencode": {

@@ -27,6 +27,7 @@ Run commands: `npx wrangler <command>` (or `pnpm`/`yarn wrangler`)
 | If you want to... | Start here |
 |-------------------|------------|
 | Create/deploy Worker quickly | Essential Commands below → [patterns.md](./patterns.md) §New Worker |
+| Full CLI command reference (all products, flags) | [commands.md](./commands.md) |
 | Configure bindings (KV, D1, R2) | [configuration.md](./configuration.md) §Bindings |
 | Write integration tests | [api.md](./api.md) §startWorker |
 | Debug production issues | [gotchas.md](./gotchas.md) + Essential Commands §Monitoring |
@@ -103,6 +104,7 @@ wrangler tail --status error      # Filter by status
 
 ## In This Reference
 
+- [commands.md](./commands.md) - Full CLI reference (KV, R2, D1, Vectorize, Hyperdrive, Queues, Containers, Workflows, Pipelines, Secrets Store, Pages), deploy flags, versions/rollback, secret-handling guidelines
 - [configuration.md](./configuration.md) - wrangler.jsonc setup, environments, bindings
 - [api.md](./api.md) - Programmatic API (`startWorker`, `getPlatformProxy`, events)
 - [patterns.md](./patterns.md) - Common workflows and development patterns

@@ -106,19 +106,25 @@ response.body.pipeThrough(new TextDecoderStream()).pipeThrough(
 
 ## Testing
 
+Use `@cloudflare/vitest-pool-workers` — runs tests inside the Workers runtime with real bindings, catching issues Node.js-based tests miss.
+
 ```typescript
 import { describe, it, expect } from 'vitest';
+import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test';
 import worker from '../src/index';
 
 describe('Worker', () => {
   it('returns 200', async () => {
     const req = new Request('http://localhost/');
-    const env = { MY_VAR: 'test' };
-    const ctx = { waitUntil: () => {}, passThroughOnException: () => {} };
-    expect((await worker.fetch(req, env, ctx)).status).toBe(200);
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(req, env, ctx);
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(200);
   });
 });
 ```
+
+**Pitfall**: the Vitest pool auto-injects `nodejs_compat`, so tests pass even if your wrangler config is missing the flag. See [rules.md](./rules.md) (Development & Testing).
 
 ## Deployment
 

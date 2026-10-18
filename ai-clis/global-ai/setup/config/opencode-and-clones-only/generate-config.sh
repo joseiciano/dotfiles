@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Generate merged config files for opencode and clones.
 #
 # `model`, `fallback_models`, `variant`, `temperature`, `skills`, and `mcps`
@@ -10,8 +11,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="$SCRIPT_DIR/config.jsonc"
 BASES_DIR="$SCRIPT_DIR/bases"
-OUTPUT_DIR="$1"
-VARIANT="$2"
+OUTPUT_DIR="${1:-}"
+VARIANT="${2:-}"
 
 if [ -z "$OUTPUT_DIR" ] || [ -z "$VARIANT" ]; then
     echo "Usage: $0 <output-dir> <variant>"

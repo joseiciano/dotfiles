@@ -93,10 +93,10 @@ while [ "$i" -lt "$count" ]; do
   name="${skill_names[i]}"
   cat > "$OUTPUT_DIR/$name.md" <<EOF
 ---
-description: Runs ${name} skill with given arguments
+description: Calls ${name} skill with given arguments
 ---
 
-Run \`${name}\` skill with arguments: \`\$ARGUMENTS\`
+Call the \`${name}\` skill with the following \`\$ARGUMENTS\`:
 EOF
   printf 'generated %s\n' "$OUTPUT_DIR/$name.md"
   i=$((i + 1))

@@ -3,15 +3,14 @@
 #
 # Proves:
 #   1. Unrelated .config trees (nvim, karabiner) are still linked.
-#   2. AI CLI-owned .config trees (ai-clis/clis/{opencode,mimocode}) are skipped.
-#   3. Legacy top-level $DOTFILES_DIR/opencode/.config and
-#      $DOTFILES_DIR/mimocode/.config staging dirs are skipped exactly (not
-#      other unrelated nested opencode/.config trees).
-#   4. No ~/.claude link is created (owned by ai-clis/global-ai `make link`).
+#   2. AI CLI-owned .config trees (ai-clis/clis/opencode) are skipped.
+#   3. The legacy top-level $DOTFILES_DIR/opencode/.config staging dir is
+#      skipped exactly (not other unrelated nested opencode/.config trees).
+#   4. No ~/.claude link is created (owned by `make -C ai-clis install`).
 #   5. A nested unrelated opencode/.config tree is NOT skipped (proves the
 #      legacy exclusion is anchored to exact root-level paths).
-#   6. install.sh runs `make init` in ai-clis/global-ai (guarded on Makefile
-#      presence so partial copies don't fail).
+#   6. install.sh runs `make install` in ai-clis (guarded on Makefile presence
+#      so partial copies don't fail).
 #
 # Runs against a throwaway fixture repo + fake HOME; live HOME is not touched.
 set -euo pipefail
@@ -37,26 +36,22 @@ printf 'init\n' > "$REPO/nvim/.config/nvim/init.lua"
 mkdir -p "$REPO/karabiner/.config/karabiner"
 printf '{}\n' > "$REPO/karabiner/.config/karabiner/karabiner.json"
 
-# legacy top-level staging dirs (must be skipped exactly)
+# legacy top-level staging dir (must be skipped exactly)
 mkdir -p "$REPO/opencode/.config/opencode"
 printf 'x\n' > "$REPO/opencode/.config/opencode/opencode.json"
-mkdir -p "$REPO/mimocode/.config/mimocode"
-printf 'x\n' > "$REPO/mimocode/.config/mimocode/mimocode.json"
 
 # nested unrelated opencode/.config (must NOT be skipped — proves anchoring)
 mkdir -p "$REPO/tools/opencode/.config/nested-opencode"
 printf 'deep\n' > "$REPO/tools/opencode/.config/nested-opencode/settings.json"
 
-# minimal ai-clis/global-ai Makefile whose `init` records invocation under HOME
-mkdir -p "$REPO/ai-clis/global-ai"
-printf 'init:\n\tmkdir -p $(HOME)/.global-ai-init\n\ttouch $(HOME)/.global-ai-init/invoked\n' \
-  > "$REPO/ai-clis/global-ai/Makefile"
+# minimal ai-clis Makefile whose `install` records invocation under HOME
+mkdir -p "$REPO/ai-clis"
+printf 'install:\n\tmkdir -p $(HOME)/.ai-clis-install\n\ttouch $(HOME)/.ai-clis-install/invoked\n' \
+  > "$REPO/ai-clis/Makefile"
 
 # AI CLI-owned retained trees (must be skipped)
 mkdir -p "$REPO/ai-clis/clis/opencode/.config/opencode"
 printf 'x\n' > "$REPO/ai-clis/clis/opencode/.config/opencode/opencode.json"
-mkdir -p "$REPO/ai-clis/clis/mimocode/.config/mimocode"
-printf 'x\n' > "$REPO/ai-clis/clis/mimocode/.config/mimocode/mimocode.json"
 mkdir -p "$REPO/ai-clis/clis/claude/.claude"
 printf 'x\n' > "$REPO/ai-clis/clis/claude/.claude/settings.json"
 
@@ -75,9 +70,9 @@ check() {
 # --- run ---
 check "install.sh succeeds" bash "$REPO/install.sh"
 
-# install.sh invoked `make init` in ai-clis/global-ai
-check "install.sh runs make init for ai-clis/global-ai" \
-  [ -f "$HOME_DIR/.global-ai-init/invoked" ]
+# install.sh invoked `make install` in ai-clis
+check "install.sh runs make install for ai-clis" \
+  [ -f "$HOME_DIR/.ai-clis-install/invoked" ]
 
 # unrelated configs linked
 check "~/.config/nvim linked" \
@@ -87,7 +82,6 @@ check "~/.config/karabiner linked" \
 
 # legacy root-level .config dirs skipped (exclusion anchored to exact repo paths)
 check "no ~/.config/opencode (legacy root skipped)" [ ! -e "$HOME_DIR/.config/opencode" ]
-check "no ~/.config/mimocode (legacy root skipped)" [ ! -e "$HOME_DIR/.config/mimocode" ]
 check "no ~/.claude (AI-owned, not linked here)" [ ! -e "$HOME_DIR/.claude" ]
 
 # nested unrelated opencode/.config linked (proves anchoring doesn't block it)

@@ -1,22 +1,22 @@
 ---
-mode: all
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
 permission: 
-  edit:
+  edit: 
     "*": deny
     "*.env": deny
     "*.env.*": deny
     "*.env.example": deny
-  read:
+  read: 
     "*": allow
     "*.env": deny
     "*.env.*": deny
     "*.env.example": deny
   bash: deny
-  external_directory:
+  external_directory: 
     "*": ask
-    "~/.config/opencode/references/**": allow
-    "~/.config/opencode/command/**": allow
+    ~/.config/opencode/references/**: allow
+    ~/.config/opencode/command/**: allow
+mode: all
 ---
 
 <Role>

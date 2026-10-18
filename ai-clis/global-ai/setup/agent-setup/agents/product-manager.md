@@ -1,34 +1,50 @@
 ---
-model: openai/gpt-5.6-sol
-fallback_models:
-  - cloudflare-workers-ai/@cf/zai-org/glm-5.2
-  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
-  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
-  - openrouter/deepseek/deepseek-v4-flash-0731
-mode: all
+name: product-manager
 description: AI product and engineering manager tasked with planning tasks and making detailed documentation
-variant: medium
-temperature: 0.1
-skills:
-  - persona
-  - plan-prd
-mcps: []
-permission: 
-  edit:
-    "*": deny
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  read:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  bash: deny
-  external_directory:
-    "*": ask
-    "~/.config/opencode/references/**": allow
-    "~/.config/opencode/command/**": allow
+claude: 
+  model: claude-opus-5-5
+  tools: "Read, Grep, Glob, Skill"
+  skills: 
+    - plan-prd
+opencode: 
+  model: opencode/mimo-v2.5-free
+  permission: 
+    edit: 
+      "*": deny
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    read: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    bash: deny
+    external_directory: 
+      "*": ask
+      ~/.config/opencode/references/**: allow
+      ~/.config/opencode/command/**: allow
+  fallback_models: 
+    - openai/gpt-5.6-sol
+    - cloudflare-workers-ai/@cf/zai-org/glm-5.2
+    - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
+  mode: all
+  variant: medium
+  temperature: 0.1
+  skills: 
+    - persona
+    - plan-prd
+  mcps: 
+    []
+omp: 
+  model: 
+    - "@slow"
+  tools: 
+    - read
+    - grep
+    - glob
+    - web_search
+  thinkingLevel: medium
 ---
 
 <Role>

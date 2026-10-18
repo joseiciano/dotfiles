@@ -1,34 +1,47 @@
 ---
-model: opencode/mimo-v2.5-free
-fallback_models:
-  - openai/gpt-5.6-luna
-  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731
-  - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
-mode: subagent
-description: UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish.
-variant: medium
-temperature: 0.7
-skills: []
-mcps: []
-shared:
-  - coding-shared
-permission:
-  edit:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  read:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  bash: deny
-  external_directory:
-    "*": allow
-    "~/.config/opencode/references/**": allow
-    "~/.config/opencode/command/**": allow
-
+name: designer
+description: "UI/UX design and implementation. Use for styling, responsive design, component architecture and visual polish."
+claude: 
+  model: claude-sonnet-5-5
+  tools: "Edit, Write, Read, Grep, Glob, Bash, Skill"
+opencode: 
+  model: opencode/mimo-v2.5-free
+  permission: 
+    edit: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    read: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    bash: deny
+    external_directory: 
+      "*": allow
+      ~/.config/opencode/references/**: allow
+      ~/.config/opencode/command/**: allow
+  fallback_models: 
+    - openai/gpt-5.6-luna
+    - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731
+    - cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6
+  mode: subagent
+  variant: medium
+  temperature: 0.7
+  skills: 
+    []
+  mcps: 
+    []
+  shared: 
+    - coding-shared
+omp: 
+  model: 
+    - "@slow"
+  tools: inherit
+  shared: 
+    - response-tone
+    - coding-shared
 ---
 You are a Designer - a frontend UI/UX specialist who creates intentional, polished experiences.
 

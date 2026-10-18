@@ -1,18 +1,10 @@
-.PHONY: init init-opencode-base init-opencode-slim init-omp init-oh-my-pi opencode-base opencode-slim oh-my-pi
+.PHONY: install install-opencode install-claude install-omp init-opencode-slim opencode-slim
 
-init:
-	@:
-
-init-opencode-base:
-	$(MAKE) -C global-ai init
+# Every harness is built from global-ai; see global-ai/Makefile.
+install install-opencode install-claude install-omp:
+	$(MAKE) -C global-ai $@
 
 init-opencode-slim:
 	$(MAKE) -C oh-my-opencode-slim init
 
-init-omp:
-	$(MAKE) -C oh-my-pi init
-
-init-oh-my-pi: init-omp
-opencode-base: init-opencode-base
 opencode-slim: init-opencode-slim
-oh-my-pi: init-omp

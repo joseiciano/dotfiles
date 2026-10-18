@@ -1,9 +1,5 @@
 {
   "default_agent": "orchestration",
-  "plugin": [
-    "./plugins/opencode-fallback/index.ts",
-    "./plugins/agent-composer/index.ts"
-  ],
   "subagent_depth": 3,
   "agent": {
     "general": {
@@ -15,6 +11,21 @@
       "disable": true,
       "options": {},
       "permission": {}
+    },
+    "Plan": {
+      "model": "openai/gpt-5.6-sol",
+      "fallback_models": [
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
+      ],
+      "variant": "high",
+      "temperature": 0.1,
+      "skills": [
+        "*"
+      ],
+      "mcps": [
+        "*"
+      ]
     },
     "council": {
       "model": "openai/gpt-5.6-terra",
@@ -60,120 +71,6 @@
       "skills": [],
       "mcps": []
     },
-    "engineering-manager": {
-      "model": "openai/gpt-5.6-sol",
-      "fallback_models": [
-        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
-        "workers-ai/@cf/moonshotai/kimi-k2.7-code",
-        "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
-      "variant": "high",
-      "temperature": 0.1,
-      "skills": [
-        "plan-implementation-plan",
-        "cloudflare",
-        "controller-service-repo",
-        "agents-sdk",
-        "better-auth-best-practices",
-        "smart-dumb-component",
-        "neon-postgres",
-        "frontend-design",
-        "durable-objects",
-        "workers-best-practices",
-        "wrangler",
-        "tanstack-integration-best-practices",
-        "sandbox-sdk",
-        "tanstack-postgres-best-practices",
-        "tanstack-query-best-practices",
-        "tanstack-router-best-practices",
-        "tanstack-start-best-practices",
-        "vercel-react-best-practices",
-        "test-driven-development",
-        "web-design-guidelines",
-        "web-perf"
-      ],
-      "mcps": []
-    },
-    "explorer": {
-      "model": "opencode/mimo-v2.5-free",
-      "fallback_models": [
-        "openai/gpt-5.6-luna",
-        "openrouter/deepseek/deepseek-v4-flash-0731",
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
-      ],
-      "variant": "low",
-      "temperature": 0.1,
-      "skills": [],
-      "mcps": [
-        "*"
-      ]
-    },
-    "fixer": {
-      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
-      "fallback_models": [
-        "opencode/mimo-v2.5-free",
-        "openai/gpt-5.6-luna",
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "workers-ai/@cf/moonshotai/kimi-k2.7-code"
-      ],
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "cloudflare",
-        "controller-service-repo",
-        "agents-sdk",
-        "better-auth-best-practices",
-        "smart-dumb-component",
-        "neon-postgres",
-        "durable-objects",
-        "workers-best-practices",
-        "wrangler",
-        "tanstack-integration-best-practices",
-        "sandbox-sdk",
-        "tanstack-postgres-best-practices",
-        "tanstack-query-best-practices",
-        "tanstack-router-best-practices",
-        "tanstack-start-best-practices",
-        "vercel-react-best-practices",
-        "test-driven-development"
-      ],
-      "mcps": [
-        "*"
-      ]
-    },
-    "mass-orchestration": {
-      "model": "openai/gpt-5.6-terra",
-      "fallback_models": [
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
-      "mcps": [
-        "*"
-      ]
-    },
-    "oracle": {
-      "model": "openai/gpt-5.6-sol",
-      "fallback_models": [
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2"
-      ],
-      "variant": "high",
-      "temperature": 0.1,
-      "skills": [
-        "*"
-      ],
-      "mcps": [
-        "*"
-      ]
-    },
     "orchestration": {
       "model": "openai/gpt-5.6-sol",
       "fallback_models": [
@@ -190,29 +87,12 @@
         "*"
       ]
     },
-    "product-manager-mini": {
+    "product-manager": {
       "model": "opencode/mimo-v2.5-free",
       "fallback_models": [
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-        "openai/gpt-5.6-terra",
-        "openrouter/deepseek/deepseek-v4-flash-0731"
-      ],
-      "variant": "medium",
-      "temperature": 0.1,
-      "skills": [
-        "persona",
-        "plan-prd"
-      ],
-      "mcps": []
-    },
-    "product-manager": {
-      "model": "openai/gpt-5.6-sol",
-      "fallback_models": [
+        "openai/gpt-5.6-sol",
         "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
-        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
-        "openrouter/deepseek/deepseek-v4-flash-0731"
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
       ],
       "variant": "medium",
       "temperature": 0.1,
@@ -232,15 +112,59 @@
       "variant": "medium",
       "temperature": 0.1,
       "skills": [
-        "review"
+        "ai-review"
       ],
       "mcps": []
+    },
+    "scout": {
+      "model": "opencode/mimo-v2.5-free",
+      "fallback_models": [
+        "openai/gpt-5.6-luna",
+        "openrouter/deepseek/deepseek-v4-flash-0731",
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6"
+      ],
+      "variant": "low",
+      "temperature": 0.1,
+      "skills": [],
+      "mcps": [
+        "*"
+      ]
+    },
+    "sonic": {
+      "model": "openrouter/deepseek/deepseek-v4-flash-0731",
+      "fallback_models": [
+        "opencode/mimo-v2.5-free",
+        "openai/gpt-5.6-luna",
+        "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-flash-0731",
+        "workers-ai/@cf/moonshotai/kimi-k2.7-code"
+      ],
+      "variant": "medium",
+      "temperature": 0.1,
+      "skills": [
+        "cloudflare",
+        "controller-service-repo",
+        "agents-sdk",
+        "better-auth-best-practices",
+        "smart-dumb-component",
+        "neon-postgres",
+        "durable-objects",
+        "workers-best-practices",
+        "wrangler",
+        "tanstack",
+        "sandbox-sdk",
+        "vercel-react-best-practices",
+        "test-driven-development"
+      ],
+      "mcps": [
+        "*"
+      ]
     },
     "tester": {
       "model": "openai/gpt-5.6-sol",
       "fallback_models": [
         "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
-        "cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2",
         "cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6"
       ],
       "variant": "high",
@@ -320,7 +244,6 @@
       "whitelist": [
         "workers-ai/@cf/zai-org/glm-4.7-flash",
         "workers-ai/@cf/moonshotai/kimi-k2.6",
-        "workers-ai/@cf/zai-org/glm-5.2",
         "workers-ai/@cf/qwen/qwen2.5-coder-32b-instruct",
         "workers-ai/@cf/meta/llama-3.1-8b-instruct"
       ]
@@ -329,7 +252,8 @@
       "whitelist": [
         "@cf/moonshotai/kimi-k2.7-code",
         "@cf/deepseek-ai/deepseek-v4-flash-0731",
-        "@cf/deepseek-ai/deepseek-v4-pro-0813"
+        "@cf/deepseek-ai/deepseek-v4-pro-0813",
+        "@cf/zai-org/glm-5.2"
       ]
     },
     "opencode": {

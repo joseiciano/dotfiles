@@ -1,0 +1,4 @@
+---
+shared:
+  - coding-shared
+---

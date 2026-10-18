@@ -55,22 +55,21 @@ if [ -d "$DOTFILES_DIR/zsh" ]; then
 fi
 
 # --- AI CLIs ---
-# Generate and link per-CLI configs (opencode, claude, mimocode, reasonix) via
-# ai-clis/global-ai's `make init`. Guarded so partial dotfiles copies without
-# the Makefile don't fail; if present and `make init` fails, set -e aborts.
-if [ -d "$DOTFILES_DIR/ai-clis/global-ai" ] && [ -f "$DOTFILES_DIR/ai-clis/global-ai/Makefile" ]; then
-  make -C "$DOTFILES_DIR/ai-clis/global-ai" init
+# Build and link opencode, Claude Code, and oh-my-pi. Guarded so partial
+# dotfiles copies without the ai-clis Makefile still work.
+if [ -f "$DOTFILES_DIR/ai-clis/Makefile" ]; then
+  make -C "$DOTFILES_DIR/ai-clis" install
 fi
 
 # --- Automatically handle .config directories ---
 # Find directories that contain a .config folder (like nvim/ and karabiner/)
 # and symlink their contents to ~/.config/.
-# Skip AI CLI-owned trees (owned by ai-clis/global-ai's `make link`) and legacy
-# top-level opencode/mimocode staging dirs. Patterns are anchored to this repo
+# Skip retained AI CLI config trees (owned by their package Makefiles) and legacy
+# top-level opencode staging dir. Patterns are anchored to this repo
 # root so unrelated nested `*/opencode/.config` trees are still handled.
 find "$DOTFILES_DIR" -maxdepth 4 -name ".config" -type d | while read -r config_parent; do
   case "$config_parent" in
-    "$DOTFILES_DIR/ai-clis/clis/"* | "$DOTFILES_DIR/opencode/.config" | "$DOTFILES_DIR/mimocode/.config") continue ;;
+    "$DOTFILES_DIR/ai-clis/clis/"* | "$DOTFILES_DIR/opencode/.config") continue ;;
   esac
   for item in "$config_parent"/*; do
     if [ -e "$item" ]; then

@@ -134,17 +134,7 @@ export default {
 };
 ```
 
-Re-run `npx wrangler types` after changing bindings in wrangler.jsonc
-
-### Manual Type Definition (Legacy)
-
-```typescript
-interface Env {
-  MY_KV: KVNamespace;
-  DB: D1Database;
-  API_KEY: string;
-}
-```
+Re-run `npx wrangler types` after changing bindings in wrangler.jsonc. Never hand-write the `Env` interface — it drifts from actual wrangler config bindings (see [rules.md](./rules.md)).
 
 ## Advanced Options
 

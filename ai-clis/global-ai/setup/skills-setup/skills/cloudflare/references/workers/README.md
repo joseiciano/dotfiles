@@ -86,6 +86,9 @@ async tail(events: TraceItem[], env: Env, ctx: ExecutionContext): Promise<void>
 - [Patterns](./patterns.md) - Common workflows, testing, optimization
 - [Frameworks](./frameworks.md) - Hono, routing, validation
 - [Gotchas](./gotchas.md) - Common issues, limits, troubleshooting
+- [Best Practices](./best-practices.md) - Production rules quick reference, anti-patterns to flag, review workflow
+- [Rules](./rules.md) - Full best practice rules with code examples and anti-patterns
+- [Review](./review.md) - Type validation, config validation, binding access patterns, review process
 
 ## Reading Order
 
@@ -97,6 +100,8 @@ async tail(events: TraceItem[], env: Env, ctx: ExecutionContext): Promise<void>
 | Debug issues | Gotchas | API (specific binding docs) |
 | Production optimization | Patterns | API (caching, streaming) |
 | Type safety | Configuration (TypeScript) | Frameworks (Hono typing) |
+| Write production Workers | Best Practices | Rules |
+| Review Workers code | Best Practices → Review | Rules |
 
 ## See Also
 

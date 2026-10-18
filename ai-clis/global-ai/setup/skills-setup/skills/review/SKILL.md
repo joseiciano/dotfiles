@@ -1,117 +1,133 @@
 ---
 name: review
 description: >
-  Performs AI-powered code review on Git changes using the `ocr` CLI from
-  alibaba/open-code-review. Use when the user asks to review code, review
+  Code review on Git changes using the `ocr` CLI from alibaba/open-code-review
+  in delegation mode: OCR handles deterministic engineering (file selection,
+  rule resolution) while the host agent performs the review itself with its
+  own intelligence and tools. Use when the user asks to review code, review
   a pull request, review staged/unstaged changes, review a commit, or
   compare branches for code quality issues. Produces line-level review
-  comments and can automatically apply fixes when requested. With appropriate
-  review rules, can detect various types of issues including bugs, security
-  vulnerabilities, performance problems, and code quality concerns.
+  comments and can automatically apply fixes when requested.
 compatibility: >
   Requires the `ocr` CLI installed (via `npm install -g
-  @alibaba-group/open-code-review` or GitHub release binary). Requires a
-  configured LLM (Anthropic or OpenAI-compatible) before first run.
+  @alibaba-group/open-code-review` or GitHub release binary). Does NOT
+  require a configured LLM endpoint — delegation mode is LLM-free on the
+  OCR side.
 ---
 
-# Open Code Review
+# Open Code Review — Delegation Mode
 
-A skill for invoking [open-code-review](https://github.com/alibaba/open-code-review) (`ocr`) — an open-source AI code review CLI that reads Git diffs and generates structured, line-level review comments.
+A skill for performing AI code review where OCR provides deterministic engineering (file filtering, rule resolution) and the host agent performs the actual review using its own intelligence and tools.
 
-## Prerequisites check
+## Proper Agent Usage
 
-Before starting a review, verify the environment:
+**Note**: This skill is only to be used within a @reviewer subagent. If not within a reviewer subagent, call one and have it run the review.
+
+## Prerequisites
 
 ```bash
-# 1. Check the CLI is installed
 which ocr || echo "NOT INSTALLED"
-
-# 2. Verify LLM connectivity
-ocr llm test
 ```
 
-If `ocr` is not installed, install it first:
+If `ocr` is not installed:
 
 ```bash
 npm install -g @alibaba-group/open-code-review
 ```
 
-If `ocr llm test` fails, the user must configure an LLM. Guide them with one of these options:
-
-**Option A — Environment variables (highest priority, recommended for CI):**
-
-```bash
-export OCR_LLM_URL=https://api.anthropic.com/v1/messages
-export OCR_LLM_TOKEN=<api-key>
-export OCR_LLM_MODEL=claude-opus-4-6
-export OCR_USE_ANTHROPIC=true
-```
-
-**Option B — Persistent config:**
-
-```bash
-ocr config set llm.url https://api.anthropic.com/v1/messages
-ocr config set llm.auth_token <api-key>
-ocr config set llm.model claude-opus-4-6
-ocr config set llm.use_anthropic true
-```
-
-Stop here and ask the user to provide credentials — never invent or hardcode API keys.
+No LLM configuration is needed for delegation mode.
 
 ## Workflow
 
-### Proper Agent Usage
-
-**Note**: This skill is only to be used within a @reviewer subagent. If not within a reviewer subagent, call one and have it run the review. 
-
-### Step 1: Gather Business Context
-
-Analyze the review target (commits, branch, or changes) to extract concise business context. Pass this context via `--background` to improve review quality.
-
-### Step 2: Run Code Review
-
-Run the OCR command with appropriate flags. **Always pass business context via `--background`** when available:
+### Step 1: Preview — Determine What to Review
 
 ```bash
-ocr review --audience agent --background "business context here" [user-args]
+ocr delegate preview --format json [--from <ref> --to <ref>] [--commit <hash>] [--exclude <patterns>]
 ```
 
-**Argument handling:**
+This outputs:
+- **mode** (workspace / range / commit)
+- **from / to / commit / merge_base** — ref metadata for constructing git commands
+- **Reviewable file list** — paths, status, insertions/deletions
+- **Excluded files** — with exclusion reason
 
-- **Background context** (RECOMMENDED): use `--background "context"` or `-b "context"` to provide business context for better review quality
-- **Default** (no user arguments): reviews staged, unstaged, and untracked changes (workspace mode)
-- **Specific commit**: use `--commit` or `-c` to review a single commit against its parent
-- **Branch comparison**: use `--from <ref>` and `--to <ref>` to review diff between two refs
-- **Timeout**: default timeout is 10 minutes per file; adjust with `--timeout <minutes>`
-- **Concurrency**: default concurrency is 8 file workers; reduce with `--concurrency <n>` if rate limits are hit
-- **Preview mode**: use `--preview` or `-p` to preview which files will be reviewed without running the LLM
-- **Installation**: if `ocr` command is not found, install it by running `npm i -g @alibaba-group/open-code-review`
+**Common invocations:**
 
-**Common invocation patterns:**
+| Scenario | Command |
+|----------|---------|
+| Workspace changes | `ocr delegate preview` |
+| Branch comparison | `ocr delegate preview --from main --to feature` |
+| Single commit | `ocr delegate preview -c abc123` |
 
-| User says | Command to run |
-|-----------|---------------|
-| "review my changes" / "review the working copy" | `ocr review --audience agent -b "context"` |
-| "review this PR" / "review feature branch" | `ocr review --audience agent -b "context" --from main --to <branch>` |
-| "review commit abc123" | `ocr review --audience agent -b "context" --commit abc123` |
-| "what would be reviewed?" (dry-run) | `ocr review --preview` |
+### Step 2: Get Rules for Files
 
-**Output mode:**
+```bash
+ocr delegate rule --format json <path1> <path2> ...
+```
 
-- Always use `--audience agent` to suppress progress UI and emit only the final summary
-- **Prevent output truncation**: For large reviews or restricted tool environments, redirect output to a temporary file (`ocr review --audience agent ... > /tmp/ocr_out.txt 2>&1`) and inspect it in full via a file reading tool instead of piping through `tail` or `head`, which drops earlier review comments.
+Pass the reviewable file paths from Step 1. Output is grouped by rule content — files sharing the same rule appear under one group, avoiding repetition.
 
-### Step 3: Classify and Report
+### Step 3: Get Diffs
 
-For each comment from the review output, classify by priority and report all issues to the user:
+Use git directly based on the mode/ref info from Step 1:
 
-- **High**: Obvious bugs, security issues, clear mistakes, or well-founded suggestions with precise fix proposals
-- **Medium**: Reasonable concerns but context-dependent, style/performance suggestions, or fixes that require manual implementation
-- **Low**: Likely false positives, lacking sufficient context, nitpicks, or meaningless suggestions
+**Range mode** (merge_base provided in preview output):
+```bash
+git diff <merge_base>..<to> -- <path>
+```
 
-Report all comments grouped by priority level.
+**Commit mode**:
+```bash
+git show <commit> -- <path>
+```
 
-### Step 4: Fix
+**Workspace mode**:
+```bash
+# Tracked files
+git diff HEAD -- <path>
+# New untracked files — read directly (entire file is new code)
+cat <path>
+```
+
+### Step 4: Review Each File
+
+Create a checklist containing every `reviewable_files` entry. For each reviewable file:
+
+Use `(path, status)` as the checklist identity. Workspace mode can report the same path twice when a staged deletion is followed by an untracked recreation.
+
+1. Get its diff (Step 3)
+2. Consult its Rule Group (from Step 2) for the review checklist
+3. Conduct a thorough review, using appropriate context tools as needed
+4. Mark the file `reviewed`, or `skipped` with a concrete reason
+
+For large changes, review in bounded batches grouped by shared rules and diff size. Do not stop after finding the first high-severity issue.
+
+### Step 5: Format Output
+
+Each comment must follow this structure:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| path | string | yes | Relative file path |
+| content | string | yes | Review comment describing the issue |
+| start_line | integer | no | Start line in the new file |
+| end_line | integer | no | End line in the new file |
+| category | enum | no | bug, security, performance, maintainability, test, style, documentation, other |
+| severity | enum | no | critical, high, medium, low |
+
+### Step 6: Classify and Report
+
+Before reporting, verify that every previewed file is accounted for. Include `total_files`, `reviewed_files`, `skipped_files`, and `coverage_rate` in the summary. A skipped file must include its reason.
+
+Group findings by severity:
+
+- **Critical/High**: Bugs, security issues, data loss risks — always report
+- **Medium**: Performance concerns, error handling gaps, maintainability issues — report with context
+- **Low**: Style nits, minor suggestions — report only if clearly valuable
+
+Discard likely false positives silently.
+
+### Step 7: Fix
 
 Before applying fixes, check whether the user requested automatic fixes:
 
@@ -123,25 +139,16 @@ When fixing issues and suggestions:
 - Focus on High and Medium priority items
 - Apply fixes directly to the code when safe and well-defined
 - For complex fixes requiring manual intervention, clearly describe what needs to be done
+- Skip Low-priority items unless trivial
 - Always verify fixes with the user before committing
 
+### Step 8: Re-review
 
-### Step 5: Re-review
+If there were fixes that needed to be addressed in step 7, **after** the fixes are implemented we want to run a new code review.
 
-If there were fixes that needed to be addressed in step 4, **after** the fixes are implemented we want to run a new code review. 
-
-Redo steps 1-4 with a new review and repeat until we have no **high** or **medium** errors.
+Redo steps 1-7 with a new review and repeat until we have no **high** or **medium** errors.
 
 ## Output Format
-
-Each comment contains:
-
-- `path`: File path
-- `content`: Review comment text
-- `start_line` / `end_line`: Line range (both 0 means positioning failed)
-- `suggestion_code`: Optional fix suggestion
-- `existing_code`: Optional original code snippet
-- `thinking`: Optional LLM reasoning process
 
 After filtering comments by priority, present results using this template:
 
@@ -179,51 +186,51 @@ When `start_line` and `end_line` are both `0`, the comment failed to locate the 
 3. Identify the relevant code section based on the comment's context
 4. Apply the fix or suggestion to the correct location
 
-## Custom Review Rules
+## Review Background
 
-If the user wants project-specific rules, OCR resolves them in this priority order:
+Analyze the `docs/` path and pass in as `--background` flag information any product and functional spec docs that are relevant to the ticket at hand.
 
-1. `--rule <path>` flag (highest)
-2. `<repo>/.opencodereview/rule.json`
-3. `~/.opencodereview/rule.json`
-4. Built-in system defaults (lowest)
+## Final Output
 
-By default, the first matching user rule replaces the built-in system rule. Set `merge_system_rule: true` on a rule entry when the matched system rule and user rule should both be included.
+1. Output the code review to the `code_reviews/<ticket>/code_review_x.md` where `x` starts at 1 and increments up each time if the previous exists. If the ticket includes numbers (e.g. "5-7-new-api-route.md"), the numbers are the ticket number (file created should be `code_reviews/5-7/code_review_1.md` for example). The command/orchestrator must create the parent directory and write the final Markdown review using shell redirection or `tee` — not the edit/write tools (these are denied). For example:
 
-Rule file format:
+   ```bash
+   mkdir -p "$(dirname "$output_file")"; <review-output-command> | tee "$output_file"
+   ```
 
-```json
-{
-  "rules": [
-    {
-      "path": "**/*.java",
-      "rule": "All new methods must validate required parameters for null",
-      "merge_system_rule": true
-    },
-    {
-      "path": "**/*mapper*.xml",
-      "rule": "Check SQL for injection risks and missing closing tags"
-    }
-  ]
-}
-```
+**Note**: If `<ticket>` does not exist, prior to calling the AI reviewer CLI, generate a 1-3 hyphenated summary (e.g. `test-local-dev`) to be the name.
 
-To preview which rule applies to a file before reviewing:
+2. Output the review to the user as well. Do not show anything other what the review/skill mentions as the output.
 
-```bash
-ocr rules check src/main/java/com/example/Foo.java
-```
+## Sub-commands Reference
+
+| Command | Purpose |
+|---------|---------|
+| `ocr delegate preview` | Which files to review + mode/ref metadata |
+| `ocr delegate rule <path...>` | Review rules grouped by content |
+
+## Shared Flags
+
+| Flag | Description |
+|------|-------------|
+| `--from <ref>` | Source ref for range mode |
+| `--to <ref>` | Target ref for range mode |
+| `-c, --commit <hash>` | Single commit mode |
+| `--repo <path>` | Repository root (default: cwd) |
+| `--rule <path>` | Custom rule.json path |
+| `--exclude <patterns>` | Comma-separated exclude patterns |
+| `-b, --background <text>` | Business context |
+| `-B, --background-file <path>` | Business context from Markdown file |
+| `-f, --format <text\|json>` | Output format; use `json` for agent integrations |
 
 ## Gotchas
 
-- **LLM must be configured first** — `ocr review` will fail loudly if no LLM is reachable. Always run `ocr llm test` before the first review.
-- **Working directory matters** — `ocr review` operates on the Git repo at the current directory. Use `--repo /path/to/repo` to run from elsewhere.
-- **Untracked files are reviewed in workspace mode** — running bare `ocr review` includes staged, unstaged, *and* untracked changes. Stage selectively if you want narrower scope.
-- **Large diffs may hit token limits** — files with very large diffs may be truncated. The default `MAX_TOKENS` is 58888 per request.
-- **Plan phase triggers at 50 lines** — diffs exceeding 50 changed lines run an extra risk-analysis phase before main review. This adds latency but improves quality.
-- **Don't pass `--audience human`** — it streams progress UI that pollutes output. Always use `--audience agent`.
-- **Comment language follows config** — set `language` config to `English` or `Chinese` (default: Chinese) to control review comment language.
-- **Avoid output truncation** — Large review runs produce verbose output. Never pipe command output to `tail` or `head` as it drops review comments from earlier sections. Redirect output to a file and read it in full.
+- **No LLM needed on OCR side** — delegation mode never calls an LLM. All intelligence comes from the host agent.
+- **Rules are grouped** — Files sharing the same rule are grouped together in the output. You can pass any number of paths per call; for large changes, fetch rules per-batch as you review.
+- **Working directory matters** — `ocr delegate` operates on the Git repo at the current directory. Use `--repo /path` to override.
+- **Untracked files in workspace mode** — `preview` includes untracked files. For these, read the file directly instead of using `git diff`.
+- **Background context** — pass `--background` to `preview` when you have requirement context; it appears in the output for your reference during review.
+- **Coverage is mandatory** — every `reviewable_files` entry must be correct or explicitly skipped; do not silently omit files.
 
 ## Validation
 
@@ -234,22 +241,6 @@ After the review completes, verify success by checking:
 3. Warnings (if any) are displayed in stderr
 
 If errors occurred, check the stderr warnings for details about which files failed and why.
-
-## Final Output
-
-1. Output the code review to the `code_reviews/<ticket>/code_review_x.md` where `x` starts at 1 and increments up each time if the previous exists. If the ticket includes numbers (e.g. "5-7-new-api-route.md"), the numbers are the ticket number (file created should be `code_reviews/5-7/code_review_1.md` for example). The command/orchestrator must create the parent directory and write the final Markdown review using shell redirection or `tee` — not the edit/write tools (these are denied). For example:
-
-   ```bash
-   mkdir -p "$(dirname "$output_file")"; <review-output-command> | tee "$output_file"
-   ```
-
-**Note**: If `<ticket>` does not exist, prior to calling the AI reviewer CLI, generate a 1-3 hyphenated summary (e.g. `test-local-dev`) to be the name. 
-
-2. Output the review to the user as well. Do not show anything other what the review/skill mentions as the output. 
-
-## Review Background
-
-Analyze the `docs/` path and pass in as `--background` flag information any product and functional spec docs that are relevant to the ticket at hand. 
 
 ## References
 

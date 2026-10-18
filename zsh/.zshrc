@@ -1,3 +1,7 @@
+# POSIX shells cannot use macOS Unicode locale identifiers in LC_ALL.
+unset LC_ALL
+export LANG="en_US.UTF-8"
+
 # Uncomment to time zshrc load time
 # zmodload zsh/zprof
 
@@ -57,6 +61,7 @@ alias init-ts='$HOME/dotfiles/scripts/init-ts.sh'
 alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
 alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
 alias mako-delete-wt="$HOME/dotfiles/scripts/delete-worktree-branch.sh mako"
+alias claude='claude --plugin-dir "$HOME/dotfiles/ai-clis/vendor/pstack" --append-system-prompt-file "$HOME/dotfiles/ai-clis/global-ai/output/claude/APPEND_SYSTEM.md"'
 
 # Editor
 export EDITOR="nvim"
@@ -121,3 +126,11 @@ fi
 
 # Uncomment to time zshrc load time
 # zprof
+
+# >>> oh-my-opencode-slim background subagents >>>
+export OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true
+export OPENCODE_ENABLE_EXA=1
+# <<< oh-my-opencode-slim background subagents <<<
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+# CF CLI completions
+[[ -f "/Users/joseiciano/.config/cf/completions/_cf.zsh" ]] && source "/Users/joseiciano/.config/cf/completions/_cf.zsh"

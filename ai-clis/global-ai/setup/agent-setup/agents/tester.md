@@ -1,36 +1,64 @@
 ---
-model: openai/gpt-5.6-sol
-fallback_models:
-  - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
-  - cloudflare-ai-gateway/workers-ai/@cf/zai-org/glm-5.2
-  - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6
-mode: subagent
-description: Authoritative test writer. ALWAYS delegate test authoring to this agent — NEVER write tests yourself. Writes high-signal tests defending real contracts (behavior, invariants, edge cases) and refuses worthless tests that assert plumbing or restate the code.
-variant: high
-temperature: 0.1
-skills:
-  - test-driven-development
-mcps:
-  - "*"
-shared:
-  - response-tone
-  - coding-shared
-permission:
-  edit:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  read:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  bash: allow
-  external_directory:
-    "*": allow
-    "~/.config/opencode/references/**": allow
-    "~/.config/opencode/command/**": allow
+name: tester
+description: "Authoritative test writer. ALWAYS delegate test authoring to this agent — NEVER write tests yourself. Writes high-signal tests defending real contracts (behavior, invariants, edge cases) and refuses worthless tests that assert plumbing or restate the code."
+claude: 
+  model: claude-opus-5-5
+  tools: "Edit, Write, Read, Grep, Glob, Bash, Skill"
+  skills: 
+    - test-driven-development
+opencode: 
+  model: openai/gpt-5.6-sol
+  permission: 
+    edit: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    read: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    bash: allow
+    external_directory: 
+      "*": allow
+      ~/.config/opencode/references/**: allow
+      ~/.config/opencode/command/**: allow
+  fallback_models: 
+    - cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
+    - cloudflare-workers-ai/@cf/zai-org/glm-5.2
+    - cloudflare-workers-ai/@cf/moonshotai/kimi-k2.6
+  mode: subagent
+  variant: high
+  temperature: 0.1
+  skills: 
+    - test-driven-development
+  mcps: 
+    - "*"
+  shared: 
+    - response-tone
+    - coding-shared
+omp: 
+  model: 
+    - "@slow"
+  tools: 
+    - read
+    - grep
+    - glob
+    - bash
+    - edit
+    - write
+    - lsp
+    - ast_grep
+    - ast_edit
+    - yield
+  spawns: 
+    - scout
+    - librarian
+  thinkingLevel: high
+  shared: 
+    - response-tone
+    - coding-shared
 ---
 
 ## System Conventions

@@ -1,3 +1,27 @@
 .state/
 /ai-clis/global-ai/envs/
 **/.env
+**/**/.env
+
+# Claude Code runtime state (~/.claude links to ai-clis/clis/claude/.claude).
+# Only hand-edited config (settings.json, CLAUDE.md) and generated links are tracked.
+/ai-clis/clis/claude/.claude/projects/
+/ai-clis/clis/claude/.claude/file-history/
+/ai-clis/clis/claude/.claude/plugins/
+/ai-clis/clis/claude/.claude/paste-cache/
+/ai-clis/clis/claude/.claude/backups/
+/ai-clis/clis/claude/.claude/sessions/
+/ai-clis/clis/claude/.claude/session-env/
+/ai-clis/clis/claude/.claude/shell-snapshots/
+/ai-clis/clis/claude/.claude/cache/
+/ai-clis/clis/claude/.claude/plans/
+/ai-clis/clis/claude/.claude/feedback/
+/ai-clis/clis/claude/.claude/downloads/
+/ai-clis/clis/claude/.claude/todos/
+/ai-clis/clis/claude/.claude/statsig/
+/ai-clis/clis/claude/.claude/ide/
+/ai-clis/clis/claude/.claude/debug/
+/ai-clis/clis/claude/.claude/history.jsonl
+/ai-clis/clis/claude/.claude/mcp-needs-auth-cache.json
+/ai-clis/clis/claude/.claude/.credentials.json
+/ai-clis/clis/claude/.claude/.last-*

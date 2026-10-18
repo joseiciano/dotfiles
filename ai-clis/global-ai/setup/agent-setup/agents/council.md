@@ -1,42 +1,57 @@
 ---
-model: openai/gpt-5.6-terra
-fallback_models:
-  - opencode/mimo-v2.5-free
-  - cloudflare-workers-ai/@cf/zai-org/glm-5.2
-  - openrouter/deepseek/deepseek-v4-flash-0731
+name: council
 description: Multi-LLM council agent that synthesizes responses from multiple models for higher-quality outputs on critical decisions.
-variant: medium
-temperature: 0.1
-skills:
-  - "*"
-mcps:
-  - "*"
-mode: subagent
-shared:
-  - coding-shared
-permission: 
-  edit:
-    "*": deny
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  bash: allow
-  webfetch: allow
-  read:
-    "*": allow
-    "*.env": deny
-    "*.env.*": deny
-    "*.env.example": deny
-  list: allow
-  grep: allow
-  glob: allow
-  external_directory:
-    "*": allow
-    "~/.config/opencode/references/**": allow
-    "~/.config/opencode/command/**": allow
-
+claude: 
+  model: claude-opus-5-5
+  tools: "Bash, WebFetch, Grep, Glob, Read, Council, Agent(councillor)"
+opencode: 
+  model: openai/gpt-5.6-terra
+  permission: 
+    edit: 
+      "*": deny
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    bash: allow
+    webfetch: allow
+    read: 
+      "*": allow
+      "*.env": deny
+      "*.env.*": deny
+      "*.env.example": deny
+    list: allow
+    grep: allow
+    glob: allow
+    external_directory: 
+      "*": allow
+      ~/.config/opencode/references/**: allow
+      ~/.config/opencode/command/**: allow
+  fallback_models: 
+    - opencode/mimo-v2.5-free
+    - cloudflare-workers-ai/@cf/zai-org/glm-5.2
+    - openrouter/deepseek/deepseek-v4-flash-0731
+  variant: medium
+  temperature: 0.1
+  skills: 
+    - "*"
+  mcps: 
+    - "*"
+  mode: subagent
+  shared: 
+    - coding-shared
+omp: 
+  model: 
+    - "@slow"
+  tools: 
+    - council_session
+    - read
+    - grep
+    - glob
+    - web_search
+  spawns: 
+    - councillor
+  thinkingLevel: medium
 ---
-
 You are the Council agent — a multi-LLM 
 orchestration system that runs consensus across multiple models.
 

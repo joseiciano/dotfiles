@@ -1,12 +1,22 @@
 ---
 name: frontend-design
-description: Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.
-license: Complete terms in LICENSE.txt
+description: Create and review distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Also use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices". Generates creative, polished code and UI design that avoids generic AI aesthetics while meeting web interface guidelines.
+argument-hint: <file-or-pattern>
 ---
 
-This skill guides creation of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.
+This skill guides creation and review of distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. Implement real working code with exceptional attention to aesthetic details and creative choices.
 
-The user provides frontend requirements: a component, page, application, or interface to build. They may include context about the purpose, audience, or technical constraints.
+The user provides frontend requirements: a component, page, application, or interface to build, or files to review. They may include context about the purpose, audience, or technical constraints.
+
+## Web Interface Guidelines
+
+Fetch fresh guidelines before building or reviewing:
+
+```
+https://raw.githubusercontent.com/vercel-labs/web-interface-guidelines/main/command.md
+```
+
+Use WebFetch to retrieve the latest rules. The fetched content contains rules for accessibility, focus states, forms, animation, typography, content handling, images, performance, navigation, touch, layout, theming, i18n, hydration, and anti-patterns, plus the review output format.
 
 ## Design Thinking
 
@@ -40,3 +50,20 @@ Interpret creatively and make unexpected choices that feel genuinely designed fo
 **IMPORTANT**: Match implementation complexity to the aesthetic vision. Maximalist designs need elaborate code with extensive animations and effects. Minimalist or refined designs need restraint, precision, and careful attention to spacing, typography, and subtle details. Elegance comes from executing the vision well.
 
 Remember: Claude is capable of extraordinary creative work. Don't hold back, show what can truly be created when thinking outside the box and committing fully to a distinctive vision.
+
+## Usage
+
+Apply the rules from both the fetched Web Interface Guidelines and this file.
+
+When building:
+1. Fetch the guidelines from the source URL above
+2. Work through Design Thinking and the Frontend Aesthetics Guidelines
+3. Treat the fetched rules (accessibility, reduced motion, compositor-friendly animation, etc.) as hard constraints the aesthetic direction works within
+
+When reviewing, given a file or pattern argument:
+1. Fetch the guidelines from the source URL above
+2. Read the specified files
+3. Check them against all rules from the fetched guidelines and this file
+4. Output findings using the format specified in the fetched guidelines
+
+If no files are specified for a review, ask the user which files to review.
