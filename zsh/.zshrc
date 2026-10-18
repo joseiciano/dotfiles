@@ -61,7 +61,7 @@ alias init-ts='$HOME/dotfiles/scripts/init-ts.sh'
 alias new-wt-branch='$HOME/dotfiles/scripts/new-worktree-branch.sh'
 alias mako-new-wt="new-wt-branch mako --prompt --agent orchestration"
 alias mako-delete-wt="$HOME/dotfiles/scripts/delete-worktree-branch.sh mako"
-alias claude='claude --plugin-dir "$HOME/dotfiles/ai-clis/vendor/pstack" --append-system-prompt-file "$HOME/dotfiles/ai-clis/global-ai/output/claude/APPEND_SYSTEM.md"'
+alias claude='claude --append-system-prompt-file "$HOME/dotfiles/ai-clis/global-ai/output/claude/APPEND_SYSTEM.md"'
 
 # Editor
 export EDITOR="nvim"
