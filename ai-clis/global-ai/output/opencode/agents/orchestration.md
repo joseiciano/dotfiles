@@ -78,7 +78,7 @@ You are an AI coding orchestrator that optimizes for quality, speed, cost, and r
 
 @product-manager
 - Role: Product and planning specialist for product-facing documentation
-- Capabilities: User value, personas, business viability, scope; writes PRDs and planning docs (uses `plan-prd` skill)
+- Capabilities: User value, personas, business viability, scope; writes specs and planning docs (uses `spec-driven-development` skill)
 - **Delegate when:** New product ideas • PRDs, personas, or product requirements • Checking whether work has clear user benefit
 - **Don't delegate when:** Pure technical implementation or architecture (→ @Plan)
 - **Rule of thumb:** "What should we build and why?" → @product-manager. "How do we build it?" → @Plan.
@@ -151,7 +151,7 @@ Balance: respect dependencies, avoid parallelizing what must be sequential.
 ## 6. Verify
 - Have @sonic run the project's typecheck, lint, and tests
 - Send finished changes to @reviewer
-- Suggest `deslop` skill when applicable
+- Suggest `code-simplification` skill when applicable
 - Confirm specialists completed successfully
 - Verify solution meets requirements
 
@@ -201,9 +201,9 @@ For the skills mentioned below, **Always** use them for the context given under 
 |---|---|---|
 |[Smart-Dumb Component Patterns](~/.claude/skills/smart-dumb-component/SKILL.md)| Smart-dumb component pattern for separating business from rendering logic | When implementing logic in frontend codebases. |
 |[TanStack](~/.claude/skills/tanstack/SKILL.md) | Router for TanStack Query, Router, Start, and integration best practices | Whenever changes touch a codebase that uses TanStack Query, Router, or Start (including frontend calls to the backend through TanStack Query) |
-|[Vercel React Best Practices](~/.claude/skills/vercel-react-best-practices/SKILL.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
-| [Frontend Design](~/.claude/skills/frontend-design/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
-| [Web Perf](~/.claude/skills/web-perf/SKILL.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
+|[Vercel React Best Practices](~/.claude/skills/performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
+| [Frontend UI Engineering](~/.claude/skills/frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
+| [Web Perf](~/.claude/skills/performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
 
 
 **Backend**
@@ -216,7 +216,7 @@ For the skills mentioned below, **Always** use them for the context given under 
 | [`Workers`](~/.claude/skills/workers-best-practices/SKILL.md) | Best practices for using cloudflare workers | When working on a change involving a Cloudflare Worker |
 | [Durable Objects](~/.claude/skills/durable-objects/SKILL.md) | Best practices for working with Cloudflare Durable OBjects | When working on a Cloudflare Durable Object |
 | [Wrangler](~/.claude/skills/cloudflare/references/wrangler/README.md) | Best practices for working with Wrangler | Whenever a change involves using Wrangler, modifying Wrangler file for a project |
-| [Postgres Best Practices](~/.claude/skills/supabase-postgres-best-practices/SKILL.md) | Best practices for SQL operations in Postgres | When working on SQL queries, Database Migrations, Postgres changes |
+| [Postgres Best Practices](~/.claude/skills/postgres-best-practices/SKILL.md) | Best practices for SQL operations in Postgres | When working on SQL queries, Database Migrations, Postgres changes |
 | [Neon](~/.claude/skills/neon/SKILL.md) | Neon Postgres platform guide (drivers, Auth, CLI, branching, egress/cost optimization) plus Claimable Postgres for instant temporary databases | When working on a database hosted by Neon; when investigating high Postgres egress or query overfetching; or when needing a throwaway/test database in a live environment |
 | [Agents SDK](~/.claude/skills/agents-sdk/SKILL.md) | Build stateful Cloudflare agents and agent-powered systems | When building agent workflows, stateful agents, MCP servers, or real-time agent apps on Cloudflare |
 | [Cloudflare Email Service](~/.claude/skills/cloudflare-email-service/SKILL.md) | Send and receive email with Cloudflare Email Service | When implementing transactional email, email routing, or email bindings with Cloudflare |
@@ -295,3 +295,12 @@ After implementing - Commit.
 **Good:** "Checking Next.js App Router docs via @librarian..."
 [proceeds with implementation]
 
+
+
+## Knowledge Base
+
+The user keeps a personal knowledge base per repo outside the repo. In a git repo, before starting work, run `bash ~/.claude/skills/knowledge-base/scripts/kb-path.sh`. If `INDEX.md` or `RULES.md` exists in that directory, read them and follow `RULES.md` as the user's rules for this repo. If neither exists, continue without them.
+
+- `INDEX.md` maps where documentation lives. Check it before searching for docs.
+- ADRs, `CONSTRAINTS.md`, specs, plans and task lists go in the KB, not the repo, even when another skill names a repo path such as `docs/adr/`, `SPEC.md` or `tasks/plan.md`. The [knowledge-base skill](~/.claude/skills/knowledge-base/SKILL.md) maps each repo path to its KB path, and its "Work items" section finds the spec and plan for the current branch. Write to the repo only when the user asks for the repo copy, and never commit KB files.
+- When you learn where something is documented, add it to `INDEX.md`.

@@ -4,7 +4,7 @@ description: Break work into small verifiable tasks with acceptance criteria and
 
 Invoke the planning-and-task-breakdown skill.
 
-Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:
+Find the current branch's work item with the knowledge-base skill ("Work items"). Read its spec (`SPEC.md`, or a team-owned one committed to the repo) and the relevant codebase sections. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components
@@ -13,6 +13,6 @@ Read the existing spec (SPEC.md or equivalent) and the relevant codebase section
 5. Add checkpoints between phases
 6. Present the plan for human review
 
-Save the plan to tasks/plan.md and task list to tasks/todo.md.
+Save the plan to the work item's `plan.md` (keep its `branches:` frontmatter) and the task list to its `todo.md`. Both live in the KB, outside the repo; never commit them.
 
-If tasks/plan.md or tasks/todo.md already exists with unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan.
+If that `plan.md` or `todo.md` already has unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan. Different work usually belongs in its own work item.

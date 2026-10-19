@@ -4,7 +4,7 @@ description: AI product and engineering manager tasked with planning tasks and m
 model: claude-opus-5-5
 tools: "Read, Grep, Glob, Skill"
 skills: 
-  - plan-prd
+  - spec-driven-development
 ---
 
 <Role>

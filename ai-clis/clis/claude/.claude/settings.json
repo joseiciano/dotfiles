@@ -31,6 +31,25 @@
             "command": "env LC_ALL=C $HOME/dotfiles/ai-clis/global-ai/output/claude/hooks/enforce-agent-spawn-policy.sh"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "env LC_ALL=C $HOME/dotfiles/ai-clis/global-ai/output/claude/hooks/redirect-docs-to-kb.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "env LC_ALL=C $HOME/dotfiles/ai-clis/global-ai/output/claude/hooks/inject-knowledge-base.sh"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -55,7 +74,7 @@
     ]
   },
   "enabledPlugins": {
-    "skills-for-real-engineers@anthropic-plugin-directory": true
+    "skills-for-real-engineers@anthropic-plugin-directory": false
   },
   "advisorModel": "opus",
   "tui": "fullscreen",

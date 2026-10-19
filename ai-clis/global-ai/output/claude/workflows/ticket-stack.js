@@ -1,6 +1,6 @@
 export const meta = {
   name: 'ticket-stack',
-  description: 'Implement numbered tickets from a plans/ directory one by one, each on its own branch stacked on the previous, with review and a PR per ticket',
+  description: 'Implement numbered tickets from a directory (in the repo or the knowledge base) one by one, each on its own branch stacked on the previous, with review and a PR per ticket',
   phases: [
     { title: 'Discover' },
     { title: 'Implement' },
@@ -26,6 +26,7 @@ const TICKETS_SCHEMA = {
         required: ['number', 'file'],
       },
     },
+    logPath: { type: 'string' },
   },
   required: ['tickets'],
 }
@@ -85,14 +86,31 @@ const discovery = await agent(
     `Ignore files in that directory with no number in the name. For each numbered file, read its YAML ` +
     `frontmatter "status" field (fall back to a "Status: <word>" badge/text in the body if there is no ` +
     `frontmatter). Return only tickets whose status is NOT "Completed" (case-insensitive) — skip anything ` +
-    `already completed. For each pending ticket return its number (the integer from the filename), its file ` +
-    `path relative to the repo root, and a short title from the frontmatter "goal" field or the first H1 ` +
-    `heading. Sort ascending by number. If nothing is pending, return an empty tickets array.`,
+    `already completed. For each pending ticket return its number (the integer from the filename), its ` +
+    `file path (relative to the repo root for a file inside the repo, absolute for one outside it, such as ` +
+    `in the knowledge base), and a short title from the frontmatter "goal" field or the first H1 ` +
+    `heading. Sort ascending by number. If nothing is pending, return an empty tickets array.\n\n` +
+    `Also return logPath, the absolute path of this run's show-me-your-work decision log. If "${ticketsDir}" ` +
+    `is inside the knowledge base (under $KNOWLEDGE_BASE_DIR, or ~/.knowledge when that is unset), it is ` +
+    `"<ticketsDir as an absolute path>/decisions.tsv". Otherwise run ` +
+    `"bash ~/.claude/skills/knowledge-base/scripts/kb-work.sh" from the repo; if it prints exactly one ` +
+    `path, use "<that path>/decisions.tsv". If not, run "bash ~/.claude/skills/knowledge-base/scripts/kb-path.sh" ` +
+    `and use "<that path>/work/<basename of ticketsDir>/decisions.tsv". Don't create the file.`,
   { phase: 'Discover', schema: TICKETS_SCHEMA, label: 'discover', agentType: 'scout' }
 )
 
 const pending = (discovery?.tickets ?? []).slice().sort((a, b) => a.number - b.number)
 log(`Found ${pending.length} pending ticket(s): ${pending.map((t) => t.file).join(', ') || '(none)'}`)
+
+const decisionLog = discovery?.logPath
+log(`Decision log: ${decisionLog ?? '(none: discovery returned no logPath)'}`)
+const logInstructions = (who) =>
+  decisionLog
+    ? `\n\nKeep a decision trail with the show-me-your-work skill in ${decisionLog} (outside the repo: never ` +
+      `commit it). Your first row has phase "start" and evidence "${who}". Then log rows as you go, not at the ` +
+      `end: every revert or change of approach, every skipped or failing check, every choice between real ` +
+      `alternatives, and every call you made where the ticket was silent or ambiguous.`
+    : ''
 
 const results = []
 let currentBase = baseBranch
@@ -115,11 +133,14 @@ for (const ticket of pending) {
       `4. Follow this repo's AGENTS.md workflow conventions: commit as you go with descriptive messages ` +
       `(don't batch unrelated changes into one commit), run "pnpm typecheck" and "pnpm build" after your ` +
       `changes (and "npx vitest run" if you touched reducer/FSM behavior), and fix any failures before moving on.\n` +
-      `5. Update the ticket file's frontmatter "status" to 'Completed' (and its status badge/text if present), ` +
-      `and commit that too.\n` +
+      `5. Update the ticket file's frontmatter "status" to 'Completed' (and its status badge/text if present). ` +
+      `A relative ticket path is inside the repo: commit that too. An absolute ticket path outside the repo ` +
+      `(the knowledge base) is edited in place and never committed.\n` +
       `6. Push the branch to origin.\n\n` +
       `Report back the absolute worktree path, the exact branch name you created, and a one-paragraph summary ` +
-      `of what you implemented.`,
+      `of what you implemented.` +
+      logInstructions(`ticket-stack #${ticket.number} implement`) +
+      (decisionLog ? ` Before reporting back, log one row with phase "ticket-${ticket.number}": what you implemented, the commit SHAs as evidence, and the typecheck/build/test result.` : ''),
     { phase: 'Implement', schema: SETUP_SCHEMA, isolation: 'worktree', label: `implement:${ticket.file}`, agentType: 'sonic' }
   )
 
@@ -160,7 +181,9 @@ for (const ticket of pending) {
       `In the worktree at ${setup.worktreePath} (cd there first), on branch "${setup.branchName}", fix these ` +
         `code review findings:\n${JSON.stringify(review.findings, null, 2)}\n\n` +
         `Re-run "pnpm typecheck" and "pnpm build" after fixing. Commit the fix with a descriptive message and ` +
-        `push the branch.`,
+        `push the branch.` +
+        logInstructions(`ticket-stack #${ticket.number} fix round ${round}`) +
+        (decisionLog ? ` Log a row for any finding you decided not to fix, with the reason.` : ''),
       { phase: 'Review', label: `fix:${ticket.file}:${round}`, agentType: 'sonic' }
     )
   }
@@ -173,12 +196,24 @@ for (const ticket of pending) {
     }
   }
 
+  const reviewStatus = clean
+    ? `review clean after ${round} round(s)`
+    : anyReviewSucceeded
+      ? `open review findings after ${maxReviewRounds} round(s)`
+      : `unreviewed: no review succeeded in ${maxReviewRounds} attempt(s)`
+
   phase('Ship')
   const ship = await agent(
     `In the worktree at ${setup.worktreePath} (cd there first), open a pull request for branch ` +
       `"${setup.branchName}" targeting base branch "${currentBase}" using the gh CLI. Title and body should ` +
       `summarize the ticket (${ticket.file}) and what changed. Follow this repo's AGENTS.md PR conventions.\n\n` +
-      `Return the PR URL and confirm the exact branch name.`,
+      `Return the PR URL and confirm the exact branch name.` +
+      (decisionLog
+        ? `\n\nThen log one row with the show-me-your-work skill in ${decisionLog} (outside the repo: never commit ` +
+          `it): phase "ticket-${ticket.number}", decision "opened PR for ${ticket.file}", why "${reviewStatus}", ` +
+          `evidence the PR URL, result "shipped" if the review was clean, otherwise "shipped-with-findings" or ` +
+          `"shipped-unreviewed" to match.`
+        : ''),
     { phase: 'Ship', schema: SHIP_SCHEMA, label: `ship:${ticket.file}`, agentType: 'sonic' }
   )
 
@@ -213,4 +248,4 @@ for (const ticket of pending) {
   log(`Ticket #${ticket.number} done → branch ${currentBase}${ship?.prUrl ? `, PR ${ship.prUrl}` : ''}`)
 }
 
-return { ticketsDir, startingBaseBranch: baseBranch, finalBranch: currentBase, processed: results }
+return { ticketsDir, startingBaseBranch: baseBranch, finalBranch: currentBase, decisionLog: decisionLog ?? null, processed: results }

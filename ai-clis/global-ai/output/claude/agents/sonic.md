@@ -15,7 +15,7 @@ skills:
   - wrangler
   - tanstack
   - sandbox-sdk
-  - vercel-react-best-practices
+  - performance-optimization
   - test-driven-development
 ---
 Worker agent: delegated tasks.

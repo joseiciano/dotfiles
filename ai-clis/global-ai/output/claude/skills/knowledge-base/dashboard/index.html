@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge Base</title>
+<style>
+:root {
+  --bg: #f6f3ec;
+  --surface: #fffdf8;
+  --sunken: #efeadf;
+  --ink: #1f1d1a;
+  --ink-2: #5b564d;
+  --ink-3: #8a8378;
+  --rule: #ddd5c6;
+  --accent: #b4441c;
+  --accent-ink: #fff;
+  --ok: #2f6b3a;
+  --warn: #9a6200;
+  --bad: #a3271b;
+  --focus: #1d5fbf;
+  --serif: "Iowan Old Style", "Charter", "Palatino Linotype", Georgia, ui-serif, serif;
+  --sans: -apple-system, "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171614;
+    --surface: #1f1d1a;
+    --sunken: #141311;
+    --ink: #ece6da;
+    --ink-2: #b3ab9d;
+    --ink-3: #7d766b;
+    --rule: #36322c;
+    --accent: #e0703f;
+    --accent-ink: #171614;
+    --ok: #7fbf87;
+    --warn: #e0b04f;
+    --bad: #f07d6e;
+    --focus: #79a8f0;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+button { font: inherit; color: inherit; }
+code, pre, .mono { font-family: var(--mono); font-size: 0.88em; }
+
+.app { display: grid; grid-template-columns: 17rem 1fr; min-height: 100vh; }
+.sidebar { border-right: 1px solid var(--rule); padding: 1.25rem 1rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.brand { font: 600 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 0.75rem; }
+.kb-select { width: 100%; padding: 0.5rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); font: 0.85rem var(--mono); }
+.nav-group { margin-top: 1.5rem; }
+.nav-group h2 { font: 600 0.7rem/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 0.5rem; }
+.nav-group ul { list-style: none; margin: 0; padding: 0; }
+.nav-link { display: flex; justify-content: space-between; gap: 0.5rem; width: 100%; text-align: left; padding: 0.3rem 0.5rem; margin: 0 -0.5rem; border: 0; background: none; border-radius: 4px; cursor: pointer; color: var(--ink-2); font-size: 0.9rem; text-decoration: none; }
+.nav-link:hover { background: var(--sunken); color: var(--ink); }
+.nav-link[aria-current="page"] { background: var(--sunken); color: var(--ink); box-shadow: inset 2px 0 0 var(--accent); }
+.nav-link .meta { color: var(--ink-3); font: 0.75rem var(--mono); white-space: nowrap; }
+.nav-link.missing { color: var(--ink-3); font-style: italic; }
+.nav-sub { padding-left: 0.75rem !important; }
+
+main { padding: 2rem 2.5rem 4rem; max-width: 60rem; width: 100%; }
+.crumbs { font: 0.8rem var(--mono); color: var(--ink-3); margin-bottom: 0.25rem; word-break: break-all; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 0.75rem; margin-bottom: 1.5rem; }
+.toolbar h1 { font: 600 1.6rem/1.2 var(--serif); margin: 0; }
+.actions { display: flex; gap: 0.5rem; align-items: center; }
+.btn { padding: 0.4rem 0.85rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); cursor: pointer; font-size: 0.85rem; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.status { font: 0.8rem var(--mono); color: var(--ink-3); }
+.status.error { color: var(--bad); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1.25rem; }
+.chip { font: 0.75rem var(--mono); padding: 0.15rem 0.5rem; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-2); background: var(--surface); }
+.chip b { color: var(--ink-3); font-weight: 400; }
+
+.doc { font: 1.02rem/1.65 var(--serif); }
+.doc h1, .doc h2, .doc h3, .doc h4 { font-family: var(--serif); line-height: 1.25; margin: 1.6em 0 0.5em; }
+.doc h1 { font-size: 1.5rem; } .doc h2 { font-size: 1.25rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.25rem; } .doc h3 { font-size: 1.08rem; }
+.doc > :first-child { margin-top: 0; }
+.doc p, .doc ul, .doc ol, .doc table, .doc pre, .doc blockquote { margin: 0 0 1em; }
+.doc ul, .doc ol { padding-left: 1.4rem; }
+.doc li { margin: 0.15em 0; }
+.doc li.task { list-style: none; margin-left: -1.4rem; display: flex; gap: 0.5rem; align-items: baseline; }
+.doc li.task input { margin: 0; transform: translateY(1px); accent-color: var(--accent); cursor: pointer; }
+.doc li.task.done > span { color: var(--ink-3); text-decoration: line-through; }
+.doc code { background: var(--sunken); padding: 0.1em 0.3em; border-radius: 3px; }
+.doc pre { background: var(--sunken); padding: 0.85rem 1rem; border-radius: 4px; overflow-x: auto; line-height: 1.45; }
+.doc pre code { background: none; padding: 0; }
+.doc blockquote { border-left: 3px solid var(--rule); padding-left: 1rem; color: var(--ink-2); }
+.doc hr { border: 0; border-top: 1px solid var(--rule); margin: 2em 0; }
+.doc table, .grid { border-collapse: collapse; width: 100%; font: 0.9rem/1.45 var(--sans); }
+.doc th, .doc td, .grid th, .grid td { border-bottom: 1px solid var(--rule); padding: 0.45rem 0.6rem; text-align: left; vertical-align: top; }
+.doc th, .grid th { font: 600 0.72rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+
+.editor { width: 100%; min-height: 65vh; padding: 1rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); font: 0.9rem/1.6 var(--mono); resize: vertical; tab-size: 2; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.card h3 { margin: 0; font: 600 1.05rem/1.3 var(--serif); }
+.card h3 button { all: unset; cursor: pointer; }
+.card h3 button:hover { color: var(--accent); }
+.card h3 button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.card .slug { font: 0.75rem var(--mono); color: var(--ink-3); }
+.progress { height: 6px; background: var(--sunken); border-radius: 3px; overflow: hidden; }
+.progress > span { display: block; height: 100%; background: var(--accent); }
+.stats { display: flex; gap: 1rem; font: 0.8rem var(--mono); color: var(--ink-2); }
+.section-title { font: 600 0.75rem/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 2rem 0 0.75rem; }
+.files { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.files button { font: 0.75rem var(--mono); padding: 0.15rem 0.45rem; border: 1px solid var(--rule); border-radius: 3px; background: none; cursor: pointer; color: var(--ink-2); }
+.files button:hover { color: var(--ink); border-color: var(--ink-3); }
+
+.badge { font: 600 0.72rem var(--mono); padding: 0.1rem 0.4rem; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.badge.ok { color: var(--ok); } .badge.warn { color: var(--warn); } .badge.bad { color: var(--bad); } .badge.neutral { color: var(--ink-3); }
+.grid td.ts { font: 0.75rem var(--mono); color: var(--ink-3); white-space: nowrap; }
+.grid td.phase { font: 0.8rem var(--mono); white-space: nowrap; }
+.grid td.ev { font: 0.78rem var(--mono); color: var(--ink-2); word-break: break-word; }
+.grid tr.start td { background: var(--sunken); }
+.filter { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+.filter input[type=search] { flex: 1; min-width: 12rem; padding: 0.45rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); font: 0.85rem var(--sans); }
+.filter label { font-size: 0.85rem; color: var(--ink-2); display: flex; gap: 0.35rem; align-items: center; }
+
+.empty { border: 1px dashed var(--rule); border-radius: 6px; padding: 2rem; text-align: center; color: var(--ink-2); }
+.empty p { margin: 0 0 1rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); }
+  main { padding: 1.25rem 1rem 3rem; }
+  .grid td.ts { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="sidebar" aria-label="Knowledge base">
+    <p class="brand">Knowledge base</p>
+    <label class="sr-only" for="kb-select">Repository</label>
+    <select id="kb-select" class="kb-select"></select>
+    <div id="nav"></div>
+  </nav>
+  <main id="main" tabindex="-1"><p class="status">Loading…</p></main>
+</div>
+<p id="live" class="sr-only" role="status" aria-live="polite"></p>
+
+<script>
+'use strict'
+
+const state = { kbs: [], kb: null, summary: null, file: null, doc: null, editing: false, dirty: false }
+const $ = (sel) => document.querySelector(sel)
+
+// ---------- API ----------
+
+async function api(path, init) {
+  const res = await fetch(path, init)
+  const body = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(body.error || `${res.status} ${res.statusText}`)
+  return body
+}
+const q = (params) => new URLSearchParams(params).toString()
+const loadKbs = () => api('/api/kbs')
+const loadSummary = (kb) => api(`/api/kb?${q({ kb })}`)
+const loadFile = (kb, path) => api(`/api/file?${q({ kb, path })}`)
+const saveFile = (kb, path, content, mtime) =>
+  api(`/api/file?${q({ kb, path })}`, {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json', 'x-kb-dashboard': '1' },
+    body: JSON.stringify({ content, mtime }),
+  })
+
+// ---------- Markdown ----------
+
+const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
+
+function safeHref(url) {
+  const u = url.trim()
+  return /^(https?:|mailto:|#|\.{0,2}\/|[\w.-]+(\/|\.md|$))/i.test(u) && !/^javascript:/i.test(u) ? u : '#'
+}
+
+function inline(text) {
+  const codes = []
+  let s = text.replace(/`([^`]+)`/g, (_, c) => `\u0000${codes.push(c) - 1}\u0000`)
+  s = esc(s)
+  s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, url) => {
+    const href = safeHref(url.replace(/&amp;/g, '&'))
+    const local = !/^(https?:|mailto:)/i.test(href)
+    return `<a href="${esc(href)}"${local ? ` data-local="${esc(href)}"` : ' target="_blank" rel="noreferrer"'}>${label}</a>`
+  })
+  s = s.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, (_, pre, url) => `${pre}<a href="${url}" target="_blank" rel="noreferrer">${url}</a>`)
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/__([^_]+)__/g, '<strong>$1</strong>')
+  s = s.replace(/(^|[^*\w])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>').replace(/(^|[^_\w])_([^_\s][^_]*)_(?!\w)/g, '$1<em>$2</em>')
+  return s.replace(/\u0000(\d+)\u0000/g, (_, i) => `<code>${esc(codes[Number(i)])}</code>`)
+}
+
+function splitFrontmatter(text) {
+  const lines = text.split('\n')
+  if (lines[0] !== '---') return { meta: [], body: lines, offset: 0 }
+  const end = lines.indexOf('---', 1)
+  if (end === -1) return { meta: [], body: lines, offset: 0 }
+  const meta = []
+  let current = null
+  for (const line of lines.slice(1, end)) {
+    const item = line.match(/^\s+-\s*(.*)$/)
+    if (item && current) { current.values.push(item[1].replace(/^["']|["']$/g, '')); continue }
+    const kv = line.match(/^([\w-]+):\s*(.*)$/)
+    if (!kv) continue
+    const raw = kv[2].trim()
+    const values = raw.startsWith('[') ? raw.replace(/[[\]]/g, '').split(',').map((v) => v.trim().replace(/^["']|["']$/g, '')).filter(Boolean) : raw ? [raw.replace(/^["']|["']$/g, '')] : []
+    current = { key: kv[1], values }
+    meta.push(current)
+  }
+  return { meta, body: lines.slice(end + 1), offset: end + 1 }
+}
+
+// Renders markdown to HTML. Task-list checkboxes carry data-line, the source
+// line index, so toggling one rewrites exactly that line.
+function markdown(text) {
+  const { meta, body, offset } = splitFrontmatter(text)
+  const out = []
+  let i = 0
+  const isTableSep = (l) => /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$/.test(l)
+  const cells = (l) => l.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim())
+  const listRe = /^(\s*)([-*+]|\d+[.)])\s+(.*)$/
+
+  while (i < body.length) {
+    const line = body[i]
+    if (!line.trim()) { i++; continue }
+
+    const fence = line.match(/^\s*(```|~~~)/)
+    if (fence) {
+      const buf = []
+      i++
+      while (i < body.length && !body[i].trim().startsWith(fence[1])) buf.push(body[i++])
+      i++
+      out.push(`<pre><code>${esc(buf.join('\n'))}</code></pre>`)
+      continue
+    }
+    const h = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/)
+    if (h) { out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue }
+    if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) { out.push('<hr>'); i++; continue }
+    if (/^\s*>/.test(line)) {
+      const buf = []
+      while (i < body.length && /^\s*>/.test(body[i])) buf.push(body[i++].replace(/^\s*>\s?/, ''))
+      // Line numbers inside a quote don't map to the file, so quoted tasks are read-only.
+      out.push(`<blockquote>${markdown(buf.join('\n')).html.replace(/ data-line="\d+"/g, ' disabled')}</blockquote>`)
+      continue
+    }
+    if (line.includes('|') && i + 1 < body.length && isTableSep(body[i + 1])) {
+      const head = cells(line)
+      i += 2
+      const rows = []
+      while (i < body.length && body[i].includes('|') && body[i].trim()) rows.push(cells(body[i++]))
+      out.push(`<table><thead><tr>${head.map((c) => `<th>${inline(c)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`)
+      continue
+    }
+    if (listRe.test(line)) {
+      const stack = []
+      while (i < body.length && (listRe.test(body[i]) || (body[i].trim() && /^\s{2,}\S/.test(body[i]) && stack.length))) {
+        const m = body[i].match(listRe)
+        if (!m) { out.push(` ${inline(body[i].trim())}`); i++; continue }
+        const indent = m[1].replace(/\t/g, '  ').length
+        const tag = /\d/.test(m[2]) ? 'ol' : 'ul'
+        while (stack.length && indent < stack[stack.length - 1].indent) out.push(`</li></${stack.pop().tag}>`)
+        if (stack.length && indent === stack[stack.length - 1].indent && tag !== stack[stack.length - 1].tag) out.push(`</li></${stack.pop().tag}>`)
+        const top = stack[stack.length - 1]
+        if (!top || indent > top.indent) { stack.push({ indent, tag }); out.push(`<${tag}>`) }
+        else out.push('</li>')
+        const task = m[3].match(/^\[([ xX])\]\s*(.*)$/)
+        if (task) {
+          const done = task[1] !== ' '
+          out.push(`<li class="task${done ? ' done' : ''}"><input type="checkbox" data-line="${i + offset}"${done ? ' checked' : ''} aria-label="Mark done: ${esc(task[2].replace(/[`*_]/g, ''))}"><span>${inline(task[2])}</span>`)
+        } else out.push(`<li>${inline(m[3])}`)
+        i++
+      }
+      while (stack.length) out.push(`</li></${stack.pop().tag}>`)
+      continue
+    }
+    const buf = []
+    while (i < body.length && body[i].trim() && !/^(#{1,6}\s|\s*```|\s*~~~|\s*>)/.test(body[i]) && !listRe.test(body[i])) buf.push(body[i++].trim())
+    out.push(`<p>${inline(buf.join(' '))}</p>`)
+  }
+  return { html: out.join(''), meta }
+}
+
+// ---------- Decisions (TSV) ----------
+
+function resultBadge(result) {
+  const r = result.toLowerCase()
+  const kind = /(green|pass|shipped$|done|ok|identical)/.test(r) && !/fail/.test(r) ? 'ok'
+    : /(revert|fail|broken|unreviewed)/.test(r) ? 'bad'
+    : /(open|inconclusive|findings|skipped|blocked)/.test(r) ? 'warn' : 'neutral'
+  return `<span class="badge ${kind}">${esc(result || '—')}</span>`
+}
+const needsAttention = (row) => /(open|inconclusive|revert|skip|findings|unreviewed|blocked|fail)/i.test(row.result)
+
+function renderDecisions(text) {
+  const lines = text.split('\n').filter((l) => l.trim())
+  const rows = lines.slice(1).map((l) => {
+    const [ts = '', phase = '', decision = '', why = '', evidence = '', result = ''] = l.split('\t')
+    return { ts, phase, decision, why, evidence, result }
+  })
+  if (!rows.length) return '<div class="empty"><p>No decisions logged yet.</p></div>'
+  const attention = rows.filter(needsAttention).length
+  return `
+    <div class="filter">
+      <label class="sr-only" for="dec-filter">Filter decisions</label>
+      <input id="dec-filter" type="search" placeholder="Filter by phase, decision, evidence…">
+      <label><input id="dec-attention" type="checkbox"> Needs attention (${attention})</label>
+      <span class="status">${rows.length} rows · append-only</span>
+    </div>
+    <table class="grid">
+      <thead><tr><th>Time</th><th>Phase</th><th>Decision</th><th>Why</th><th>Evidence</th><th>Result</th></tr></thead>
+      <tbody>${rows.map((r) => `
+        <tr class="${r.phase === 'start' ? 'start' : ''}" data-attention="${needsAttention(r)}" data-text="${esc(Object.values(r).join(' ').toLowerCase())}">
+          <td class="ts">${esc(r.ts.replace('T', ' ').replace('Z', ''))}</td>
+          <td class="phase">${esc(r.phase)}</td>
+          <td>${inline(r.decision)}</td>
+          <td>${inline(r.why)}</td>
+          <td class="ev">${inline(r.evidence)}</td>
+          <td>${resultBadge(r.result)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`
+}
+
+function wireDecisionFilter() {
+  const input = $('#dec-filter'), only = $('#dec-attention')
+  if (!input) return
+  const apply = () => {
+    const needle = input.value.trim().toLowerCase()
+    for (const tr of document.querySelectorAll('.grid tbody tr')) {
+      const show = (!needle || tr.dataset.text.includes(needle)) && (!only.checked || tr.dataset.attention === 'true')
+      tr.hidden = !show
+    }
+  }
+  input.addEventListener('input', apply)
+  only.addEventListener('change', apply)
+}
+
+// ---------- Rendering ----------
+
+const announce = (msg) => { $('#live').textContent = msg }
+const fileTitle = (path) => path.split('/').pop()
+
+function setHash() {
+  const params = { kb: state.kb }
+  if (state.file) params.file = state.file
+  const next = `#${q(params)}`
+  if (location.hash !== next) history.replaceState(null, '', next)
+}
+
+function navLink({ label, meta = '', file = null, missing = false, sub = false }) {
+  const current = state.file === file ? ' aria-current="page"' : ''
+  return `<li><button class="nav-link${missing ? ' missing' : ''}${sub ? ' nav-sub' : ''}" data-file="${esc(file ?? '')}"${current}>
+    <span>${esc(label)}</span>${meta ? `<span class="meta">${esc(meta)}</span>` : ''}</button></li>`
+}
+
+function progressLabel(todo) {
+  return todo && todo.total ? `${todo.done}/${todo.total}` : ''
+}
+
+function renderNav() {
+  const s = state.summary
+  $('#kb-select').innerHTML = state.kbs.map((id) => `<option value="${esc(id)}"${id === state.kb ? ' selected' : ''}>${esc(id)}</option>`).join('')
+  if (!s) { $('#nav').innerHTML = ''; return }
+  const top = s.top.filter((f) => f.exists || f.name !== 'GLOSSARY.md')
+  let html = `<div class="nav-group"><ul>${navLink({ label: 'Overview', file: null })}</ul></div>`
+  html += `<div class="nav-group"><h2>Files</h2><ul>${top.map((f) => navLink({ label: f.name, file: f.name, missing: !f.exists, meta: f.exists ? '' : 'new' })).join('')}</ul></div>`
+  if (s.work.length) {
+    html += `<div class="nav-group"><h2>Work</h2><ul>${s.work.map((w) => {
+      const main = navLink({ label: w.path.split('/').pop(), file: firstFile(w), meta: progressLabel(w.todo) })
+      const mods = w.modules.map((m) => navLink({ label: m.path.split('/').pop(), file: firstFile(m), meta: progressLabel(m.todo), sub: true })).join('')
+      return main + mods
+    }).join('')}</ul></div>`
+  }
+  if (s.adrs.length) html += `<div class="nav-group"><h2>Decisions (ADR)</h2><ul>${s.adrs.map((a) => navLink({ label: a.title, file: a.path })).join('')}</ul></div>`
+  $('#nav').innerHTML = html
+}
+
+function firstFile(item) {
+  for (const name of ['SPEC.md', 'plan.md', 'todo.md', 'decisions.tsv']) if (item.files.includes(name)) return `${item.path}/${name}`
+  return item.files.length ? `${item.path}/${item.files[0]}` : null
+}
+
+function workCard(w) {
+  const pct = w.todo && w.todo.total ? Math.round((w.todo.done / w.todo.total) * 100) : 0
+  return `<article class="card">
+    <div class="slug">${esc(w.path.replace(/^work\//, ''))}</div>
+    <h3><button data-file="${esc(firstFile(w) ?? '')}">${esc(w.title || w.path.split('/').pop())}</button></h3>
+    ${w.branches.length ? `<div class="chips" style="margin:0">${w.branches.map((b) => `<span class="chip">${esc(b)}</span>`).join('')}</div>` : ''}
+    ${w.todo && w.todo.total ? `<div class="progress" role="progressbar" aria-label="Tasks done" aria-valuemin="0" aria-valuemax="${w.todo.total}" aria-valuenow="${w.todo.done}"><span style="width:${pct}%"></span></div>` : ''}
+    <div class="stats">${w.todo ? `<span>${w.todo.done}/${w.todo.total} tasks</span>` : ''}${w.decisions ? `<span>${w.decisions} decisions</span>` : ''}</div>
+    <div class="files">${w.files.map((f) => `<button data-file="${esc(`${w.path}/${f}`)}">${esc(f)}</button>`).join('')}</div>
+  </article>`
+}
+
+function renderOverview() {
+  const s = state.summary
+  const header = `<div class="crumbs">${esc(s.dir)}</div><div class="toolbar"><h1>${esc(s.id)}</h1>
+    <div class="actions"><button class="btn" data-action="refresh">Refresh</button></div></div>`
+  if (!s.exists) {
+    return `${header}<div class="empty"><p>This repository has no knowledge base yet.</p>
+      <button class="btn primary" data-file="INDEX.md">Create INDEX.md</button></div>`
+  }
+  const items = s.work.flatMap((w) => [w, ...w.modules])
+  let html = header
+  html += `<h2 class="section-title">Work items</h2>`
+  html += items.length ? `<div class="cards">${items.map(workCard).join('')}</div>` : `<div class="empty"><p>No work items. <code>/spec</code> or <code>/plan-tasks</code> create one.</p></div>`
+  html += `<h2 class="section-title">Files</h2><div class="files">${s.top.filter((f) => f.exists).map((f) => `<button data-file="${esc(f.name)}">${esc(f.name)}</button>`).join('') || '<span class="status">None yet.</span>'}</div>`
+  if (s.adrs.length) html += `<h2 class="section-title">Architecture decisions</h2><table class="grid"><tbody>${s.adrs.map((a) => `<tr><td class="phase">${esc(fileTitle(a.path))}</td><td><a href="#" data-file="${esc(a.path)}">${esc(a.title)}</a></td></tr>`).join('')}</tbody></table>`
+  return html
+}
+
+function renderFile() {
+  const d = state.doc
+  const path = state.file
+  const isTsv = path.endsWith('.tsv')
+  const editable = path.endsWith('.md')
+  const actions = state.editing
+    ? `<span class="status" id="save-status">${state.dirty ? 'Unsaved changes' : ''}</span>
+       <button class="btn" data-action="cancel">Cancel</button>
+       <button class="btn primary" data-action="save">Save <span class="mono" aria-hidden="true">⌘S</span></button>`
+    : `<span class="status" id="save-status"></span>${editable ? `<button class="btn" data-action="edit">${d.exists ? 'Edit' : 'Create'}</button>` : ''}`
+  const header = `<div class="crumbs">${esc(state.kb)}/${esc(path)}</div>
+    <div class="toolbar"><h1>${esc(fileTitle(path))}</h1><div class="actions">${actions}</div></div>`
+
+  if (state.editing) return `${header}<label class="sr-only" for="editor">Edit ${esc(path)}</label><textarea id="editor" class="editor" spellcheck="false">${esc(d.content)}</textarea>`
+  if (isTsv) return header + renderDecisions(d.content)
+  if (!d.exists) return `${header}<div class="empty"><p>${esc(path)} doesn't exist yet.</p>${editable ? '<button class="btn primary" data-action="edit">Create it</button>' : ''}</div>`
+  if (!editable) return `${header}<pre class="doc">${esc(d.content)}</pre>`
+  const { html, meta } = markdown(d.content)
+  const chips = meta.length ? `<div class="chips">${meta.map((m) => m.values.map((v) => `<span class="chip"><b>${esc(m.key)}</b> ${esc(v)}</span>`).join('')).join('')}</div>` : ''
+  return `${header}${chips}<article class="doc">${html}</article>`
+}
+
+function render() {
+  renderNav()
+  const main = $('#main')
+  if (!state.summary) { main.innerHTML = '<p class="status">Loading…</p>'; return }
+  main.innerHTML = state.file ? renderFile() : renderOverview()
+  wireDecisionFilter()
+  if (state.editing) {
+    const ed = $('#editor')
+    ed.focus()
+    ed.addEventListener('input', () => { state.dirty = ed.value !== state.doc.content; $('#save-status').textContent = state.dirty ? 'Unsaved changes' : '' })
+  }
+  setHash()
+}
+
+function showError(err) {
+  const el = $('#save-status')
+  if (el) { el.textContent = err.message; el.classList.add('error') }
+  else $('#main').insertAdjacentHTML('afterbegin', `<p class="status error" role="alert">${esc(err.message)}</p>`)
+  announce(err.message)
+}
+
+// ---------- Actions ----------
+
+function confirmDiscard() {
+  return !state.dirty || confirm('Discard unsaved changes?')
+}
+
+async function selectKb(kb) {
+  if (!confirmDiscard()) { renderNav(); return }
+  Object.assign(state, { kb, file: null, doc: null, editing: false, dirty: false, summary: null })
+  render()
+  state.summary = await loadSummary(kb)
+  render()
+}
+
+async function openFile(file) {
+  if (!confirmDiscard()) return
+  Object.assign(state, { file, editing: false, dirty: false })
+  if (file) state.doc = await loadFile(state.kb, file)
+  render()
+  $('#main').focus({ preventScroll: true })
+  window.scrollTo(0, 0)
+}
+
+async function save() {
+  const content = $('#editor').value
+  try {
+    const res = await saveFile(state.kb, state.file, content, state.doc.mtime)
+    state.doc = { ...state.doc, content, exists: true, mtime: res.mtime }
+    state.editing = false
+    state.dirty = false
+    state.summary = await loadSummary(state.kb)
+    render()
+    $('#save-status').textContent = 'Saved'
+    announce('Saved')
+  } catch (err) { showError(err) }
+}
+
+async function toggleTask(input) {
+  const line = Number(input.dataset.line)
+  const lines = state.doc.content.split('\n')
+  const next = lines[line].replace(/\[([ xX])\]/, (_, c) => (c === ' ' ? '[x]' : '[ ]'))
+  if (next === lines[line]) return
+  lines[line] = next
+  const content = lines.join('\n')
+  try {
+    const res = await saveFile(state.kb, state.file, content, state.doc.mtime)
+    state.doc = { ...state.doc, content, mtime: res.mtime }
+    state.summary = await loadSummary(state.kb)
+    render()
+    announce(input.checked ? 'Marked done' : 'Marked not done')
+  } catch (err) {
+    input.checked = !input.checked
+    showError(err)
+  }
+}
+
+async function refresh() {
+  if (state.editing) return
+  state.kbs = (await loadKbs()).kbs
+  if (state.kb && !state.kbs.includes(state.kb)) state.kbs.unshift(state.kb)
+  if (!state.kb) return
+  const summary = await loadSummary(state.kb)
+  const doc = state.file ? await loadFile(state.kb, state.file) : null
+  // Re-render only on a real change, so returning to the tab keeps a typed filter.
+  if (JSON.stringify(summary) === JSON.stringify(state.summary) && JSON.stringify(doc) === JSON.stringify(state.file ? state.doc : null)) return
+  state.summary = summary
+  if (state.file) state.doc = doc
+  render()
+}
+
+function resolveLocal(href) {
+  if (href.startsWith('#')) return null
+  const base = state.file ? state.file.split('/').slice(0, -1) : []
+  for (const part of href.split('/')) {
+    if (part === '..') base.pop()
+    else if (part && part !== '.') base.push(part)
+  }
+  return base.join('/')
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('[data-file], [data-action], a[data-local], input[data-line]')
+  if (!target) return
+  if (target.matches('input[data-line]')) { toggleTask(target); return }
+  if (target.matches('a[data-local]')) {
+    const file = resolveLocal(target.dataset.local)
+    if (file !== null) { e.preventDefault(); openFile(file).catch(showError) }
+    return
+  }
+  if (target.dataset.file !== undefined) { e.preventDefault(); openFile(target.dataset.file || null).catch(showError); return }
+  const action = target.dataset.action
+  if (action === 'edit') { state.editing = true; state.dirty = false; render() }
+  if (action === 'cancel' && confirmDiscard()) { state.editing = false; state.dirty = false; render() }
+  if (action === 'save') save()
+  if (action === 'refresh') refresh().catch(showError)
+})
+
+document.addEventListener('keydown', (e) => {
+  if (!state.editing) return
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save() }
+  if (e.key === 'Escape' && confirmDiscard()) { state.editing = false; state.dirty = false; render() }
+})
+
+$('#kb-select').addEventListener('change', (e) => selectKb(e.target.value).catch(showError))
+window.addEventListener('beforeunload', (e) => { if (state.dirty) e.preventDefault() })
+window.addEventListener('focus', () => refresh().catch(() => {}))
+
+async function init() {
+  const params = new URLSearchParams(location.hash.slice(1))
+  state.kbs = (await loadKbs()).kbs
+  const wanted = params.get('kb')
+  if (wanted && !state.kbs.includes(wanted)) state.kbs.unshift(wanted)
+  const kb = wanted || state.kbs[0]
+  if (!kb) {
+    $('#main').innerHTML = '<div class="empty"><p>No knowledge bases found. Run <code>/setup-knowledge-base</code> in a repo.</p></div>'
+    return
+  }
+  state.kb = kb
+  state.summary = await loadSummary(kb)
+  const file = params.get('file')
+  if (file) { state.file = file; state.doc = await loadFile(kb, file) }
+  render()
+}
+
+init().catch((err) => { $('#main').innerHTML = `<p class="status error" role="alert">${esc(err.message)}</p>` })
+</script>
+</body>
+</html>

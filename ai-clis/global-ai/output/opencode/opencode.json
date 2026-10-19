@@ -27,6 +27,13 @@
         "*"
       ]
     },
+    "comment-sicko": {
+      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+      "skills": [
+        "how",
+        "why"
+      ]
+    },
     "council": {
       "model": "openai/gpt-5.6-terra",
       "fallback_models": [
@@ -98,7 +105,7 @@
       "temperature": 0.1,
       "skills": [
         "persona",
-        "plan-prd"
+        "spec-driven-development"
       ],
       "mcps": []
     },
@@ -131,6 +138,12 @@
         "*"
       ]
     },
+    "security-reviewer": {
+      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+      "skills": [
+        "security-and-hardening"
+      ]
+    },
     "sonic": {
       "model": "openrouter/deepseek/deepseek-v4-flash-0731",
       "fallback_models": [
@@ -153,7 +166,7 @@
         "wrangler",
         "tanstack",
         "sandbox-sdk",
-        "vercel-react-best-practices",
+        "performance-optimization",
         "test-driven-development"
       ],
       "mcps": [
@@ -171,6 +184,16 @@
       "temperature": 0.1,
       "skills": [
         "test-driven-development"
+      ],
+      "mcps": [
+        "*"
+      ]
+    },
+    "web-performance-auditor": {
+      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+      "skills": [
+        "performance-optimization",
+        "browser-testing-with-devtools"
       ],
       "mcps": [
         "*"

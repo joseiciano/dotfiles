@@ -1,0 +1,1 @@
+/Users/joseiciano/dotfiles/ai-clis/global-ai/output/claude/commands/setup-knowledge-base.md

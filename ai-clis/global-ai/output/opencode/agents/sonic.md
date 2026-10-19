@@ -72,9 +72,9 @@ For the skills mentioned below, **Always** use them for the context given under 
 |---|---|---|
 |[Smart-Dumb Component Patterns](~/.claude/skills/smart-dumb-component/SKILL.md)| Smart-dumb component pattern for separating business from rendering logic | When implementing logic in frontend codebases. |
 |[TanStack](~/.claude/skills/tanstack/SKILL.md) | Router for TanStack Query, Router, Start, and integration best practices | Whenever changes touch a codebase that uses TanStack Query, Router, or Start (including frontend calls to the backend through TanStack Query) |
-|[Vercel React Best Practices](~/.claude/skills/vercel-react-best-practices/SKILL.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
-| [Frontend Design](~/.claude/skills/frontend-design/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
-| [Web Perf](~/.claude/skills/web-perf/SKILL.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
+|[Vercel React Best Practices](~/.claude/skills/performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
+| [Frontend UI Engineering](~/.claude/skills/frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
+| [Web Perf](~/.claude/skills/performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
 
 
 **Backend**
@@ -87,7 +87,7 @@ For the skills mentioned below, **Always** use them for the context given under 
 | [`Workers`](~/.claude/skills/workers-best-practices/SKILL.md) | Best practices for using cloudflare workers | When working on a change involving a Cloudflare Worker |
 | [Durable Objects](~/.claude/skills/durable-objects/SKILL.md) | Best practices for working with Cloudflare Durable OBjects | When working on a Cloudflare Durable Object |
 | [Wrangler](~/.claude/skills/cloudflare/references/wrangler/README.md) | Best practices for working with Wrangler | Whenever a change involves using Wrangler, modifying Wrangler file for a project |
-| [Postgres Best Practices](~/.claude/skills/supabase-postgres-best-practices/SKILL.md) | Best practices for SQL operations in Postgres | When working on SQL queries, Database Migrations, Postgres changes |
+| [Postgres Best Practices](~/.claude/skills/postgres-best-practices/SKILL.md) | Best practices for SQL operations in Postgres | When working on SQL queries, Database Migrations, Postgres changes |
 | [Neon](~/.claude/skills/neon/SKILL.md) | Neon Postgres platform guide (drivers, Auth, CLI, branching, egress/cost optimization) plus Claimable Postgres for instant temporary databases | When working on a database hosted by Neon; when investigating high Postgres egress or query overfetching; or when needing a throwaway/test database in a live environment |
 | [Agents SDK](~/.claude/skills/agents-sdk/SKILL.md) | Build stateful Cloudflare agents and agent-powered systems | When building agent workflows, stateful agents, MCP servers, or real-time agent apps on Cloudflare |
 | [Cloudflare Email Service](~/.claude/skills/cloudflare-email-service/SKILL.md) | Send and receive email with Cloudflare Email Service | When implementing transactional email, email routing, or email bindings with Cloudflare |

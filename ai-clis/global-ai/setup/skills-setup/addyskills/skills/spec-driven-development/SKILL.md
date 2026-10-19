@@ -62,7 +62,7 @@ Build order: identity → billing, notifications → reporting
 
 **The map is gated like every phase.** The human reviews module boundaries, dependency direction, and build order before any module spec is written. Getting the map wrong is expensive; reviewing ten lines is not.
 
-**Then recurse per module.** Run Specify → Plan → Tasks → Implement for each module in dependency order. Each module gets its own spec, scoped to that module's objective, boundaries, and success criteria. Save the approved map at the project root and each module's spec alongside it, named by module id (`SPEC-identity.md`, `SPEC-billing.md`) — the map, not filename guessing, is the index of what exists.
+**Then recurse per module.** Run Specify → Plan → Tasks → Implement for each module in dependency order. Each module gets its own spec, scoped to that module's objective, boundaries, and success criteria. Save the approved map as `<kb>/work/<slug>/MAP.md` and each module's spec as `<kb>/work/<slug>/<module-id>/SPEC.md`, outside the repo (the [knowledge-base skill](../knowledge-base/SKILL.md), "Work items") — the map, not filename guessing, is the index of what exists.
 
 ### Phase 1: Specify
 
@@ -150,7 +150,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 **External spec tools:** This workflow is format-agnostic. If the project
 already uses OpenSpec or another specification system, keep that system's
 artifact format and storage conventions instead of creating a duplicate
-`SPEC.md`. This skill owns the clarification, content, and approval gates; the
+`SPEC.md`. Otherwise save the spec as the current work item's `SPEC.md` in the
+knowledge base, not the repo (see the knowledge-base skill's "Work items"), and
+never commit it. This skill owns the clarification, content, and approval gates; the
 external tool owns how the approved spec is represented.
 
 **Reframe instructions as success criteria.** When receiving vague requirements, translate them into concrete conditions:
@@ -185,7 +187,7 @@ With the validated spec, generate a technical implementation plan:
 
 > Follow `planning-and-task-breakdown` for the dependency-graph mapping and vertical-slicing mechanics behind these steps; it is the canonical source. The bullets above are a lightweight summary; if they ever diverge, `planning-and-task-breakdown` takes precedence.
 >
-> **Output convention:** Save the plan to `tasks/plan.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default `tasks/todo.md`; projects may designate an external tracker instead). Create `tasks/` if it does not exist. Downstream commands (`/build`, etc.) expect these defaults.
+> **Output convention:** Save the plan to the work item's `plan.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default: the work item's `todo.md`; projects may designate an external tracker instead). Both live in the knowledge base, outside the repo. Downstream commands (`/build`, etc.) expect these defaults.
 
 The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
 

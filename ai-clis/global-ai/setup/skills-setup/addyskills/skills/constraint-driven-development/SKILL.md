@@ -92,7 +92,7 @@ Stop at four. A twelve-question intake produces a config nobody understands and 
 
 ### Step 3: Write CONSTRAINTS.md
 
-One file at the repo root. Any agent on any harness can read it, and a change to it shows up in review where it belongs.
+One file, kept out of the repo in the personal knowledge base at `<kb>/CONSTRAINTS.md` (the [knowledge-base skill](../knowledge-base/SKILL.md) resolves `<kb>`). Any agent on any harness can read it. Never commit it.
 
 ```markdown
 # Constraints
@@ -137,7 +137,7 @@ number and no command in this column is an aspiration, not a constraint.
 | W1 | `no-explicit-any` | `src/legacy/**` | Rewrite tracked in ENG-441 | @addy | 2026-11-01 |
 ```
 
-Then add one line to `AGENTS.md` and `CLAUDE.md`: `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
+Then add one line to `<kb>/RULES.md`, not `AGENTS.md` or `CLAUDE.md`: `Read <kb>/CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
 
 ### Step 4: Install what each dimension needs
 
@@ -167,7 +167,7 @@ Five things that will bite you if you skip them:
 4. **Coverage needs no second test run.** Read the lcov your suite already writes and intersect it with `git diff`. Running the suite twice to get a number is the fastest way to make people hate this.
 5. **Semgrep's registry rules are free to run; check the licence before redistributing them.** `opengrep` is a drop-in fork with the same rule format and JSON output if that matters to your legal team.
 
-Add each one to the project's own script so it's reproducible without an agent:
+Group the commands in `CONSTRAINTS.md` under these three stage names. Do not add them to the repo's `package.json` or CI unless the user asks: with `CONSTRAINTS.md` in the knowledge base, the agent runs them. If the user does want repo scripts, this is the shape:
 
 ```json
 {
@@ -298,7 +298,7 @@ The skill was applied correctly when:
 - [ ] At least one constraint is external (not judged by this project's own tests)
 - [ ] Measured-only metrics record today's value and a direction
 - [ ] Exceptions have an owner and an expiry date
-- [ ] `AGENTS.md` or `CLAUDE.md` points at the file
+- [ ] `<kb>/RULES.md` points at the file
 - [ ] A trial run on the current branch produces no failures the user disagrees with
 
 ## See Also

@@ -15,7 +15,7 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
 
 ## Steps
 
-1. Spawn `Agent` with `subagent_type: "pstack:comment-sicko"`.
+1. Start the `comment-sicko` subagent.
    - Pass the scope.
    - Do not restate its rules.
 2. Inspect its report and diff.
@@ -34,12 +34,12 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
      - If a keep is refuted or still ambiguous, delete it.
    - Revert and rerun one rejected report with the failure named. Reject a second, report it open, and fail `/no-comments`.
 3. Fix trivial accepted flags directly by deleting a dead path, dropping a parameter, or using the real API.
-   - If any fix needs a shape, run `/architect` once for the accepted set and surrounding code.
-   - Stop at the sketch. Architect shapes. Step 4 implements.
+   - If any fix needs a shape, start the `Plan` agent once for the accepted set and surrounding code.
+   - Stop at the sketch. Plan shapes. Step 4 implements.
 4. Implement the smallest root-cause fix in scope.
    - Remove every named workaround.
    - If the root cause is out of scope, land the smallest in-scope fix and report the rest open.
-   - The **principle-fix-root-causes** and **principle-redesign-from-first-principles** skills guide intent only. Neither authorizes widening the fence nor fixing instances outside it.
+   - The `debugging-and-error-recovery` skill guides intent only. It does not authorize widening the fence or fixing instances outside it.
    - Never bolt on symptom guards.
 5. Constraint comments say `do not remove`, `do not change wording`, or `talk to X before changing`.
    - Leave keeps about things we cannot change.
@@ -50,7 +50,7 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
    - The deletion count.
    - Restored comments.
    - Reruns.
-   - Architect sketch.
+   - Plan sketch.
    - Fixes.
    - Encoding offers.
    - Encodings.

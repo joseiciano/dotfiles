@@ -14,4 +14,4 @@ Then generate a structured spec covering all six core areas: objective, commands
 
 If the request bundles several independently testable capabilities, first propose a capability map (module ids, dependency direction, build order) per the skill's Phase 0 and get it approved, then spec each module in dependency order.
 
-Save the spec as SPEC.md in the project root and confirm with the user before proceeding.
+Find or create the work item for the current branch with the knowledge-base skill ("Work items"). Save the spec as the work item's `SPEC.md`, or, for a split, the map as `work/<slug>/MAP.md` and each module's spec as `work/<slug>/<module>/SPEC.md`. These live in the KB, outside the repo; never commit them. Confirm with the user before proceeding.

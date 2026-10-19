@@ -31,7 +31,7 @@ Before writing any code, operate in read-only mode:
 - Map dependencies between components
 - Note risks and unknowns
 
-**Do NOT write code during planning.** The output is a plan document saved to `tasks/plan.md` and a task list recorded in the task list target (see Output Files; default `tasks/todo.md`), not implementation.
+**Do NOT write code during planning.** The output is a plan document saved to the work item's `plan.md` and a task list recorded in the task list target (see Output Files; default the work item's `todo.md`), not implementation.
 
 ### Step 2: Identify the Dependency Graph
 
@@ -145,10 +145,10 @@ If a task is L or larger, it should be broken into smaller tasks. An agent perfo
 
 ## Output Files
 
-- **Plan document:** Save the implementation plan to `tasks/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
+- **Plan document:** Save the implementation plan to the work item's `plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
 - **Task list:** Record each task in the **task list target** (defined below).
 
-Create the `tasks/` directory if it does not exist.
+The work item is a directory in the personal knowledge base, outside the repo: the [knowledge-base skill](../knowledge-base/SKILL.md)'s "Work items" section finds the one for the current branch, or creates it. Keep the `branches:` frontmatter at the top of `plan.md`. Never commit these files. Below, `tasks/plan.md` and `tasks/todo.md` mean the work item's `plan.md` and `todo.md`.
 
 **Never overwrite an incomplete plan.** Before writing `tasks/plan.md` or `tasks/todo.md`, check whether they already exist and still contain unchecked tasks:
 

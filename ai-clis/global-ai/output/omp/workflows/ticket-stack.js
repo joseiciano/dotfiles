@@ -1,6 +1,6 @@
 export const meta = {
   name: 'ticket-stack',
-  description: 'Implement numbered tickets from a plans/ directory one by one, each on its own branch stacked on the previous, with review and a PR per ticket',
+  description: 'Implement numbered tickets from a directory (in the repo or the knowledge base) one by one, each on its own branch stacked on the previous, with review and a PR per ticket',
   phases: [
     { title: 'Discover' },
     { title: 'Implement' },
@@ -85,8 +85,9 @@ const discovery = await agent(
     `Ignore files in that directory with no number in the name. For each numbered file, read its YAML ` +
     `frontmatter "status" field (fall back to a "Status: <word>" badge/text in the body if there is no ` +
     `frontmatter). Return only tickets whose status is NOT "Completed" (case-insensitive) — skip anything ` +
-    `already completed. For each pending ticket return its number (the integer from the filename), its file ` +
-    `path relative to the repo root, and a short title from the frontmatter "goal" field or the first H1 ` +
+    `already completed. For each pending ticket return its number (the integer from the filename), its ` +
+    `file path (relative to the repo root for a file inside the repo, absolute for one outside it, such as ` +
+    `in the knowledge base), and a short title from the frontmatter "goal" field or the first H1 ` +
     `heading. Sort ascending by number. If nothing is pending, return an empty tickets array.`,
   { phase: 'Discover', schema: TICKETS_SCHEMA, label: 'discover', agentType: 'scout' }
 )
@@ -115,8 +116,9 @@ for (const ticket of pending) {
       `4. Follow this repo's AGENTS.md workflow conventions: commit as you go with descriptive messages ` +
       `(don't batch unrelated changes into one commit), run "pnpm typecheck" and "pnpm build" after your ` +
       `changes (and "npx vitest run" if you touched reducer/FSM behavior), and fix any failures before moving on.\n` +
-      `5. Update the ticket file's frontmatter "status" to 'Completed' (and its status badge/text if present), ` +
-      `and commit that too.\n` +
+      `5. Update the ticket file's frontmatter "status" to 'Completed' (and its status badge/text if present). ` +
+      `A relative ticket path is inside the repo: commit that too. An absolute ticket path outside the repo ` +
+      `(the knowledge base) is edited in place and never committed.\n` +
       `6. Push the branch to origin.\n\n` +
       `Report back the absolute worktree path, the exact branch name you created, and a one-paragraph summary ` +
       `of what you implemented.`,

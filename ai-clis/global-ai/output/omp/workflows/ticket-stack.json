@@ -1,9 +1,9 @@
 {
   "name": "ticket-stack",
-  "description": "Implement numbered tickets from a plans/ directory one by one, each on its own branch stacked on the previous, with review and a PR per ticket",
+  "description": "Implement numbered tickets from a directory (in the repo or the knowledge base) one by one, each on its own branch stacked on the previous, with review and a PR per ticket",
   "scriptPath": "ticket-stack.js",
   "parameters": {
-    "ticketsDir": { "type": "string", "description": "Directory containing the numbered ticket files", "required": true },
+    "ticketsDir": { "type": "string", "description": "Directory containing the numbered ticket files: a repo path, or an absolute knowledge-base path such as <kb>/work/<slug>", "required": true },
     "baseBranch": { "type": "string", "description": "Branch the first ticket stacks on", "required": true },
     "maxReviewRounds": { "type": "number", "description": "Max review/fix rounds per ticket", "default": 3 }
   }

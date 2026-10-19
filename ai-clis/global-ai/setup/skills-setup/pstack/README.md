@@ -2,7 +2,8 @@
 
 `how` and `why` imported once from the vendored pstack plugin in `ai-clis/vendor/pstack`,
 so the suite no longer depends on pstack being loaded as a Claude Code plugin (`teach`
-runs both). These copies are ours to edit; the build does not re-read the vendor copy.
+runs both). `show-me-your-work` was imported later for the decision trail that `/build auto`
+and the `ticket-stack` workflow keep. These copies are ours to edit; the build does not re-read the vendor copy.
 
 ## Changes from upstream
 - Subagents are our agents instead of pstack's `general-purpose` / `poteto-agent-*` /
@@ -15,3 +16,9 @@ runs both). These copies are ours to edit; the build does not re-read the vendor
 - Restored `why/references/sources/` playbooks (linear, notion, slack, datadog, sentry,
   databricks) from git (`630155c`); they had been deleted from the vendor copy but
   `source-playbook.md` links to them.
+- `show-me-your-work` is trimmed for `/build auto` and `ticket-stack`: the log lives in the
+  work item's `decisions.tsv` in the knowledge base instead of the working directory; the
+  transcript audit and the mandatory cross-model review are removed (ticket-stack already
+  reviews each ticket), replaced by a reread of the run's own rows before handing back;
+  `references/decision-log-template.tsv` is dropped because `log.sh` writes the header; the
+  link to pstack's `encode-lessons-in-structure` is removed.

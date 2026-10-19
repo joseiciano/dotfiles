@@ -45,7 +45,7 @@ If the available evidence conflicts, surface the conflict rather than silently i
 
 ### ADR Template
 
-Store ADRs in `docs/decisions/` with sequential numbering (unless the project already uses another location — see above):
+Store ADRs in the personal knowledge base at `<kb>/adr/` with sequential numbering, not in the repo (the [knowledge-base skill](../knowledge-base/SKILL.md) resolves `<kb>`). Follow an existing repo convention for format and numbering, and write into the repo's ADR directory only when the user asks for the repo copy:
 
 ```markdown
 # ADR-001: Use PostgreSQL for primary database
