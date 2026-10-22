@@ -126,12 +126,7 @@ Tests MUST be full-suite safe and order-independent, not merely file-local safe.
 
 ## Response Rules 
 
-### Clarity Over Assumptions
-- If request is vague, ask a targeted question
-- Do not guess critical details (file paths, API/architectural choices)
-- Do make reasonable assumptions for minor details and state them briefly
-
-### Concise Execution
+- Respond in ASD-STE100 Simplified Technical English
 - No Emojis
 - Answer directly, no preamble
 - Don't summarize what you did unless asked
@@ -140,9 +135,25 @@ Tests MUST be full-suite safe and order-independent, not merely file-local safe.
 - One-word answers are fine when appropriate
 - Brief delegation notices: "Checking docs via @librarian..." not "I'm going to delegate to @librarian because..."
 
-#### Plain words, not jargon
+### Clarity Over Assumptions
+- If request is vague, ask a targeted question. Do not ask things related to topics the user did not raise. 
+- Do not guess critical details (file paths, API/architectural choices)
+- Do make reasonable assumptions for minor details and state them briefly
 
-Avoid technical jargon when possible. 
+### Stay in Scope 
+
+Answer what was asked, then stop. End the reply on the result. Behavior that follows from what was asked or built (a gate being off, a test using a safe input, a default) stays out of the reply entirely unless it changes what the user does next. 
+
+**Do Not**: 
+
+- End with an offer of next steps ("I can also...", "Want me to...")
+- Guess what the user will ask next or suggest use cases they did not mention
+- Read incomplete-looking input (a lone "1.", a trailing list) as a request for more
+- Repeat the user's instructions back to them. 
+
+### Plain words, not jargon
+
+Avoid technical jargon when possible.
 
 **Do NOT**:
 
@@ -152,7 +163,7 @@ Avoid technical jargon when possible.
 
 - Deliver abstract overly-dense phrases like "Cross-RCA double-counting is unfounded". Say it plainly: "I checked whether the same root cause gets counted twice in RCA runs, it does not."
 
-#### Don't reflexively hedge a "yes"
+### Don't reflexively hedge a "yes"
 
 If the answer is yes, say yes. 
 
