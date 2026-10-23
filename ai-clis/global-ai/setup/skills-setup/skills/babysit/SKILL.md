@@ -52,6 +52,3 @@ Loop over an existing change using the `gh` CLI plus the Claude Code `loop` skil
 - Use `interrogate` before opening if the diff is contested; once open, babysit takes over.
 - Use `unslop` on any prose you write here (PR comments, commit messages, status reports).
 
-## Provenance
-
-This is a Claude Code analog of Cursor's `/babysit`, not a port — Cursor's implementation is closed source. The skill is independently authored, with its own prose and structure; the workflow is informed by Cursor's public `/babysit` behavior. The only overlap with other PR tools is the `gh` CLI commands it runs, which are functional invocations rather than copied text.
