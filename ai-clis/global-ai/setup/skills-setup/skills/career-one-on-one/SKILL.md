@@ -22,4 +22,4 @@ Write to `~/documents/workspace/workjournal/one-on-one/<YYYY-MM-DD>-<name>.md`, 
 ## Writing rules
 
 - **Point first.** The first line of each point is direct and brief. Sub-bullets add context only if needed.
-- **Plain.** Short sentences, one idea each, no jargon.
+- **Plain.** Short sentences, one idea each, no jargon. Apply the `bro` skill to keep it simple.

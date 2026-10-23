@@ -25,4 +25,4 @@ Write to `~/documents/workspace/workjournal/weekly/<START>_<END>.md`. If the fil
 ## Writing rules
 
 - **Point first.** The first line of each point is the outcome, direct and brief. Sub-bullets add context only if needed.
-- **Plain.** Short sentences, one idea each, no jargon.
+- **Plain.** Short sentences, one idea each, no jargon. Apply the `bro` skill to keep it simple.

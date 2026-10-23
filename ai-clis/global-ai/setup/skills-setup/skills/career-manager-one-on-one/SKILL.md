@@ -37,4 +37,4 @@ Write to `~/documents/workspace/workjournal/manager-one-on-one/<END>.md`. If the
 ## Writing rules
 
 - **Point first.** The first line of each point is direct and brief.
-- **Plain.** Short sentences, one idea each, no jargon.
+- **Plain.** Short sentences, one idea each, no jargon. Apply the `bro` skill to keep it simple.

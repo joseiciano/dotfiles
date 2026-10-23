@@ -29,4 +29,4 @@ Write to `~/documents/workspace/workjournal/daily/<YYYY-MM-DD>.md` with today's 
 ## Writing rules
 
 - **Point first.** The first line of each point is the outcome, direct and brief. Sub-bullets add context only if needed.
-- **Plain.** Short sentences, one idea each, no jargon. Leave out cosmetic changes.
+- **Plain.** Short sentences, one idea each, no jargon. Apply the `bro` skill to keep it simple. Leave out cosmetic changes.

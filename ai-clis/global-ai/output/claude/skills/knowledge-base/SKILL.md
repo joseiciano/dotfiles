@@ -93,7 +93,13 @@ A map, not a copy. One line per source: what it covers, then where it is. Group 
 
 ## Access
 - Confluence: via the atlassian MCP (`mcp__atlassian__*`)
+
+## Verification Processes
+Driver skill: `.claude/skills/verify/` (run with /verify)
+- Create a note: browser and CLI creation, cancellation, persistence, cleanup. `.claude/skills/verify/features/create-note.md`
 ```
+
+`## Verification Processes` lists the repo's verification skill and its features, one line each, from the feature map README's `## Features` list. `create-verification-skill` and `maintain-verification-skill` keep it current; leave it out when the repo has no verification skill.
 
 Rules:
 - Link to the source; never paste its contents.
@@ -117,7 +123,7 @@ Written by `documentation-and-adrs`, `constraint-driven-development`, `spec-driv
 Run this when the user asks, and also, without waiting to be asked, when you find the KB has no INDEX.md (the write hook says so). Do steps 1–3 and 5's INDEX.md without asking anything, then ask step 4's question and show the RULES.md draft.
 
 1. Resolve the KB path. If it already has files, read them and update rather than overwrite.
-2. Scan the repo for documentation: README files, `docs/`, ADR folders (`docs/adr`, `docs/decisions`, `.adr-dir`), `CONTRIBUTING.md`, CLAUDE.md / AGENTS.md, OpenAPI / schema files, runbooks. Skip `node_modules`, build output, and vendored code.
+2. Scan the repo for documentation: README files, `docs/`, ADR folders (`docs/adr`, `docs/decisions`, `.adr-dir`), `CONTRIBUTING.md`, CLAUDE.md / AGENTS.md, OpenAPI / schema files, runbooks. Skip `node_modules`, build output, and vendored code. For each `.claude/skills/verify*/features/README.md`, write the `## Verification Processes` section.
 3. List connected MCP servers and CLIs (`gh`, Confluence, Notion, Linear, etc.) that can reach external docs.
 4. Ask the user, in one message, where external documentation lives (Confluence spaces, wikis, Notion pages, Google Drive folders, team channels). Offer what step 3 found as a starting point. Accept "none".
 5. Write INDEX.md. Draft RULES.md from what the repo shows (stack, commands, conventions) and show it to the user before writing; skip it if they decline.
