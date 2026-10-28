@@ -54,6 +54,8 @@ Spawn a `reviewer` agent on the uncommitted diff and have it review by running t
 - `APPROVED`, or
 - `CHANGES` followed by a numbered list, each item naming the file and the concrete fix.
 
+When the diff changes an exported symbol, a DB schema, a wire format, or a feature flag, first run `blast-radius` in automated mode on it and give the reviewer its writeup. Each confirmed risk counts as a correctness bug, and an `UNPROVEN` status goes in the Step 5 report.
+
 Only correctness bugs, unmet acceptance criteria, security issues, and departures from the ticket's decisions block approval. Style preferences are noted, not blocking.
 
 On `CHANGES`, send the list to the original implementer with `SendMessage` so it keeps its context, have it re-run Verify, then send the new diff to the same reviewer. Cap the loop at **3 rounds**; still not approved after the third, stop and show the user the outstanding items and ask how to proceed.

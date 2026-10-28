@@ -65,6 +65,8 @@ Package two things for the reviewer:
 - **ARTIFACT**: the diff or the function (not the whole file), plus any surrounding files the reviewer needs to read it.
 - **CONTRACT**: what the artifact must satisfy: the requirements, constraints, and the property under test, stated as a requirement ("must be safe under concurrent reads"), never as a conclusion ("is safe").
 
+When the CLAIM is that a change is safe for code outside the diff, run `blast-radius` in automated mode first. Add its probe and the probe's output to the ARTIFACT, and its consumer list to the CONTRACT, so reviewers attack the evidence rather than the conclusion.
+
 Strip your reasoning from both. Done when the ARTIFACT covers one decision and stays under ~200 changed lines; anything larger, decompose and run a cycle per piece.
 
 ### Step 3: DOUBT — Invoke the fresh-context reviewers

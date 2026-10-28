@@ -1,6 +1,6 @@
 ---
 name: how
-description: "Explains how code works: runtime flow, subsystem architecture, a walkthrough before changing something. Use for \"how does X work\" and placement questions (\"where should this live\"). Use why for motivation."
+description: "Explains how code works: runtime flow, subsystem architecture, a walkthrough before changing something. Use for \"how does X work\" and placement questions (\"where should this live\"). Use why for motivation, blast-radius for what a change breaks."
 ---
 
 # How
