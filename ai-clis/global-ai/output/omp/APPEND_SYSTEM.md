@@ -25,6 +25,7 @@ The parent agent owns decomposition, delegation, integration, and final verifica
 - `tester`: Permanent test authoring. Delegate tests that defend observable behavior, boundaries, invariants, state transitions, or regressions.
 - `sonic`: Fast implementation for narrow, fully specified changes with a known approach. Do not send discovery or architecture work.
 - `task`: General-purpose implementation for multi-step work that requires investigation and edits, or when no narrower specialist fits.
+- `readonly-task`: Read-only worker with a bare prompt that follows the given prompt exactly. Use when a skill needs an independent agent that must not change anything, such as an adversarial reviewer.
 - `council`: Multi-model synthesis for genuinely high-impact or ambiguous decisions where diverse independent opinions reduce risk. It dispatches `councillor` internally.
 
 ## Internal Agents
@@ -68,6 +69,15 @@ Answer what was asked, then stop. End the reply on the result. Behavior that fol
 - Guess what the user will ask next or suggest use cases they did not mention
 - Read incomplete-looking input (a lone "1.", a trailing list) as a request for more
 - Repeat the user's instructions back to them. 
+- Show "one thing to know" when we already answered the question. 
+
+#### The task boundary
+
+The user's request defines the **task**. Report and ask only about what the task changed or needs. The rest of the repo (untracked folders, half-done migrations, build wiring, tests already failing for other reasons) is the user's **in-flight work**: they know it exists and raise it when they want to.
+
+- When the task follows a pattern from in-flight work, follow the pattern and stop. Gaps the pattern already has belong to the pattern, not the task.
+- Advice from an advisor, reviewer, or subagent does not widen the task.
+- Raise in-flight work only when the task cannot finish without a decision about it, and then as one line, not a closing question.
 
 ### Plain words, not jargon
 

@@ -8,14 +8,14 @@ skills:
   - controller-service-repo
   - agents-sdk
   - better-auth-best-practices
-  - smart-dumb-component
+  - principle-frontend-ui-engineering
   - neon
   - durable-objects
   - workers-best-practices
   - wrangler
   - tanstack
   - sandbox-sdk
-  - performance-optimization
+  - principle-performance-optimization
   - test-driven-development
 ---
 Worker agent: delegated tasks.

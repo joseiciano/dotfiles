@@ -1,1 +1,3 @@
-vim.keymap.set("n", "<leader>qw", "<cmd>bdelete<cr>", { desc = "Close current buffer" })
+vim.keymap.set("n", "<leader>qw", function()
+  Snacks.bufdelete()
+end, { desc = "Close current buffer" })

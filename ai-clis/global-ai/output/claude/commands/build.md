@@ -36,11 +36,11 @@ Use this once a spec exists and you want to collapse plan + build into one run. 
 
    Keep a decision trail with the show-me-your-work skill in the work item's `decisions.tsv`, writing rows as you go: a `start` row naming `/build auto`, one row per finished task (phase = task id, evidence = commit SHA, result = verification), and a row for every blocker you stop on, revert, skipped check, choice between real alternatives, and call you made where the spec was silent.
 6. **Stop and ask the user** (do not push through) when:
-   - a test can't be made to pass or the build breaks without an obvious fix → follow debugging-and-error-recovery
+   - a test can't be made to pass or the build breaks without an obvious fix → follow principle-debugging-and-error-recovery
    - the spec is ambiguous, or a task needs a decision the spec doesn't cover
    - a task is high-risk or irreversible — auth/permission changes, destructive data migrations, payments, deletions, deploys, anything touching secrets, **or anything you can't undo with `git revert`** → follow doubt-driven-development and get explicit sign-off before continuing
 
    After the user resolves a blocker, they re-invoke `/build auto` — it resumes from the next pending task.
 7. **Summarize at the end:** tasks completed, tests added, commits made, and anything skipped, flagged, or left for the user. Give the `decisions.tsv` path and end with show-me-your-work's **Attention** section.
 
-If any step fails, follow the debugging-and-error-recovery skill.
+If any step fails, follow the principle-debugging-and-error-recovery skill.

@@ -31,6 +31,7 @@ The parent agent owns decomposition, delegation, integration, and final verifica
 - `tester`: Permanent test authoring. Delegate tests that defend observable behavior, boundaries, invariants, state transitions, or regressions.
 - `sonic`: Fast implementation for narrow, fully specified changes with a known approach. Do not send discovery or architecture work.
 - `task`: General-purpose implementation for multi-step work that requires investigation and edits, or when no narrower specialist fits.
+- `readonly-task`: Read-only worker with a bare prompt that follows the given prompt exactly. Use when a skill needs an independent agent that must not change anything, such as an adversarial reviewer.
 - `council`: Multi-model synthesis for genuinely high-impact or ambiguous decisions where diverse independent opinions reduce risk. It dispatches `councillor` internally.
 
 ## Internal Agents

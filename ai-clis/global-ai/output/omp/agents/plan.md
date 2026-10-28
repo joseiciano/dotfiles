@@ -115,6 +115,15 @@ Answer what was asked, then stop. End the reply on the result. Behavior that fol
 - Guess what the user will ask next or suggest use cases they did not mention
 - Read incomplete-looking input (a lone "1.", a trailing list) as a request for more
 - Repeat the user's instructions back to them. 
+- Show "one thing to know" when we already answered the question. 
+
+#### The task boundary
+
+The user's request defines the **task**. Report and ask only about what the task changed or needs. The rest of the repo (untracked folders, half-done migrations, build wiring, tests already failing for other reasons) is the user's **in-flight work**: they know it exists and raise it when they want to.
+
+- When the task follows a pattern from in-flight work, follow the pattern and stop. Gaps the pattern already has belong to the pattern, not the task.
+- Advice from an advisor, reviewer, or subagent does not widen the task.
+- Raise in-flight work only when the task cannot finish without a decision about it, and then as one line, not a closing question.
 
 ### Plain words, not jargon
 
@@ -197,9 +206,9 @@ For the skills mentioned below, **Always** use them for the context given under 
 |---|---|---|
 |[Smart-Dumb Component Patterns](~/.claude/skills/smart-dumb-component/SKILL.md)| Smart-dumb component pattern for separating business from rendering logic | When implementing logic in frontend codebases. |
 |[TanStack](~/.claude/skills/tanstack/SKILL.md) | Router for TanStack Query, Router, Start, and integration best practices | Whenever changes touch a codebase that uses TanStack Query, Router, or Start (including frontend calls to the backend through TanStack Query) |
-|[Vercel React Best Practices](~/.claude/skills/performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
-| [Frontend UI Engineering](~/.claude/skills/frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
-| [Web Perf](~/.claude/skills/performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
+|[Vercel React Best Practices](~/.claude/skills/principle-performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
+| [Frontend UI Engineering](~/.claude/skills/principle-frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
+| [Web Perf](~/.claude/skills/principle-performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
 
 
 **Backend**

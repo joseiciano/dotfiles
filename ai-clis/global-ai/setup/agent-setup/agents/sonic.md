@@ -9,14 +9,14 @@ claude:
     - controller-service-repo
     - agents-sdk
     - better-auth-best-practices
-    - smart-dumb-component
+    - principle-frontend-ui-engineering
     - neon
     - durable-objects
     - workers-best-practices
     - wrangler
     - tanstack
     - sandbox-sdk
-    - performance-optimization
+    - principle-performance-optimization
     - test-driven-development
 opencode: 
   model: openrouter/deepseek/deepseek-v4-flash-0731
@@ -49,14 +49,14 @@ opencode:
     - controller-service-repo
     - agents-sdk
     - better-auth-best-practices
-    - smart-dumb-component
+    - principle-frontend-ui-engineering
     - neon-postgres
     - durable-objects
     - workers-best-practices
     - wrangler
     - tanstack
     - sandbox-sdk
-    - performance-optimization
+    - principle-performance-optimization
     - test-driven-development
   mcps: 
     - "*"

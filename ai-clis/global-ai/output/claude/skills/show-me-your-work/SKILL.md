@@ -1,6 +1,6 @@
 ---
 name: show-me-your-work
-description: "Keep a reviewable decision trail for long-running or unattended work: a TSV log in the knowledge base with one row per decision (what, why, evidence, result). Use for /build auto, the ticket-stack workflow, other autonomous or multi-phase runs, or work a human reviews after stepping away."
+description: "Keep a reviewable decision trail: a TSV log in the knowledge base, one row per decision. Use for autonomous or multi-phase runs (/build auto, build-from-spec, build-from-idea) or work a human reviews after stepping away."
 ---
 
 # Show me your work
@@ -15,7 +15,7 @@ A single TSV file, one row per decision. Cells stay single-line. Evidence is a p
 - **phase.** The task, ticket or workstream.
 - **decision.** What was chosen or done, one line.
 - **why.** The reason in plain words.
-- **evidence.** A pointer that proves it: commit SHA, PR URL, `file:line`, a test command, or an artifact path. Never a paragraph.
+- **evidence.** A pointer that proves it: commit SHA, PR URL, `file:line`, a test command, or an artifact path.
 - **result.** The outcome: `tests green`, `reverted`, `open`, `INCONCLUSIVE`, `shipped-with-findings`.
 
 ```
@@ -48,16 +48,14 @@ Log decision points, not every action:
 - a check skipped or not run, and why
 - a blocker hit
 
-Skip the trivial and self-evident.
-
 ## Runs
 
-A run is one agent conversation, or one workflow sub-agent. When a run adds to a log that already has rows, its first row has phase `start` and names the run (`/build auto`, `ticket-stack #3 implement`) in evidence. Use phase `start` for nothing else.
+A run is one agent conversation, or one workflow sub-agent. When a run adds to a log that already has rows, its first row has phase `start` and names the run (`/build auto`, `build-from-spec ticket 03`) in evidence. Use phase `start` for nothing else.
 
 ## Rules
 
-- Append-only. A wrong row gets a new row that supersedes it. Never edit or delete history.
-- Log as you go, not at the end. A log reconstructed from memory loses the reverts and the silent calls, which are the rows a reviewer needs most.
+- Append-only: a wrong row gets a new row that supersedes it, and existing rows stay as written.
+- Log each row as the decision happens. A log reconstructed from memory loses the reverts and the silent calls, which are the rows a reviewer needs most.
 - Before handing back, read this run's rows once. If a fork, revert or skipped check that shaped the work is missing, append it.
 
 ## Handing back

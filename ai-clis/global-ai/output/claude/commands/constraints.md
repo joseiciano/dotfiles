@@ -2,7 +2,7 @@
 description: Define and enforce this project's quality bar — interview, sane defaults, CONSTRAINTS.md in the personal knowledge base
 ---
 
-Invoke the constraint-driven-development skill.
+Invoke the principle-constraint-driven-development skill.
 
 $ARGUMENTS
 

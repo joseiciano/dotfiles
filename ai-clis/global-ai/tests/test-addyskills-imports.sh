@@ -4,20 +4,20 @@
 # Sources are only read; the one build step writes to a throwaway dir.
 #
 # The imported skills (setup/skills-setup/addyskills/skills/<skill>/, shared
-# checklists in addyskills/references/) and commands
+# checklists in setup/references/) and commands
 # (setup/command-setup/command/) were rewritten from upstream so they work as
 # plain skills in ~/.claude. A re-import or hand edit that reintroduces an
 # upstream-only shape breaks them silently, so this test proves:
 #   1. No imported file (addyskills/README.md excluded) or command uses the
 #      `agent-skills:` plugin prefix or the upstream agent names
 #      `code-reviewer`, `test-engineer`, `security-auditor`.
-#   2. Every `../../references/` / `../../../references/` link in
+#   2. Every `../../../../references/` / `../../../../../references/` link in
 #      addyskills/skills resolves, from the file that holds it, to an existing
-#      file in addyskills/references (a wrong depth would be silently left
+#      file in setup/references (a wrong depth would be silently left
 #      un-inlined by copy-skills.js).
 #   3. No skill name exists in more than one skill source (every dir
 #      make/claude.mk passes to copy-skills.js: skills/, addyskills/skills/,
-#      mattskills/skills/, pstack/skills/, ...); build-claude would refuse to
+#      mattskills/skills/, ...); build-claude would refuse to
 #      build.
 #   4. A real `make build-claude`, `make setup-opencode` and `make build-omp`
 #      (Makefile, make/ and setup/ copied into a throwaway dir, fake HOME)
@@ -28,11 +28,9 @@
 #      rows in STALE_PATHS.
 #   6. Folded wrappers are flat: no SKILL.md below any installed skill's top
 #      level, every `references:` entry of ai-review and git has
-#      references/<entry>/guide.md, and performance-optimization has web-perf
+#      references/<entry>/guide.md, and principle-performance-optimization has web-perf
 #      and vercel-react-best-practices guides.
-#   7. ai-review's code-review-and-quality guide links to the addyskills
-#      checklists resolve to byte-identical inlined copies inside ai-review,
-#      and no installed ai-review file still names addyskills/references.
+#   7. No installed ai-review file names addyskills/references.
 #   8. No retired skill is installed as a top-level skill.
 #   9. No `references/<file>.md` path in an installed skill points outside
 #      that skill.
@@ -65,7 +63,7 @@ SKILLS="$SKILLS_SETUP/skills"
 ADDY="$SKILLS_SETUP/addyskills"
 ADDY_SKILLS="$ADDY/skills"
 MATT_SKILLS="$SKILLS_SETUP/mattskills/skills"
-SHARED="$ADDY/references"
+SHARED="$ROOT/setup/references"
 COMMANDS="$ROOT/setup/command-setup/command"
 AGENTS="$ROOT/setup/agent-setup/agents"
 AGENT_SETUP="$ROOT/setup/agent-setup"
@@ -123,9 +121,9 @@ done < <(find "$ADDY_SKILLS" -type f -name '*.md' | LC_ALL=C sort)
 if [ "$count" -eq 0 ]; then
   bad "found shared-reference links to check (extraction broken?)"
 elif [ -z "$missing" ]; then
-  ok "all $count shared-reference links resolve to a file in addyskills/references"
+  ok "all $count shared-reference links resolve to a file in setup/references"
 else
-  bad "shared-reference links that do not resolve into addyskills/references:$missing"
+  bad "shared-reference links that do not resolve into setup/references:$missing"
 fi
 
 # --- 3. no skill name in more than one source ---
@@ -133,7 +131,7 @@ fi
 SKILL_SOURCES="$(grep -oE 'copy-skills\.js \$\(SKILLS_SETUP\)/[^ ]+' "$ROOT/make/claude.mk" \
   | sed -E 's#^copy-skills\.js \$\(SKILLS_SETUP\)/##' | LC_ALL=C sort -u)"
 missing=""
-for want in skills addyskills/skills mattskills/skills pstack/skills; do
+for want in skills addyskills/skills mattskills/skills; do
   printf '%s\n' "$SKILL_SOURCES" | grep -qxF -- "$want" || missing="$missing $want"
 done
 for src in $SKILL_SOURCES; do
@@ -242,37 +240,15 @@ for wrapper in ai-review git; do
   fi
 done
 for route in web-perf vercel-react-best-practices; do
-  check_file="$BUILT/performance-optimization/references/$route/guide.md"
+  check_file="$BUILT/principle-performance-optimization/references/$route/guide.md"
   if [ -f "$check_file" ]; then
-    ok "performance-optimization: references/$route/guide.md installed"
+    ok "principle-performance-optimization: references/$route/guide.md installed"
   else
-    bad "performance-optimization: references/$route/guide.md installed"
+    bad "principle-performance-optimization: references/$route/guide.md installed"
   fi
 done
 
-# --- 7. ai-review inlines the addyskills checklists ---
-GUIDE="$BUILT/ai-review/references/code-review-and-quality/guide.md"
-AI_REVIEW_REAL="$(cd "$BUILT/ai-review" && pwd -P)"
-bad_links=""
-count=0
-while IFS= read -r link; do
-  [ -n "$link" ] || continue
-  name="$(basename "$link")"
-  [ -f "$SHARED/$name" ] || continue # only links to shared checklists
-  count=$((count + 1))
-  target_dir="$(cd "$(dirname "$GUIDE")/$(dirname "$link")" 2>/dev/null && pwd -P)" || target_dir=""
-  case "$target_dir/" in
-    "$AI_REVIEW_REAL"/*) cmp -s "$target_dir/$name" "$SHARED/$name" || bad_links="$bad_links $link(differs)" ;;
-    *) bad_links="$bad_links $link(outside ai-review)" ;;
-  esac
-done < <(grep -oE '(\]\(|`)[A-Za-z0-9._/-]+\.md' "$GUIDE" | sed -E 's/^(\]\(|`)//' | LC_ALL=C sort -u)
-if [ "$count" -eq 0 ]; then
-  bad "ai-review guide links a shared checklist (extraction broken or links dropped?)"
-elif [ -z "$bad_links" ]; then
-  ok "ai-review guide's $count checklist links resolve to inlined copies inside ai-review"
-else
-  bad "ai-review guide checklist links not inlined:$bad_links"
-fi
+# --- 7. ai-review does not name addyskills/references ---
 if grep -rqF 'addyskills/references' "$BUILT/ai-review"; then
   bad "installed ai-review still names addyskills/references: $(grep -rlF 'addyskills/references' "$BUILT/ai-review" | sed "s#$BUILT/##" | tr '\n' ' ')"
 else
@@ -371,7 +347,7 @@ fi
 
 # --- 13. pstack skills installed, rewritten off upstream names ---
 for name in how why; do
-  if [ -f "$BUILT/$name/SKILL.md" ] && diff -r "$SKILLS_SETUP/pstack/skills/$name" "$BUILT/$name" >/dev/null 2>&1; then
+  if [ -f "$BUILT/$name/SKILL.md" ] && diff -r "$SKILLS_SETUP/skills/$name" "$BUILT/$name" >/dev/null 2>&1; then
     ok "pstack skill $name installed identical to its source"
   else
     bad "pstack skill $name installed identical to its source"

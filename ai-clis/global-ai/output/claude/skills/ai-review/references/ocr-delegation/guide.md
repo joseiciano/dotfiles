@@ -85,6 +85,12 @@ Use `(path, status)` as the checklist identity. Workspace mode can report the sa
 
 For large changes, review in bounded batches grouped by shared rules and diff size. Do not stop after finding the first high-severity issue.
 
+The rule groups cover correctness, security, performance, maintainability, structure, and tests. When there are no rules (no `ocr`), review against those same areas. In both cases:
+
+- **Read the tests first.** They show intent. To check whether a test would catch a regression, invert one condition the change adds, run the suite, and restore the file from a copy. A mutation that stays green is a finding: name the missing test case.
+- **Lead with what matters.** One structural problem outranks ten nits. Don't bury it.
+- **Don't rubber-stamp or soften.** A bug that will hit production is High, not "a minor concern". Quantify when you can.
+
 ### Step 5: Format Output
 
 Each comment must follow this structure:

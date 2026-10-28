@@ -4,7 +4,7 @@ description: "Security engineer focused on vulnerability detection, threat model
 model: claude-opus-5-5
 tools: "Read, Grep, Glob, Bash, Skill"
 skills: 
-  - security-and-hardening
+  - principle-security-and-hardening
 ---
 
 # Security Auditor

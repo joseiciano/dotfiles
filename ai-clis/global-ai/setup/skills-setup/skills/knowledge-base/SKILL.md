@@ -21,9 +21,9 @@ It prints `~/.knowledge/<host>/<owner>/<repo>`, keyed by the normalized git remo
 <kb>/
   INDEX.md          map: where documentation lives
   RULES.md          personal rules file (context-engineering Level 1, not committed)
-  CONSTRAINTS.md    constraint-driven-development quality bar
+  CONSTRAINTS.md    principle-constraint-driven-development quality bar
   adr/NNNN-slug.md
-  work/<slug>/      one work item: SPEC.md, plan.md, todo.md
+  work/<slug>/      one work item: INTENT.md, SPEC.md, plan.md, todo.md
     decisions.tsv   show-me-your-work decision log for unattended runs
     MAP.md          capability map, only when the work is split into modules
     <module>/       one module: SPEC.md, plan.md, todo.md
@@ -38,6 +38,7 @@ Other skills name repo paths. Write these to the KB instead, whether or not the 
 | `docs/adr/`, `docs/decisions/` | `<kb>/adr/` |
 | `GLOSSARY.md` (and `<context>/GLOSSARY.md`) | `<kb>/GLOSSARY.md` (`<kb>/<context>/GLOSSARY.md`) |
 | `CONSTRAINTS.md` | `<kb>/CONSTRAINTS.md` |
+| `docs/intent/<topic>.md` | `<work>/INTENT.md` |
 | `SPEC.md`, `tasks/plan.md`, `tasks/todo.md` | `<work>/SPEC.md`, `<work>/plan.md`, `<work>/todo.md` |
 | capability map, `SPEC-<module>.md` | `<kb>/work/<slug>/MAP.md`, `<kb>/work/<slug>/<module>/SPEC.md` |
 | a line added to `CLAUDE.md` / `AGENTS.md` | a line in `<kb>/RULES.md` |
@@ -112,7 +113,7 @@ The rules file `context-engineering` describes (tech stack, commands, convention
 
 ### adr/, CONSTRAINTS.md, work/
 
-Written by `documentation-and-adrs`, `constraint-driven-development`, `spec-driven-development`, `planning-and-task-breakdown` and `show-me-your-work` using their own formats, at the KB paths in the table above.
+Written by `principle-documentation-and-adrs`, `principle-constraint-driven-development`, `spec-driven-development`, `planning-and-task-breakdown` and `show-me-your-work` using their own formats, at the KB paths in the table above.
 
 `CONSTRAINTS.md` in the KB is enforced by the agent only: run the commands it lists, and do not add check scripts to the repo's `package.json` or CI unless the user asks. Add `Read <kb>/CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.` to RULES.md.
 

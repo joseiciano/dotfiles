@@ -109,6 +109,18 @@
       ],
       "mcps": []
     },
+    "readonly-task": {
+      "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
+      "fallback_models": [
+        "workers-ai/@cf/moonshotai/kimi-k2.7-code",
+        "cloudflare-ai-gateway/workers-ai/@cf/moonshotai/kimi-k2.6",
+        "cloudflare-workers-ai/@cf/zai-org/glm-5.2"
+      ],
+      "variant": "medium",
+      "temperature": 0.1,
+      "skills": [],
+      "mcps": []
+    },
     "reviewer": {
       "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
       "fallback_models": [
@@ -141,7 +153,7 @@
     "security-reviewer": {
       "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
       "skills": [
-        "security-and-hardening"
+        "principle-security-and-hardening"
       ]
     },
     "sonic": {
@@ -159,14 +171,14 @@
         "controller-service-repo",
         "agents-sdk",
         "better-auth-best-practices",
-        "smart-dumb-component",
+        "principle-frontend-ui-engineering",
         "neon-postgres",
         "durable-objects",
         "workers-best-practices",
         "wrangler",
         "tanstack",
         "sandbox-sdk",
-        "performance-optimization",
+        "principle-performance-optimization",
         "test-driven-development"
       ],
       "mcps": [
@@ -192,7 +204,7 @@
     "web-performance-auditor": {
       "model": "cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813",
       "skills": [
-        "performance-optimization",
+        "principle-performance-optimization",
         "browser-testing-with-devtools"
       ],
       "mcps": [

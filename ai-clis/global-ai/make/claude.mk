@@ -15,11 +15,8 @@ build-claude:
 	$(RENDER) claude --out $(CLAUDE_OUT)/agents
 	$(RENDER) prompt $(APPEND_SYSTEM) $(CLAUDE_OUT)/APPEND_SYSTEM.md
 	cp -R $(SETUP_DIR)/claude-specific/hooks $(CLAUDE_OUT)/hooks
-	cp $(WORKFLOWS_SETUP)/*/*.js $(CLAUDE_OUT)/workflows/
-	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/skills $(CLAUDE_OUT)/skills --references $(SKILLS_SETUP)/addyskills/references
-	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/addyskills/skills $(CLAUDE_OUT)/skills --references $(SKILLS_SETUP)/addyskills/references
-	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/mattskills/skills $(CLAUDE_OUT)/skills
-	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/pstack/skills $(CLAUDE_OUT)/skills
+	if [ -d $(WORKFLOWS_SETUP) ]; then find $(WORKFLOWS_SETUP) -mindepth 2 -maxdepth 2 -name '*.js' -exec cp {} $(CLAUDE_OUT)/workflows/ \;; fi
+	bun $(SKILLS_SETUP)/copy-skills.js $(SKILLS_SETUP)/skills $(CLAUDE_OUT)/skills --references $(SETUP_DIR)/references
 	if [ -d $(SEEDED_COMMANDS) ]; then cp -R $(SEEDED_COMMANDS)/. $(CLAUDE_OUT)/commands/; fi
 	$(SKILLS_SETUP)/generate-skill-commands.sh $(CLAUDE_OUT)/skills $(CLAUDE_OUT)/commands
 	$(SKILLS_SETUP)/strip-command-flags.sh $(CLAUDE_OUT)/skills

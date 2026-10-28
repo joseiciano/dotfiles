@@ -166,7 +166,7 @@ Balance: respect dependencies, avoid parallelizing what must be sequential.
 ## 6. Verify
 - Have @sonic run the project's typecheck, lint, and tests
 - Send finished changes to @reviewer
-- Suggest `code-simplification` skill when applicable
+- Suggest `principle-code-simplification` skill when applicable
 - Confirm specialists completed successfully
 - Verify solution meets requirements
 

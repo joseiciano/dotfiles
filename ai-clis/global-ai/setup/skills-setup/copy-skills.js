@@ -9,8 +9,8 @@
 // (README.md, ...) are skipped.
 //
 // With --references, links in the copied markdown that resolve into the shared
-// references dir (e.g. `../../references/security-checklist.md` from a
-// SKILL.md, or `../../../addyskills/references/...` from one of our own skills)
+// references dir (e.g. `../../../references/definition-of-done.md` from a
+// SKILL.md in skills-setup/skills/<skill>/, or `../../../../references/...` from its references/)
 // are inlined: the file is copied into the skill's own references/
 // folder and the link is rewritten to point at the copy. A link into the shared
 // dir that names a missing file, or a copy that would clash with a different
@@ -44,8 +44,8 @@ const walk = (dir) =>
     return e.isDirectory() ? walk(p) : [p];
   });
 
-// Relative paths that end in references/<file>.md, e.g. ../../references/x.md
-// or ../../../addyskills/references/x.md; only ones resolving into the shared
+// Relative paths that end in references/<file>.md, e.g. ../../../references/x.md
+// or ../../../../references/x.md; only ones resolving into the shared
 // dir are inlined.
 const SHARED_LINK = /(?:\.\.\/)+(?:[A-Za-z0-9._-]+\/)*references\/([A-Za-z0-9._-]+\.md)/g;
 

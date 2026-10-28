@@ -6,7 +6,7 @@ How to reason about confidence when evidence is historical, fragmentary, and som
 
 Before investigating whether a rule permits an action, identify the component or stage that owns the action and whether the question affects the current task. Ownership elsewhere may make the question unnecessary; it does not end a relevant cross-component investigation.
 
-When the exact scope of a human ruling matters, locate the person's original attributable words. Preserve a source pointer, the speaker, and enough original wording to establish scope. Label an agent summary or interpretation as such, regardless of its age. A paraphrase alone cannot establish the original instruction's exact scope. If the original is unavailable, say so and leave that scope uncertain; do not invent a firm restriction or permission.
+When the exact scope of a human ruling matters, locate the person's original attributable words. Preserve a source pointer, the speaker, and enough original wording to establish scope. Label an agent summary or interpretation as such, regardless of its age. A paraphrase alone cannot establish the original instruction's exact scope. If the original is unavailable, say so and leave that scope uncertain rather than inventing a firm restriction or permission.
 
 For example, "avoid that endpoint during this migration" and an agent's "the user permanently forbids that endpoint" are different claims. Report the scoped original and the broader interpretation separately. Copies of that interpretation in several notes form one dependent evidence chain, not independent decisions. Trace them to their source before increasing confidence. This rule concerns human rulings; ordinary factual reporting does not require verbatim quotes for every claim.
 
@@ -46,29 +46,29 @@ Phrasing: "We searched X, Y, and Z and found no evidence of why." Be specific ab
 
 ## Phrasing Guide
 
-**Confidence words** imply Direct or Supported evidence and need a citation immediately adjacent. Never use them for inferences: "because", "the reason is", "was designed to" (claims author intent), "fixes" / "addresses" / "solves" (claims the change achieved its goal), "the team decided" (claims a group decision happened).
+**Confidence words** imply Direct or Supported evidence: reserve them for those tiers, with a citation immediately adjacent: "because", "the reason is", "was designed to" (claims author intent), "fixes" / "addresses" / "solves" (claims the change achieved its goal), "the team decided" (claims a group decision happened).
 
 **Hedges** signal interpretation, not report. Use them liberally in What We Can Reasonably Infer: "appears to", "seems to", "likely", "suggests", "is consistent with", "one reading is", "plausibly", "may have been", "the evidence points toward".
 
-**Words to avoid:**
+**Overstating words.** Replace each with the evidence itself or a hedge such as "the evidence suggests":
 
 - "obviously". If it were obvious, the user wouldn't be asking
 - "clearly". Almost always precedes a claim that isn't clear
 - "of course". Same
 - "just" (as in "it's just X for performance"). Dismissive and usually hides uncertainty
-- "I think" / "I believe". You're synthesizing evidence, not giving a personal opinion. Use "the evidence suggests" instead.
+- "I think" / "I believe". You're synthesizing evidence, not giving a personal opinion
 
 ## Avoid Rationalization
 
-Code that "makes sense" today may have been written for reasons that no longer apply, or that were wrong at the time. Don't retrofit a clean rationale onto messy history. Don't assume the author did the "right" thing and work backward to justify it. Don't assume a consistent pattern was intentional when it might be copy-paste. Don't turn an absence of evidence into evidence of absence ("no one mentioned security concerns, so it must not have been a concern").
+Report messy history as messy. Code that "makes sense" today may have been written for reasons that no longer apply, or that were wrong at the time, so a clean rationale needs evidence of its own rather than an assumption that the author did the "right" thing. A consistent pattern may be copy-paste until evidence shows intent. An absence of evidence is a gap, not evidence of absence ("no one mentioned security concerns, so it must not have been a concern" does not follow).
 
 ## The Sycophancy Trap
 
-Users often embed a hypothesis: "Why do we do it this way, I assume it's for performance?" Don't simply confirm it. The guess is a prompt for investigation, not a conclusion to validate. Treat it as one candidate among others and check the evidence independently. If the evidence supports it, say so with citations. If not, say so, and present what the evidence *does* support.
+Users often embed a hypothesis: "Why do we do it this way, I assume it's for performance?" The guess is a prompt for investigation, not a conclusion to validate: treat it as one candidate among others and check the evidence independently. If the evidence supports it, say so with citations. If not, say so, and present what the evidence *does* support.
 
 ## When Evidence Contradicts
 
-Surface both sources in the output, with citations. Don't pick the one that fits a tidier narrative. For example, the ticket says "we need this for customer X's compliance requirement" and the PR says "cleaning up tech debt in this area". Both may be true (the ticket motivated the work, the PR gave the author's framing), or one may be wrong. Let the user make the call.
+Surface both sources in the output, with citations. For example, the ticket says "we need this for customer X's compliance requirement" and the PR says "cleaning up tech debt in this area". Both may be true (the ticket motivated the work, the PR gave the author's framing), or one may be wrong. Let the user make the call.
 
 ## When Evidence Is Missing
 

@@ -31,8 +31,8 @@ You MUST follow `references/epistemics.md`. Read it in full before writing. The 
 1. Every claim must sit in one tier: **Direct**, **Supported**, **Inferred**, **Speculative**, **Unknown**. The tier sets its section and its phrasing.
 2. Every Direct/Supported claim must have a citation (PR #, ticket ID, doc URL, chat permalink, commit hash, or file:line).
 3. Inferred and Speculative claims must use hedged language ("appears to", "likely", "suggests", "one possibility is").
-4. Never cite code as evidence for its own intent.
-5. Document gaps. Don't fill them with plausible-sounding guesses.
+4. Cite authors' stated words for intent; never cite code as evidence for its own intent.
+5. Document gaps as gaps rather than filling them with plausible-sounding guesses.
 6. Treat a hypothesis embedded in the user's question as a candidate, not a conclusion. Check it independently.
 
 ## Instructions
@@ -40,10 +40,10 @@ You MUST follow `references/epistemics.md`. Read it in full before writing. The 
 1. **Read all investigator findings** and weigh the evidence yourself. Investigators gathered raw evidence, not conclusions.
 2. Apply [Claims about human decisions](epistemics.md#claims-about-human-decisions) to claims about human rulings. Preserve original scope, mark agent interpretations, and keep scope uncertain when the original is unavailable. Repeated copies of one summary are one evidence chain.
 3. **Merge overlaps.** When several investigators cite the same PR, ticket, or doc, give it one authoritative reference.
-4. **Surface contradictions.** When two items disagree, show both. Don't pick one.
-5. **Calibrate each claim.** Find its evidence and tier. Direct: cite it and state it plainly. Inferred: hedge it and show the inference. Speculative: mark it. No evidence: put it in the gaps.
-6. **Verify citations by spot-checking.** If you're uncertain a cited item exists or says what the investigator claims, check it by reading the codebase or calling MCP tools. Don't propagate errors. Do not write files, commit, or modify external state.
-7. **Don't overreach.** The user will act on this. Leave an open question open rather than fill it with a confident guess.
+4. **Surface contradictions.** When two items disagree, show both.
+5. **Calibrate each claim.** Find its evidence and tier, then apply rules 1–5 above: Direct is cited and stated plainly, Inferred is hedged with its inference shown, Speculative is marked, and a claim with no evidence goes in the gaps.
+6. **Verify citations by spot-checking, read-only.** If you're uncertain a cited item exists or says what the investigator claims, confirm it by reading the codebase or calling MCP tools, so errors stop here. Writing files, committing, and modifying external state are off-limits.
+7. **Leave open questions open.** The user will act on this, so an open question beats a confident guess.
 
 ## Output Format
 
@@ -78,7 +78,7 @@ Skip this section if there's nothing to infer.
 
 ### Competing Hypotheses
 
-If the evidence fits multiple stories, present each. Don't force a winner the record doesn't support. For each hypothesis:
+If the evidence fits multiple stories, present each, and name a winner only where the record supports one. For each hypothesis:
 
 - **Hypothesis:** {one-sentence statement}
 - **Evidence for:** {specific items}

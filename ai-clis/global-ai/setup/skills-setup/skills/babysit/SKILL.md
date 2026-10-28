@@ -5,7 +5,8 @@ description: Watch an open PR — fix failing CI, handle the straightforward rev
 
 # Babysit a PR
 
-Loop over an existing change using the `gh` CLI plus the Claude Code `loop` skill for pacing.
+
+Loop over an existing change using the `loop` skill for pacing to keep track of the work in the project's version control. 
 
 ## When to use
 
@@ -13,13 +14,20 @@ Loop over an existing change using the `gh` CLI plus the Claude Code `loop` skil
 - The user invokes `/babysit` directly.
 - A subagent that opens a PR does NOT babysit — return to the parent and let the parent decide.
 
-## Steps
+## Version Control 
 
-1. **Fetch PR state.**
+Identify the version control from the repository being used. 
 
+If using Github, use the Github cli to track changes: 
    ```bash
    gh pr view <number> --json number,title,state,mergeable,reviewDecision,statusCheckRollup,mergeStateStatus,comments,reviews
    ```
+
+If using Gitlab, use the equivalent Gitlab cli commands to track changes. 
+
+## Steps
+
+1. **Fetch PR state.**
 
 2. **Triage in priority order.**
    - Merge conflicts (`mergeStateStatus == DIRTY`): run the **fix-merge-conflicts** skill. Force-push only if the branch is yours and not shared.
@@ -27,7 +35,7 @@ Loop over an existing change using the `gh` CLI plus the Claude Code `loop` skil
    - Review comments: run the **get-pr-comments** skill for the summary, then act only on feedback you actually agree with. When a comment has a single mechanical answer — a rename, a guard clause, a formatting nit — make the edit and quote the comment in the commit message. When it hinges on a judgement call, or you can't tell what's being asked, don't guess: leave it and reply with what you would have done.
 
 3. **Loop.** Use the Claude Code `loop` skill to pace re-checks. Pick the interval from what you're watching:
-   - Active CI run: poll `gh pr checks --watch` (it blocks until checks finish, so no separate loop interval needed).
+   - Active CI run: poll the pr (it blocks until checks finish, so no separate loop interval needed).
    - Awaiting reviewer: 20–30 min heartbeat.
    - Idle but want to catch new comments: hourly.
 
@@ -44,11 +52,11 @@ Loop over an existing change using the `gh` CLI plus the Claude Code `loop` skil
 - Don't tweak a test's expected values just to get a pass. Only change an assertion when the behaviour genuinely changed and the assertion was pinned to the old behaviour.
 - Never skip hooks (`--no-verify`).
 - Never bypass a failing check by marking it as not required.
-- `gh pr ready` only when all checks are green and no unresolved review comments remain.
+- When all checks are green and no unresolved review comments remain, mark the PR as ready. 
 
 ## Cross-refs
 
-- Opening a PR does not start a babysit; inside poteto-mode the Babysit playbook owns the request and starts only when asked.
+- Opening a PR does not automatically start a babysit. 
 - Use `interrogate` before opening if the diff is contested; once open, babysit takes over.
 - Use `unslop` on any prose you write here (PR comments, commit messages, status reports).
 

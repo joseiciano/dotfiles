@@ -5,7 +5,7 @@ claude:
   model: claude-opus-5-5
   tools: "Read, Grep, Glob, Bash, Skill"
   skills: 
-    - security-and-hardening
+    - principle-security-and-hardening
 opencode: 
   model: cloudflare-workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813
   mode: subagent
@@ -19,7 +19,7 @@ opencode:
       "*.env.example": deny
     bash: allow
   skills: 
-    - security-and-hardening
+    - principle-security-and-hardening
   shared: 
     - coding-shared
 omp: 

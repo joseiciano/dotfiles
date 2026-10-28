@@ -13,7 +13,7 @@ build-omp:
 	$(RENDER) omp --out $(OMP_OUT)/agents
 	$(RENDER) prompt $(APPEND_SYSTEM) $(OMP_OUT)/APPEND_SYSTEM.md
 	cp -R $(SETUP_DIR)/omp-specific/extensions $(OMP_OUT)/extensions
-	cp $(WORKFLOWS_SETUP)/*/* $(OMP_OUT)/workflows/
+	if [ -d $(WORKFLOWS_SETUP) ]; then find $(WORKFLOWS_SETUP) -mindepth 2 -maxdepth 2 -type f -exec cp {} $(OMP_OUT)/workflows/ \;; fi
 
 # Link only after the build completes, even under `make -j`.
 install-omp: build-omp

@@ -25,7 +25,7 @@
 #      run's copy is left intact.
 #  10. A link that climbs out of the skill and back down through intermediate
 #      folders (`../../../../../addy/references/<f>.md` from a nested
-#      references/<sub>/guide.md, as own skills link addyskills/references) is
+#      references/<sub>/guide.md, as own skills link setup/references) is
 #      inlined into the skill's references/ and rewritten relative to the
 #      linking file; the same shape from SKILL.md is rewritten too.
 #  11. An intermediate-folder link to an existing file outside the shared dir

@@ -26,6 +26,14 @@ Answer what was asked, then stop. End the reply on the result. Behavior that fol
 - Repeat the user's instructions back to them. 
 - Show "one thing to know" when we already answered the question. 
 
+### The task boundary
+
+The user's request defines the **task**. Report and ask only about what the task changed or needs. The rest of the repo (untracked folders, half-done migrations, build wiring, tests already failing for other reasons) is the user's **in-flight work**: they know it exists and raise it when they want to.
+
+- When the task follows a pattern from in-flight work, follow the pattern and stop. Gaps the pattern already has belong to the pattern, not the task.
+- Advice from an advisor, reviewer, or subagent does not widen the task.
+- Raise in-flight work only when the task cannot finish without a decision about it, and then as one line, not a closing question.
+
 ## Plain words, not jargon
 
 Avoid technical jargon when possible.

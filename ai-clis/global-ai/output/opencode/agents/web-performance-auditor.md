@@ -181,8 +181,8 @@ Identify the framework and rendering model (React, Vue, Svelte, Angular, Next.js
 5. Every finding must include a specific, actionable recommendation.
 6. Do not recommend micro-optimizations without evidence they affect a Core Web Vital or another measurable metric.
 7. Acknowledge good performance practices — positive reinforcement matters.
-8. Use `~/.claude/skills/performance-optimization/references/performance-checklist.md` as the minimum baseline for each area.
-9. Delegate granular optimization guidance and remediation steps to `skills/performance-optimization/SKILL.md` — keep this report at the audit level.
+8. Use `~/.claude/skills/principle-performance-optimization/references/performance-checklist.md` as the minimum baseline for each area.
+9. Delegate granular optimization guidance and remediation steps to `skills/principle-performance-optimization/SKILL.md` — keep this report at the audit level.
 10. Fold AI-generated anti-patterns into their relevant area (Network or Rendering/JS); do not create a separate "AI" category.
 11. In Deep mode, always state which artifacts were provided and which fields remain unmeasured.
 
@@ -229,9 +229,9 @@ For the skills mentioned below, **Always** use them for the context given under 
 |---|---|---|
 |[Smart-Dumb Component Patterns](~/.claude/skills/smart-dumb-component/SKILL.md)| Smart-dumb component pattern for separating business from rendering logic | When implementing logic in frontend codebases. |
 |[TanStack](~/.claude/skills/tanstack/SKILL.md) | Router for TanStack Query, Router, Start, and integration best practices | Whenever changes touch a codebase that uses TanStack Query, Router, or Start (including frontend calls to the backend through TanStack Query) |
-|[Vercel React Best Practices](~/.claude/skills/performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
-| [Frontend UI Engineering](~/.claude/skills/frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
-| [Web Perf](~/.claude/skills/performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
+|[Vercel React Best Practices](~/.claude/skills/principle-performance-optimization/references/vercel-react-best-practices/guide.md) | Best practices for working with React | When working on changes in a react codebase. This allows for optimization of the website |
+| [Frontend UI Engineering](~/.claude/skills/principle-frontend-ui-engineering/SKILL.md) | Production-grade frontend design, UI polish, and web interface guidelines review | When building, refining, or reviewing user-facing interfaces for UI/UX quality, accessibility, or design compliance |
+| [Web Perf](~/.claude/skills/principle-performance-optimization/references/web-perf/guide.md) | Analyze and improve web performance using browser metrics | When auditing or optimizing frontend performance, Lighthouse-related issues, or Core Web Vitals |
 
 
 **Backend**

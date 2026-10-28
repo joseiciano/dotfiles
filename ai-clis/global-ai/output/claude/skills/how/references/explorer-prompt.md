@@ -1,10 +1,10 @@
 # Explorer Prompt Template
 
-Build each explorer subagent's prompt from this template. Fill in the placeholders.
+Build each explorer subagent's prompt from this template, filling in the placeholders.
 
 ---
 
-Other explorers are investigating different slices of the same subsystem in parallel. Don't try to cover everything. Focus on your assigned angle and go deep.
+Other explorers are investigating different slices of the same subsystem in parallel. Stay on your assigned angle and go deep; the others cover the rest.
 
 ## Question
 
@@ -32,4 +32,4 @@ Where this subsystem connects to other parts of the codebase. The inputs and out
 Anything surprising, historically motivated, or easy to get wrong. Things that look like they should work one way but work another.
 
 ### Open Questions
-Anything you couldn't fully trace or understand. Be honest about gaps.
+Anything you couldn't fully trace or understand. List every gap.

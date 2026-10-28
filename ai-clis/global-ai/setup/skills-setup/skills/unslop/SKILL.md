@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: "Cut AI tells from prose: docs, READMEs, PR descriptions, commit messages, and chat replies. Use for 'unslop' or when writing or editing text. For AI-generated patterns in code, use code-simplification."
+description: "Cut AI tells from prose: docs, READMEs, PR descriptions, commit messages, and chat replies. Use for 'unslop' or when writing or editing text. For AI-generated patterns in code, use principle-code-simplification."
 ---
 
 # Unslop

@@ -25,15 +25,12 @@
 #      its source dir name.
 #  7a. Every setup/skills-setup/addyskills/skills/<skill>/ dir is copied into
 #      output/claude/skills alongside the own skills, with links into
-#      addyskills/references/ inlined into the skill's own references/;
+#      setup/references/ inlined into the skill's own references/;
 #      addyskills/README.md is not copied. (copy-skills.js details live in
 #      test-copy-skills.sh.)
 #  7b. Every setup/skills-setup/mattskills/skills/<skill>/ dir (with its
 #      sidecar files) is copied into output/claude/skills alongside the
 #      others; mattskills/README.md is not copied.
-#  7c. Every setup/skills-setup/pstack/skills/<skill>/ dir (with its
-#      references/) is copied into output/claude/skills alongside the others;
-#      pstack/README.md is not copied.
 #
 # Every skill source dir that make/claude.mk passes to copy-skills.js is
 # emptied in the fixture, so a newly added source cannot leak live skills into
@@ -77,7 +74,7 @@ SKILLS_SRC="$GAI/setup/skills-setup/skills"
 SEEDED="$GAI/setup/command-setup/command"
 ADDY_SRC="$GAI/setup/skills-setup/addyskills"
 MATT_SRC="$GAI/setup/skills-setup/mattskills"
-PSTACK_SRC="$GAI/setup/skills-setup/pstack"
+SHARED_SRC="$GAI/setup/references"
 
 # --- fixture: mirror real repo layout (Makefile, make/ and setup trees) ---
 mkdir -p "$GAI"
@@ -101,8 +98,8 @@ for src in $SKILL_SOURCES; do
   rm -rf "${GAI:?}/setup/skills-setup/$src"
   mkdir -p "$GAI/setup/skills-setup/$src"
 done
-rm -rf "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC" "$PSTACK_SRC"
-mkdir -p "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC" "$PSTACK_SRC"
+rm -rf "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC"
+mkdir -p "$SKILLS_SRC" "$SEEDED" "$ADDY_SRC" "$MATT_SRC"
 
 # 1. command-enabled: frontmatter declares command: true -> command generated.
 mkdir -p "$SKILLS_SRC/command-enabled"
@@ -143,10 +140,10 @@ For reference, command: true appears in this body but never in the
 frontmatter, so it must not enable a generated command.
 MD
 
-# 7a. imported addyskills (upstream layout): skills/<skill>/ + shared
-#     references/ + a README.md that is not a skill.
+# 7a. imported addyskills: skills/<skill>/ linking the shared
+#     setup/references/ + a README.md that is not a skill.
 mkdir -p "$ADDY_SRC/skills/addy-alpha/references" "$ADDY_SRC/skills/addy-beta" \
-  "$ADDY_SRC/references"
+  "$SHARED_SRC"
 cat > "$ADDY_SRC/skills/addy-alpha/SKILL.md" <<'MD'
 ---
 name: addy-alpha
@@ -154,12 +151,12 @@ description: Imported skill with its own checklist and a shared one.
 ---
 
 See [the checklist](references/checklist.md) and
-[the shared checklist](../../references/shared-checklist.md).
+[the shared checklist](../../../../references/shared-checklist.md).
 MD
 cat > "$ADDY_SRC/skills/addy-alpha/references/checklist.md" <<'MD'
 - [ ] Imported checklist item.
 MD
-cat > "$ADDY_SRC/references/shared-checklist.md" <<'MD'
+cat > "$SHARED_SRC/shared-checklist.md" <<'MD'
 - [ ] Shared checklist item.
 MD
 cat > "$ADDY_SRC/skills/addy-beta/SKILL.md" <<'MD'
@@ -190,24 +187,6 @@ Sidecar format doc.
 MD
 cat > "$MATT_SRC/README.md" <<'MD'
 # mattskills (imported) -- not a skill
-MD
-
-# 7c. imported pstack: skills/<skill>/ with a references/ doc + a README.md
-#     that is not a skill.
-mkdir -p "$PSTACK_SRC/skills/pstack-delta/references"
-cat > "$PSTACK_SRC/skills/pstack-delta/SKILL.md" <<'MD'
----
-name: pstack-delta
-description: Imported pstack skill with a reference doc.
----
-
-Read [the prompt](references/prompt.md).
-MD
-cat > "$PSTACK_SRC/skills/pstack-delta/references/prompt.md" <<'MD'
-Reference prompt.
-MD
-cat > "$PSTACK_SRC/README.md" <<'MD'
-# pstack (imported) -- not a skill
 MD
 
 # 6. seeded command copied verbatim.
@@ -292,10 +271,8 @@ check_content "seeded command copied verbatim" \
   "$OUT_CMDS/seeded-cmd.md" "$SEEDED/seeded-cmd.md"
 
 # --- 7/7a. own + imported skills under their source names; README.md is not ---
-check_listing "output/claude/skills holds own + addyskills + mattskills + pstack skills, no README.md" \
-  "$OUT_SKILLS" "addy-alpha addy-beta body-only command-disabled command-enabled matt-gamma pstack-delta "
-check "pstack skill copied with its references/ verbatim" \
-  diff -r "$PSTACK_SRC/skills/pstack-delta" "$OUT_SKILLS/pstack-delta"
+check_listing "output/claude/skills holds own + addyskills + mattskills skills, no README.md" \
+  "$OUT_SKILLS" "addy-alpha addy-beta body-only command-disabled command-enabled matt-gamma "
 check_listing "mattskills skill copied with its sidecar files" \
   "$OUT_SKILLS/matt-gamma" "FORMAT.md SKILL.md "
 check_content "mattskills skill copied verbatim" \
@@ -305,7 +282,7 @@ check_content "imported skill keeps its own references/ file" \
   "$ADDY_SRC/skills/addy-alpha/references/checklist.md"
 check_content "imported skill's shared checklist inlined into its references/" \
   "$OUT_SKILLS/addy-alpha/references/shared-checklist.md" \
-  "$ADDY_SRC/references/shared-checklist.md"
+  "$SHARED_SRC/shared-checklist.md"
 check "imported skill links the inlined copy, not the shared dir" \
   grep -qF '(references/shared-checklist.md)' "$OUT_SKILLS/addy-alpha/SKILL.md"
 check_content "second addyskills skill copied verbatim" \

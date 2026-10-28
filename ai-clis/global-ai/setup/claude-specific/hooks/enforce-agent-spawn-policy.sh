@@ -27,7 +27,7 @@ subagent_type="$(jq -r '.tool_input.subagent_type' <<<"$input")"
 # accident.
 if [[ -z "$agent_id" ]]; then
   case "$subagent_type" in
-    scout|librarian|Plan|product-manager|designer|reviewer|tester|sonic|task|council|security-reviewer|web-performance-auditor|comment-sicko)
+    scout|librarian|Plan|product-manager|designer|reviewer|tester|sonic|task|readonly-task|council|security-reviewer|web-performance-auditor|comment-sicko)
       exit 0
       ;;
     *)

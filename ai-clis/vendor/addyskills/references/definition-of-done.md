@@ -1,12 +1,12 @@
 # Definition of Done
 
-A standing, project-wide bar that every change must clear before it counts as done. Unlike acceptance criteria, which vary per task and answer "did we build the right thing?", the Definition of Done is the same every time and answers "is this finished to our standard?". Use it as the final gate in `planning-and-task-breakdown`, `incremental-implementation`, and `shipping-and-launch`.
+Answers the question "is this project finished to our standard". To be used for understanding globally, what is needed to say something is done. 
 
 ## Definition of Done vs. Acceptance Criteria
 
 | | Acceptance Criteria | Definition of Done |
 |---|---|---|
-| Scope | Specific to one task or spec | Applies to every increment |
+| Scope | Specific to one task or spec | Applies to any step of the process |
 | Changes | Different for each item | Fixed and reused |
 | Answers | "Did we build *this thing*?" | "Is it *ready*?" |
 | Owner | Defined when planning the task | Defined once for the project |

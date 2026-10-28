@@ -1,13 +1,13 @@
 ---
 name: how
-description: "Use for \"how does X work\", code walkthroughs before changing something, and placement / ownership / layering questions (\"where should this live\", \"which package owns this\", \"is this the right layer\"). Explains subsystem architecture, runtime flow, onboarding mental models. Use why for motivation."
+description: "Explains how code works: runtime flow, subsystem architecture, a walkthrough before changing something. Use for \"how does X work\" and placement questions (\"where should this live\"). Use why for motivation."
 ---
 
 # How
 
-Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
+Explore the codebase to answer "how does X work?" questions. Pitch the explanation at a senior engineer onboarding onto a subsystem: a working mental model, at the altitude of architecture rather than annotated source.
 
-Explorers are `scout` subagents. The explainer is a `task` subagent; tell it to read and explain only, and not to edit any file.
+Explorers are `scout` subagents. The explainer is a `task` subagent; tell it to read and explain only, leaving every file unedited.
 
 ## 1. Assess complexity
 
@@ -24,12 +24,8 @@ Decompose the question into 2 to 4 angles, each a distinct slice of the subsyste
 
 ## 3. Synthesize (complex only)
 
-Once all explorers have returned, spawn one explainer with `references/explainer-prompt.md` and every explorer's findings filled in.
+Once every explorer has returned, spawn one explainer with `references/explainer-prompt.md` and every explorer's findings filled in.
 
 ## 4. Present
 
-Present the explainer's output. Light edits for clarity or context from the conversation are fine. Do not substantially rewrite it.
-
-## Output format
-
-The explanation uses the sections defined in `references/explainer-prompt.md`, dropping any that do not apply: Overview, Key Concepts, How It Works, Where Things Live, Gotchas.
+Present the explainer's output in the section structure `references/explainer-prompt.md` defines. Keep its substance as written; light edits for clarity or context from the conversation are fine.

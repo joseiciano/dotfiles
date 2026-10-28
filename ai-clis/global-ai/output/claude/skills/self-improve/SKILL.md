@@ -9,14 +9,11 @@ disable-model-invocation: true
 
 Arguments: `$ARGUMENTS`
 
-Only run this skill when the user calls it manually. Do not trigger it on your own.
-
 ## Rules for every mode
 
 - Call the Skill tool with `writing-for-agents` and read its `SKILL-MECHANICS.md` before you write anything. Its rules govern every skill or steering file you write.
-- Skills live in `~/dotfiles/ai-clis/global-ai/setup/skills-setup/skills/`. Add new skills there and edit existing ones there.
-- Before you add a skill, search the installed skills for one that already covers the topic. Extending a skill beats adding one.
-- After you change any skill, run `make install-claude` from `~/dotfiles/ai-clis`.
+- Skills live in `~/dotfiles/ai-clis/global-ai/setup/skills-setup/skills/`. Add and edit skills there.
+- After you change any skill, run `make install-claude` from `~/dotfiles/ai-clis`. The mode is done when it exits cleanly.
 
 ## Choose the mode
 
@@ -38,7 +35,7 @@ Run a retrospective on a coding session and suggest improvements to the agent's 
 Write a new skill for the topic.
 
 1. If the topic is empty, ask the user for it.
-2. Search the skill suite for skills that already cover the topic. If extending one of them is just as good, switch to Apply and extend it.
+2. Search the installed skills for ones that already cover the topic. Extending a skill beats adding one, so if extending is just as good, switch to Apply and extend it.
 3. Choose the invocation mode. Make the skill model-invoked only if the agent or another skill must reach it unprompted. Otherwise make it user-invoked with `disable-model-invocation: true`.
 4. Write the skill.
 

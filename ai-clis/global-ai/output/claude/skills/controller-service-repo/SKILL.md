@@ -1,182 +1,45 @@
 ---
 name: controller-service-repo
-description: Enforces the Controller-Service-Repository backend pattern.
+description: Controller-Service-Repository layering for backend code. Use when adding or refactoring a backend endpoint, route, or feature package.
 author: joseiciano
-version: "1.0.0"
+version: "1.1.0"
 ---
 
-# Controller-Service-Repository Pattern
+# Controller-Service-Repository
 
-Use this skill when implementing or refactoring backend code inside a package.
+Each backend feature is one package split into three **layers**. Dependencies run one way: controller → service → repository. A layer calls only the layer below it.
 
-The examples below use typescript, but this pattern is extendable for any language. 
-
-## Goal
-
-Always structure backend features using **Controller → Service → Repository**.
-This keeps concerns separated, improves testability, and makes code easier to maintain.
-
-## Package Structure
+## Package layout
 
 ```text
-packages/
-└─ foo/
-   ├─ foo-controller.ts
-   ├─ foo-service.ts
-   ├─ foo-repository.ts
-   ├─ types.ts
-   └─ index.ts
+foo/
+├─ foo-controller.ts
+├─ foo-service.ts
+├─ foo-repository.ts
+├─ types.ts
+└─ index.ts      # barrel: re-exports the package
 ```
 
-## Layer Responsibilities
+Match the repo's existing file naming and extension where it differs; the three-layer split and the barrel are the fixed part.
 
-### 1) Controller (HTTP boundary)
+## Layers
 
-- Defines routes.
-- Parses and validates request inputs (path params, query params, body).
-- Converts framework request/response objects into plain service inputs.
-- Calls service layer.
-- Returns HTTP responses.
+### Controller: the HTTP boundary
 
-**Controller must not contain business logic or direct DB/API calls.**
+Owns routes, request parsing and input validation (path params, query, body), and HTTP responses. It converts framework request objects into plain service inputs, calls the service, and maps the result to a response. Business rules and data access live below it.
 
-### 2) Service (business logic)
+### Service: business logic
 
-- Handles validation and authorization checks.
-  - Example: authentication, permission checks, invariants.
-- Orchestrates use cases.
-- Shapes data for repository calls.
-- Calls repository layer.
+Owns authentication and permission checks, invariants, and use-case orchestration. It receives plain inputs, shapes data for the repository, and calls it. It works with domain shapes, leaving raw request objects to the controller and query details to the repository.
 
-**Service must not parse raw HTTP request objects and should avoid low-level query details.**
+### Repository: data access
 
-### 3) Repository (data access)
+Owns DB queries and external API calls, and maps raw persistence or API responses to domain shapes. Routing and authorization decisions stay in the layers above.
 
-- Handles low-level operations.
-  - DB queries
-  - External API calls
-- Maps raw persistence/API responses to domain-friendly shapes when needed.
+## Example
 
-**Repository must not contain route logic or authorization decisions.**
+For a full TypeScript package (Hono + Supabase), read [`references/typescript-example.md`](references/typescript-example.md).
 
-## TypeScript Example
+## Done when
 
-### `foo/types.ts`
-
-```ts
-export interface WorkerBindings {
-  SUPABASE_URL: string;
-  SUPABASE_ANON_KEY: string;
-}
-
-export interface FooInput {
-  userId: string;
-}
-
-export interface FooResult {
-  id: string;
-  userId: string;
-  createdAt: string;
-}
-```
-
-### `foo/foo-repository.ts`
-
-```ts
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { FooResult } from './types';
-
-export class FooRepository {
-  constructor(private readonly supabase: SupabaseClient) {}
-
-  async createFoo(userId: string): Promise<FooResult> {
-    const { data, error } = await this.supabase
-      .from('foos')
-      .insert({ user_id: userId })
-      .select('id, user_id, created_at')
-      .single();
-
-    if (error) throw error;
-
-    return {
-      id: data.id,
-      userId: data.user_id,
-      createdAt: data.created_at,
-    };
-  }
-}
-```
-
-### `foo/foo-service.ts`
-
-```ts
-import { FooRepository } from './foo-repository';
-import type { FooInput, FooResult } from './types';
-
-export class FooService {
-  constructor(private readonly fooRepository: FooRepository) {}
-
-  async createFoo(input: FooInput, context: { requesterId: string | null }): Promise<FooResult> {
-    if (!context.requesterId) {
-      throw new Error('Unauthorized');
-    }
-
-    if (context.requesterId !== input.userId) {
-      throw new Error('Forbidden');
-    }
-
-    return this.fooRepository.createFoo(input.userId);
-  }
-}
-```
-
-### `foo/foo-controller.ts`
-
-```ts
-import type { Hono } from 'hono';
-import type { SupabaseClient } from '@supabase/supabase-js';
-import { FooRepository } from './foo-repository';
-import { FooService } from './foo-service';
-import type { WorkerBindings } from './types';
-
-interface FooControllerOptions {
-  supabaseFactory: (bindings: WorkerBindings) => SupabaseClient;
-}
-
-export const registerFooController = (
-  app: Hono<{ Bindings: WorkerBindings }>,
-  options: FooControllerOptions,
-): void => {
-  app.post('/foo/:userId', async (c) => {
-    const userId = c.req.param('userId');
-    if (!userId) return c.json({ error: 'Missing userId' }, 400);
-
-    const supabase = options.supabaseFactory(c.env);
-    const repository = new FooRepository(supabase);
-    const service = new FooService(repository);
-
-    // Example: requesterId extracted from auth middleware/context.
-    const requesterId = c.get('requesterId') as string | null;
-
-    const result = await service.createFoo({ userId }, { requesterId });
-    return c.json(result, 201);
-  });
-};
-```
-
-### `foo/index.ts` (barrel)
-
-```ts
-export * from './types';
-export * from './foo-repository';
-export * from './foo-service';
-export * from './foo-controller';
-```
-
-## Rules to Enforce
-
-- Every backend feature should include controller, service, and repository files.
-- Controllers only parse inputs + map outputs.
-- Services own business logic and authorization checks.
-- Repositories own DB/API access.
-- Use `index.ts` as the package barrel export.
+Every feature you touched has all three layers and a barrel, each piece of logic sits in the layer that owns it, and every import points one way: controller → service → repository.
