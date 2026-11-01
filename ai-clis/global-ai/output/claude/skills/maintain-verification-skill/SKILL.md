@@ -12,8 +12,16 @@ A feature map rots the moment the app changes. This skill is the upkeep loop for
 Pick one, and say which:
 
 - **clean** — every feature got source and live coverage; nothing worth shipping. No branch, no PR.
-- **changed** — one PR ships proven doc, harness, or map corrections.
+- **changed** — one PR ships proven doc, harness, or map corrections (in [scoped mode](#scoped-mode), uncommitted fixes handed to the caller instead).
 - **blocked** — coverage could not finish or a proven fix could not ship safely. Say exactly what blocked it.
+
+## Scoped mode
+
+`verification-preflight` runs this skill on only the features a piece of work touches. The caller names those features (including any the map lacks). Every step below applies to that set instead of the whole map, with three changes:
+
+- Step 1 fixes only the index entries for the named features, adding an entry for each one the map lacks.
+- Step 3's churn sweep is skipped: the caller already named what is missing.
+- Step 6 opens no branch or PR. Leave the proven fixes uncommitted in the skill's directory and return the outcome, the changed files, and any product gaps; the caller commits them as the first `verify:` commit on its work branch.
 
 ## Edit scope
 

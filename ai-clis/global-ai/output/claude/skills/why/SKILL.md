@@ -1,6 +1,6 @@
 ---
 name: why
-description: "Investigates why code is the way it is: design rationale, tradeoffs, regressions, postmortems, data-backed thresholds. Use for \"why does X work this way\" or \"why did we pick Y\". Queries every available evidence source in parallel and returns a cited read. Use how for runtime behavior."
+description: "Investigates why code is the way it is: design rationale, tradeoffs, regressions, postmortems, data-backed thresholds. Use for \"why does X work this way\" or \"why did we pick Y\". Queries every available evidence source in parallel and returns a cited read. Use how for runtime behavior, blast-radius for what a change breaks."
 ---
 
 # Why

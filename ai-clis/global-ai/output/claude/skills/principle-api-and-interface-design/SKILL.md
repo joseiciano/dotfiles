@@ -95,7 +95,7 @@ app.post('/api/tasks', async (req, res) => {
 
 ### Additive change
 
-Change a published interface only by **adding**: new optional fields, new endpoints, new enum values consumers can ignore. Removing a field or changing its type breaks every consumer already reading it. When a breaking change is unavoidable, route it through `deprecation-and-migration`.
+Change a published interface only by **adding**: new optional fields, new endpoints, new enum values consumers can ignore. Removing a field or changing its type breaks every consumer already reading it. Before changing an existing interface, run `blast-radius` on the change for the consumer census, including consumers grep misses (serialized payloads, other languages, stored data). When a breaking change is unavoidable, route it through `deprecation-and-migration`.
 
 ```typescript
 interface CreateTaskInput {
@@ -117,6 +117,7 @@ After designing or changing an interface:
 - [ ] Every endpoint returns one success shape, and every error path returns the one error shape
 - [ ] Validation runs at every entry point that receives external input, including third-party responses
 - [ ] Every change to a published interface is additive, or is routed through `deprecation-and-migration`
+- [ ] Every change to an existing interface has a `blast-radius` consumer census
 - [ ] Every new name follows the conventions already in use, without exceptions
 - [ ] Types or schema docs are committed with the implementation
 - [ ] For REST endpoints, every check in [references/rest.md](references/rest.md) passes

@@ -24,7 +24,9 @@ Take one **ticket** (the unit `to-ticket` produces) from intake to a reviewed, c
 
 **Pick it up.** Apply `to-ticket`'s "Picking up a ticket" rule: re-read the code the ticket touches and refresh its Architecture Decisions and Task List in place. Keep the acceptance criteria fixed; if they no longer hold, raise it with the user before building.
 
-Done when you hold one ticket whose task list matches the current code.
+**Verification preflight.** Run [`verification-preflight`](../../../references/verification-preflight.md) for this ticket, every time, before Step 2. It creates or repairs the project's `verify` skill when needed and returns the ticket's verify plan.
+
+Done when you hold one ticket whose task list matches the current code, and its verify plan (or `preflight: skipped (no surface)` with the reason).
 
 ### Step 2: Implement
 
@@ -37,15 +39,16 @@ Route by the ticket's own fields:
 
 If the refreshed task list clearly touches more files than the ticket lists, route by the real count.
 
-Pass the agent the full ticket text and the repo's build and test commands. Tell it to:
+Pass the agent the full ticket text, the repo's build and test commands, and the verify plan. Tell it to:
 
 - Load `principle-incremental-implementation` and `principle-test-driven-development`, plus every skill in the ticket's **Principles** section, before writing code.
 - Load any other `principle-*` skill whose trigger the work matches once it is in the code, and name it in its report.
 - Work through the task list in order as thin slices, tick each task as it lands, and run the ticket's Verify commands before returning.
+- After Verify passes, drive every feature in the verify plan with the `verify` skill, add and drive the plan's new feature file when there is one, and keep the evidence.
 - On a failing check, follow `principle-debugging-and-error-recovery` instead of retrying blind.
-- Report what changed, the principle skills it loaded, and the Verify results.
+- Report what changed, the principle skills it loaded, the Verify results, and the evidence path for each drive.
 
-Done when the agent reports every task ticked and Verify passing. A failing Verify goes back to the same agent with the failure output before moving on.
+Done when the agent reports every task ticked, Verify passing, and every verify-plan feature passing as the preflight's "After implementation" section defines it. A failing Verify or drive goes back to the same agent with the failure output before moving on.
 
 ### Step 3: Review until approved
 
@@ -56,9 +59,11 @@ Spawn a `reviewer` agent on the uncommitted diff and have it review by running t
 
 When the diff changes an exported symbol, a DB schema, a wire format, or a feature flag, first run `blast-radius` in automated mode on it and give the reviewer its writeup. Each confirmed risk counts as a correctness bug, and an `UNPROVEN` status goes in the Step 5 report.
 
+Give it the verify plan and the drive evidence too: a verify-plan feature without passing evidence is an unmet acceptance criterion.
+
 Only correctness bugs, unmet acceptance criteria, security issues, and departures from the ticket's decisions block approval. Style preferences are noted, not blocking.
 
-On `CHANGES`, send the list to the original implementer with `SendMessage` so it keeps its context, have it re-run Verify, then send the new diff to the same reviewer. Cap the loop at **3 rounds**; still not approved after the third, stop and show the user the outstanding items and ask how to proceed.
+On `CHANGES`, send the list to the original implementer with `SendMessage` so it keeps its context, have it re-run Verify and the verify-plan drives, then send the new diff and the new evidence to the same reviewer. Cap the loop at **3 rounds**; still not approved after the third, stop and show the user the outstanding items and ask how to proceed.
 
 Done when the reviewer replies `APPROVED`.
 
@@ -73,7 +78,7 @@ Tell the user:
 
 - What the ticket now delivers, in one or two sentences.
 - Files changed.
-- Verify results and the number of review rounds.
+- Verify results, the verify-plan drives with their evidence paths (or why the preflight skipped), and the number of review rounds.
 - Anything deferred or flagged by the reviewer as non-blocking.
 
 Then continue by mode:
@@ -83,7 +88,7 @@ Then continue by mode:
 
 ### Step 6: Merge request
 
-- **Yes:** load the `git` skill and follow its `commit-pull-request` route for the branch, commit, and PR format. Create a new branch for this ticket off the branch you are on, unless you are already on one made for it, and target the PR at the branch you started from. Link the ticket in the PR body. For a local ticket, add `branch: <name>` to its frontmatter so `build-from-spec` can stack the next ticket on it. Return the PR URL.
+- **Yes:** load the `git` skill and follow its `commit-pull-request` route for the branch, commit, and PR format. Create a new branch for this ticket off the branch you are on, unless you are already on one made for it, and target the PR at the branch you started from. When the preflight changed the `verify` skill, commit those files first as their own `verify:` commit, then the ticket's work. Link the ticket in the PR body. For a local ticket, add `branch: <name>` to its frontmatter so `build-from-spec` can stack the next ticket on it. Return the PR URL.
 - **No:** stop. Tell the user the changes are in the working tree, uncommitted, and the ticket is marked Completed.
 
 ## Verification
@@ -94,6 +99,7 @@ Before reporting in Step 5, confirm:
 - [ ] The implementer matched the routing table.
 - [ ] The implementer loaded the core principle skills and the ticket's Principles, and the reviewer checked against them.
 - [ ] The ticket's Verify commands pass on the final diff.
+- [ ] The verification preflight ran for this ticket, and every verify-plan feature passed on the final diff (or the preflight recorded why it skipped).
 - [ ] The reviewer's last reply was `APPROVED`.
 - [ ] The ticket status reads `Completed` (or the tracker's done state).
 - [ ] In `manual`, nothing was committed or pushed without the user's yes.

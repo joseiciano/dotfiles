@@ -52,7 +52,7 @@ Each slice cuts a narrow but complete path through every layer (schema, API, UI,
 **Wide refactors** are the exception. A wide refactor is one mechanical change (rename a column, retype a shared symbol) whose blast radius breaks call sites across the codebase at once, so no vertical slice lands green. Sequence it as **expand–contract**:
 
 1. **Expand:** add the new form beside the old so nothing breaks.
-2. **Migrate:** move call sites in batches sized by blast radius (per package, per directory), one ticket per batch, each blocked by the expand.
+2. **Migrate:** move call sites in batches sized by blast radius (per package, per directory), one ticket per batch, each blocked by the expand. Run `blast-radius` in automated mode on the change to find the call sites, including the ones grep misses, before drawing the batches.
 3. **Contract:** delete the old form in a ticket blocked by every migrate batch.
 
 When batches cannot stay green alone, keep the sequence but put them on a shared integration branch, all blocking a final integrate-and-verify ticket.

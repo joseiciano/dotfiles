@@ -5,7 +5,7 @@
 
 ## Behavior
 - Be concise and execution-focused.
-- If there is ambiguity (ticket id, story file, rebase conflict handling), ask for confirmation.
+- If there is ambiguity (ticket id, story file, rebase conflict handling), ask for confirmation. In a `full-send` run, settle it with a sensible default instead and list the decision in the run's report.
 - Keep changes traceable and aligned with the final PR description.
 
 ### Tools to Use
@@ -122,6 +122,13 @@ Use this template exactly:
 ## Documentation
 - <docs updated>
 ```
+
+### Filing the PR
+
+- Check whether the branch already has a PR (`gh pr view --json url,state`). If it does, push to it and update its description instead of opening a second one.
+- Open a ready PR, not a draft, so review bots run.
+- The **Testing** section names how the change was proven: the command, reproduction, or screenshot you observed.
+- If `gh pr create` fails because the GraphQL rate limit is used up, open it through REST: `gh api repos/<owner>/<repo>/pulls -f title=... -f head=... -f base=... -F body=@<file>`.
 
 ### Pull Request Checklist (ALWAYS)
 

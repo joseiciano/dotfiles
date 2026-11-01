@@ -71,6 +71,8 @@ Explore the repository to understand the current state of the codebase, if you h
 
 Make sure to respect any knowledge-base or product docs (ADRs). 
 
+When the idea asserts something about existing code ("make endpoint X public", "X already handles Y"), treat the assertion as a hypothesis: run `blast-radius` in automated mode on it and design against its result. Carry an `UNPROVEN` fact into the spec as an open question.
+
 ### Step 3: Identify key details
 
 Sketch out the seams that will be used to test this feature. 
